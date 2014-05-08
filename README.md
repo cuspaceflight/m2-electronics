@@ -1,4 +1,4 @@
-# Marlet 2 Flight Computers
+# Martlet 2 Flight Computers
 
 This repository contains the schematics, PCB designs and firmware for the
 various electronic systems onboard Martlet 2.
