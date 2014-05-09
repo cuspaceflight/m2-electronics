@@ -2,7 +2,7 @@
 <export version="D">
     <design>
         <source>/home/adam/Projects/m2-electronics/m2p/pcb/m2p.sch</source>
-        <date>Fri 09 May 2014 18:19:28 BST</date>
+        <date>Fri 09 May 2014 18:28:44 BST</date>
         <tool>Eeschema (2014-jan-25)-product</tool>
     </design>
     <components>
@@ -79,7 +79,7 @@
         <comp ref="C11">
             <value>2200µ</value>
             <fields>
-                <field name="Farnell">2346510</field>
+                <field name="Farnell">2346569</field>
             </fields>
             <libsource lib="device" part="CP1"/>
             <sheetpath names="/" tstamps="/"/>
@@ -98,7 +98,7 @@
         <comp ref="R20">
             <value>5</value>
             <fields>
-                <field name="Farnell">2328359</field>
+                <field name="Farnell">2328356</field>
             </fields>
             <libsource lib="device" part="R"/>
             <sheetpath names="/" tstamps="/"/>
@@ -318,7 +318,7 @@
         <comp ref="C12">
             <value>2200µ</value>
             <fields>
-                <field name="Farnell">2346510</field>
+                <field name="Farnell">2346569</field>
             </fields>
             <libsource lib="device" part="CP1"/>
             <sheetpath names="/" tstamps="/"/>
@@ -337,7 +337,7 @@
         <comp ref="R21">
             <value>5</value>
             <fields>
-                <field name="Farnell">2328359</field>
+                <field name="Farnell">2328356</field>
             </fields>
             <libsource lib="device" part="R"/>
             <sheetpath names="/" tstamps="/"/>
@@ -495,7 +495,7 @@
             <value>1k</value>
             <footprint>0603</footprint>
             <fields>
-                <field name="Farnell">2332003</field>
+                <field name="Farnell">2331727</field>
             </fields>
             <libsource lib="device" part="R"/>
             <sheetpath names="/" tstamps="/"/>
