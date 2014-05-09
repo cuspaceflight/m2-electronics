@@ -19,6 +19,7 @@ for comp in root.iter('comp'):
     val = comp.findtext('value')
     footprint = comp.findtext('footprint')
     fields = comp.find('fields')
+    found_farnell = False
     if not fields:
         continue
     for field in fields.findall('field'):
@@ -31,6 +32,9 @@ for comp in root.iter('comp'):
             if part_desc[farnell] != (val, footprint):
                 part_refs[farnell] = "ERROR Different parts specify same "\
                                      "order number."
+            found_farnell = True
+    if not found_farnell:
+        print("Part does not have Farnell ID: ", ref, val)
 
 with open(sys.argv[2], 'w') as f:
     for part in part_qtys:
