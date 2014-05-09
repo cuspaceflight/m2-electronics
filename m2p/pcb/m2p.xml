@@ -2,7 +2,7 @@
 <export version="D">
     <design>
         <source>/home/adam/Projects/m2-electronics/m2p/pcb/m2p.sch</source>
-        <date>Fri 09 May 2014 18:28:44 BST</date>
+        <date>Fri 09 May 2014 18:30:16 BST</date>
         <tool>Eeschema (2014-jan-25)-product</tool>
     </design>
     <components>
@@ -523,7 +523,7 @@
         </comp>
         <comp ref="IC5">
             <value>STM32F103C</value>
-            <footprint>TQFP48</footprint>
+            <footprint>LQFP48</footprint>
             <fields>
                 <field name="Farnell">1447637</field>
             </fields>
