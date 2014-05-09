@@ -21,6 +21,7 @@ for comp in root.iter('comp'):
     fields = comp.find('fields')
     found_farnell = False
     if not fields:
+        print("Part does not have Farnell ID: ", ref, val)
         continue
     for field in fields.findall('field'):
         if field.get('name') == "Farnell":
