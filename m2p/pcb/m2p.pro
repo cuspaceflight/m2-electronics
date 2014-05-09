@@ -1,6 +1,6 @@
-update=Fri 09 May 2014 00:17:26 BST
+update=Fri 09 May 2014 15:29:34 BST
 version=1
-last_client=eeschema
+last_client=kicad
 [cvpcb]
 version=1
 NetITyp=0
@@ -130,3 +130,5 @@ LibName36=apu1205-hf-3
 LibName37=sn74ahc1g32dckr
 LibName38=adum1100
 LibName39=adum1201
+LibName40=stm32f103c
+LibName41=swd
