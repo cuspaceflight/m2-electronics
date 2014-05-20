@@ -105,3 +105,4 @@ LibName45=tps77018
 LibName46=tps76327
 LibName47=jdga_quad_v
 LibName48=ltc2602
+LibName49=stm32f303c
