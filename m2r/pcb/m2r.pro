@@ -1,4 +1,4 @@
-update=Mon 19 May 2014 02:13:16 BST
+update=Tue 20 May 2014 01:46:25 BST
 version=1
 last_client=eeschema
 [cvpcb]
@@ -97,3 +97,11 @@ LibName37=ntx2b
 LibName38=rockblock
 LibName39=adum1201
 LibName40=mcp1802
+LibName41=adp3338
+LibName42=sma
+LibName43=max-7q
+LibName44=alm-2712
+LibName45=tps77018
+LibName46=tps76327
+LibName47=jdga_quad_v
+LibName48=ltc2602
