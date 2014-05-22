@@ -1,4 +1,4 @@
-update=Tue 20 May 2014 01:46:25 BST
+update=Thu 22 May 2014 22:33:30 BST
 version=1
 last_client=eeschema
 [cvpcb]
@@ -106,3 +106,4 @@ LibName46=tps76327
 LibName47=jdga_quad_v
 LibName48=ltc2602
 LibName49=stm32f303c
+LibName50=testpad

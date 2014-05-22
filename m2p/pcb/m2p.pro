@@ -1,6 +1,6 @@
-update=Fri 09 May 2014 15:29:34 BST
+update=Thu 22 May 2014 22:43:13 BST
 version=1
-last_client=kicad
+last_client=eeschema
 [cvpcb]
 version=1
 NetITyp=0
@@ -132,3 +132,4 @@ LibName38=adum1100
 LibName39=adum1201
 LibName40=stm32f103c
 LibName41=swd
+LibName42=testpad
