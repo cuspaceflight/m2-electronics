@@ -1,4 +1,4 @@
-update=Thu 22 May 2014 22:43:13 BST
+update=Wed 28 May 2014 00:30:31 BST
 version=1
 last_client=eeschema
 [cvpcb]
@@ -133,3 +133,4 @@ LibName39=adum1201
 LibName40=stm32f103c
 LibName41=swd
 LibName42=testpad
+LibName43=stm32f303c
