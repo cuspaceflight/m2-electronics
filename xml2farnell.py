@@ -14,6 +14,8 @@ part_qtys = defaultdict(int)
 part_refs = defaultdict(str)
 part_desc = {}
 
+nofarnell = []
+
 for comp in root.iter('comp'):
     ref = comp.get('ref')
     val = comp.findtext('value')
@@ -22,6 +24,8 @@ for comp in root.iter('comp'):
     found_farnell = False
     if not fields:
         print("Part does not have Farnell ID: ", ref, val)
+        if ref[:2] not in ("TP", "GS"):
+            nofarnell.append(ref)
         continue
     for field in fields.findall('field'):
         if field.get('name') == "Farnell":
@@ -43,3 +47,6 @@ with open(sys.argv[2], 'w') as f:
                                             part_desc[part][0],
                                             part_desc[part][1],
                                             part_refs[part]))
+    f.write("\n\n\nNo Farnell codes:\n")
+    f.write(', '.join(nofarnell))
+    f.write("\n")
