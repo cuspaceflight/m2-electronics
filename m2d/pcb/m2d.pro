@@ -1,4 +1,4 @@
-update=Fri 30 May 2014 01:10:16 BST
+update=Thu 19 Jun 2014 01:31:54 BST
 version=1
 last_client=eeschema
 [cvpcb]
@@ -102,3 +102,5 @@ LibName42=hmc5883l
 LibName43=ad8495
 LibName44=ad8226
 LibName45=tmp36
+LibName46=ms5611-01ba03
+LibName47=op1177
