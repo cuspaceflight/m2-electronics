@@ -1,4 +1,4 @@
-update=Wed 02 Jul 2014 21:17:56 BST
+update=Sat 05 Jul 2014 17:25:12 BST
 version=1
 last_client=eeschema
 [cvpcb]
@@ -90,7 +90,7 @@ LibName30=valves
 LibName31=adum5201
 LibName32=adxl375
 LibName33=apu1205-hf-3
-LibName34=m2d-cache
+LibName34=m2fc-cache
 LibName35=part
 LibName36=sp100-2t
 LibName37=stm32f303c
@@ -105,3 +105,5 @@ LibName45=tmp36
 LibName46=ms5611-01ba03
 LibName47=op1177
 LibName48=stm32f415rg
+LibName49=op2177
+LibName50=microsd
