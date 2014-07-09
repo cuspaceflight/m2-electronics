@@ -1,4 +1,4 @@
-update=Sat 05 Jul 2014 17:25:12 BST
+update=Sun 06 Jul 2014 12:30:13 BST
 version=1
 last_client=eeschema
 [cvpcb]
@@ -107,3 +107,7 @@ LibName47=op1177
 LibName48=stm32f415rg
 LibName49=op2177
 LibName50=microsd
+LibName51=adp3335
+LibName52=ad8541
+LibName53=ad8656
+LibName54=stm32f405vgt
