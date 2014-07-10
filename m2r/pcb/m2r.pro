@@ -1,4 +1,4 @@
-update=Thu 29 May 2014 23:57:03 BST
+update=Thu 10 Jul 2014 20:47:35 BST
 version=1
 last_client=eeschema
 [cvpcb]
@@ -109,3 +109,4 @@ LibName49=stm32f303c
 LibName50=testpad
 LibName51=mtx2
 LibName52=ms5611-01ba03
+LibName53=adp3335
