@@ -1313,7 +1313,7 @@ Connection ~ 6650 4350
 Connection ~ 6650 4100
 Connection ~ 6650 4000
 Text Notes 2600 2250 0    100  ~ 0
-Inertial Measurement Unit
+INERTIAL MEASUREMENT UNIT
 Wire Notes Line
 	7450 5250 9400 5250
 Text HLabel 4000 4550 2    60   Output ~ 0
