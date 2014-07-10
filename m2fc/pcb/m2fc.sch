@@ -613,12 +613,13 @@ F3 "STRAIN_2" O R 9900 4850 60
 F4 "STRAIN_3" O R 9900 4950 60 
 $EndSheet
 $Sheet
-S 8300 5200 1600 200 
+S 8300 5200 1600 300 
 U 53B64BF1
 F0 "Thermocouples" 60
 F1 "thermocouples.sch" 60
 F2 "THERMO_1" O L 8300 5250 60 
 F3 "THERMO_2" O L 8300 5350 60 
+F4 "THERMO_3" O L 8300 5450 60 
 $EndSheet
 $Sheet
 S 8300 2500 1600 1300
@@ -644,9 +645,10 @@ F17 "BARO_MISO" O R 9900 2650 60
 F18 "GYRO_SCL" I R 9900 3050 60 
 F19 "GYRO_SDA" B R 9900 3150 60 
 F20 "GYRO_DRDY" O R 9900 3250 60 
-F21 "MAGNO_SCL" I R 9900 3450 60 
-F22 "MAGNO_SDA" B R 9900 3550 60 
-F23 "MAGNO_DRDY" O R 9900 3650 60 
+F21 "MAGNO_SCL" I R 9900 3550 60 
+F22 "MAGNO_SDA" B R 9900 3650 60 
+F23 "MAGNO_DRDY" O R 9900 3750 60 
+F24 "GYRO_INT1" O R 9900 3350 60 
 $EndSheet
 $Sheet
 S 8300 4000 650  1000
@@ -823,11 +825,11 @@ Text Label 9950 3150 0    60   ~ 0
 GYRO_SDA
 Text Label 9950 3250 0    60   ~ 0
 GYRO_DRDY
-Text Label 9950 3450 0    60   ~ 0
-MAGNO_SCL
 Text Label 9950 3550 0    60   ~ 0
-MAGNO_SDA
+MAGNO_SCL
 Text Label 9950 3650 0    60   ~ 0
+MAGNO_SDA
+Text Label 9950 3750 0    60   ~ 0
 MAGNO_DRDY
 Text Label 9950 4050 0    60   ~ 0
 PYRO_1_F
@@ -1000,8 +1002,6 @@ F 4 "1759037" H 2800 2050 60  0001 C CNN "Farnell"
 	1    2800 2050
 	1    0    0    -1  
 $EndComp
-Text Notes 6250 2100 0    60   ~ 0
-* SHARE HALF BRIDGE?\n* TEMPERATURE COMP?
 $Comp
 L ADP3335 IC?
 U 1 1 53C24FC1
@@ -1308,8 +1308,6 @@ Wire Wire Line
 Wire Wire Line
 	9900 3250 9950 3250
 Wire Wire Line
-	9950 3450 9900 3450
-Wire Wire Line
 	9900 3550 9950 3550
 Wire Wire Line
 	9950 3650 9900 3650
@@ -1486,4 +1484,250 @@ Wire Notes Line
 	3250 1550 5150 1550
 Wire Wire Line
 	1400 1300 1400 1350
+Text Label 3050 5700 2    60   ~ 0
+SWDIO
+Text Label 3050 5800 2    60   ~ 0
+SWCLK
+Text Label 3050 4400 2    60   ~ 0
+STRAIN_1
+Text Label 3050 4500 2    60   ~ 0
+STRAIN_2
+Text Label 3050 4600 2    60   ~ 0
+STRAIN_3
+Text Label 3050 4700 2    60   ~ 0
+BAT_MON
+Text Label 4450 1900 0    60   ~ 0
+THERMO_1
+Text Label 4450 2000 0    60   ~ 0
+THERMO_2
+Text Label 3050 4800 2    60   ~ 0
+HG_ACCEL_CS
+Text Label 3050 4900 2    60   ~ 0
+HG_ACCEL_SCK
+Text Label 3050 5000 2    60   ~ 0
+HG_ACCEL_MISO
+Text Label 3050 5100 2    60   ~ 0
+HG_ACCEL_MOSI
+Text Label 3050 6400 2    60   ~ 0
+BARO_SCK
+Text Label 3050 6500 2    60   ~ 0
+BARO_MISO
+Text Label 3050 6600 2    60   ~ 0
+BARO_MOSI
+Text Label 3050 6700 2    60   ~ 0
+SER_OUT_1
+Text Label 3050 6800 2    60   ~ 0
+SER_IN_1
+Text Label 3050 6900 2    60   ~ 0
+GYRO_SCL
+Text Label 3050 7000 2    60   ~ 0
+GYRO_SDA
+Text Label 3050 7100 2    60   ~ 0
+MAGNO_SCL
+Text Label 3050 7200 2    60   ~ 0
+MAGNO_SDA
+Text Label 3050 7300 2    60   ~ 0
+LG_ACCEL_CS
+Text Label 3050 7400 2    60   ~ 0
+LG_ACCEL_SCK
+Text Label 3050 7500 2    60   ~ 0
+LG_ACCEL_MISO
+Text Label 3050 7600 2    60   ~ 0
+LG_ACCEL_MOSI
+Text Label 4450 2600 0    60   ~ 0
+SD_DAT0
+Text Label 4450 2700 0    60   ~ 0
+SD_DAT1
+Text Label 4450 2800 0    60   ~ 0
+SD_DAT2
+Text Label 4450 2900 0    60   ~ 0
+SD_DAT3
+Text Label 4450 3000 0    60   ~ 0
+SD_CLK
+Text Label 4450 3700 0    60   ~ 0
+SD_CMD
+Text Label 4450 4000 0    60   ~ 0
+SER_OUT_2
+Text Label 4450 4100 0    60   ~ 0
+SER_IN_2
+Text Label 4450 3600 0    60   ~ 0
+SD_CD
+Text Label 4450 2200 0    60   ~ 0
+HG_ACCEL_INT1
+Text Label 4450 2300 0    60   ~ 0
+HG_ACCEL_INT2
+Text Label 4450 4300 0    60   ~ 0
+LG_ACCEL_INT1
+Text Label 4450 4400 0    60   ~ 0
+LG_ACCEL_INT2
+Text Label 4450 5200 0    60   ~ 0
+GYRO_DRDY
+Text Label 4450 4200 0    60   ~ 0
+BARO_CS
+Text Label 4450 6700 0    60   ~ 0
+MAGNO_DRDY
+Text Label 4450 5700 0    60   ~ 0
+LED_A
+Text Label 4450 5800 0    60   ~ 0
+LED_C
+Text Label 4450 5400 0    60   ~ 0
+LED_1
+Text Label 4450 5500 0    60   ~ 0
+LED_2
+Text Label 4450 5600 0    60   ~ 0
+LED_3
+Text Label 4450 5900 0    60   ~ 0
+PYRO_1_F
+Text Label 4450 6000 0    60   ~ 0
+PYRO_1_C
+Text Label 4450 6100 0    60   ~ 0
+PYRO_2_C
+Text Label 4450 6200 0    60   ~ 0
+PYRO_2_F
+Text Label 9950 3350 0    60   ~ 0
+GYRO_INT1
+Wire Wire Line
+	9900 3350 9950 3350
+Wire Wire Line
+	9950 3750 9900 3750
+Text Label 4450 5300 0    60   ~ 0
+GYRO_INT1
+Text Label 8250 5450 2    60   ~ 0
+THERMO_3
+Wire Wire Line
+	8250 5450 8300 5450
+Text Label 4450 2100 0    60   ~ 0
+THERMO_3
+Wire Wire Line
+	3100 4400 3050 4400
+Wire Wire Line
+	3050 4500 3100 4500
+Wire Wire Line
+	3050 4600 3100 4600
+Wire Wire Line
+	3050 4700 3100 4700
+Wire Wire Line
+	3050 4800 3100 4800
+Wire Wire Line
+	3050 4900 3100 4900
+Wire Wire Line
+	3050 5000 3100 5000
+Wire Wire Line
+	3050 5100 3100 5100
+Wire Wire Line
+	3050 5700 3100 5700
+Wire Wire Line
+	3050 5800 3100 5800
+Wire Wire Line
+	3050 6400 3100 6400
+Wire Wire Line
+	3050 6500 3100 6500
+Wire Wire Line
+	3050 6600 3100 6600
+Wire Wire Line
+	3050 6700 3100 6700
+Wire Wire Line
+	3050 6800 3100 6800
+Wire Wire Line
+	3050 6900 3100 6900
+Wire Wire Line
+	3050 7000 3100 7000
+Wire Wire Line
+	3050 7100 3100 7100
+Wire Wire Line
+	3050 7200 3100 7200
+Wire Wire Line
+	3050 7300 3100 7300
+Wire Wire Line
+	3050 7400 3100 7400
+Wire Wire Line
+	3050 7500 3100 7500
+Wire Wire Line
+	3050 7600 3100 7600
+Wire Wire Line
+	4450 6700 4400 6700
+Wire Wire Line
+	4450 6200 4400 6200
+Wire Wire Line
+	4450 6100 4400 6100
+Wire Wire Line
+	4450 6000 4400 6000
+Wire Wire Line
+	4400 5900 4450 5900
+Wire Wire Line
+	4400 5800 4450 5800
+Wire Wire Line
+	4400 5700 4450 5700
+Wire Wire Line
+	4400 5600 4450 5600
+Wire Wire Line
+	4400 5500 4450 5500
+Wire Wire Line
+	4400 5400 4450 5400
+Wire Wire Line
+	4400 5300 4450 5300
+Wire Wire Line
+	4400 5200 4450 5200
+Wire Wire Line
+	4400 4400 4450 4400
+Wire Wire Line
+	4400 4300 4450 4300
+Wire Wire Line
+	4400 4200 4450 4200
+Wire Wire Line
+	4400 4100 4450 4100
+Wire Wire Line
+	4400 4000 4450 4000
+Wire Wire Line
+	4400 3700 4450 3700
+Wire Wire Line
+	4400 3600 4450 3600
+Wire Wire Line
+	4400 1900 4450 1900
+Wire Wire Line
+	4400 2000 4450 2000
+Wire Wire Line
+	4400 2100 4450 2100
+Wire Wire Line
+	4400 2200 4450 2200
+Wire Wire Line
+	4400 2300 4450 2300
+Wire Wire Line
+	4400 2600 4450 2600
+Wire Wire Line
+	4400 2700 4450 2700
+Wire Wire Line
+	4400 2800 4450 2800
+Wire Wire Line
+	4400 2900 4450 2900
+Wire Wire Line
+	4400 3000 4450 3000
+NoConn ~ 4400 1800
+NoConn ~ 4400 2400
+NoConn ~ 4400 2500
+NoConn ~ 4400 3100
+NoConn ~ 4400 3200
+NoConn ~ 4400 3300
+NoConn ~ 4400 3500
+NoConn ~ 4400 3800
+NoConn ~ 4400 3900
+NoConn ~ 4400 4500
+NoConn ~ 4400 4600
+NoConn ~ 4400 4700
+NoConn ~ 4400 4800
+NoConn ~ 4400 4900
+NoConn ~ 4400 5000
+NoConn ~ 4400 6300
+NoConn ~ 4400 6400
+NoConn ~ 4400 6500
+NoConn ~ 4400 6600
+NoConn ~ 3100 6100
+NoConn ~ 3100 6200
+NoConn ~ 3100 6300
+NoConn ~ 3100 5900
+NoConn ~ 3100 5600
+NoConn ~ 3100 5500
+NoConn ~ 3100 5400
+NoConn ~ 3100 5300
+NoConn ~ 3100 5200
 $EndSCHEMATC

@@ -536,7 +536,6 @@ F 4 "2333026" H 2400 4300 60  0001 C CNN "Farnell"
 	1    2400 4300
 	1    0    0    -1  
 $EndComp
-NoConn ~ 3800 4150
 $Comp
 L R R?
 U 1 1 53B67990
@@ -584,7 +583,6 @@ F 3 "" H 4950 5000 60  0001 C CNN
 	1    4950 5000
 	1    0    0    -1  
 $EndComp
-NoConn ~ 3800 4550
 Text Notes 2250 5200 0    60   ~ 0
 GYROSCOPE
 $Comp
@@ -612,12 +610,12 @@ $EndComp
 $Comp
 L +3.3V #PWR068
 U 1 1 53B679BB
-P 3900 4250
-F 0 "#PWR068" H 3900 4210 30  0001 C CNN
-F 1 "+3.3V" H 3900 4360 30  0000 C CNN
-F 2 "" H 3900 4250 60  0000 C CNN
-F 3 "" H 3900 4250 60  0000 C CNN
-	1    3900 4250
+P 3950 4250
+F 0 "#PWR068" H 3950 4210 30  0001 C CNN
+F 1 "+3.3V" H 3950 4360 30  0000 C CNN
+F 2 "" H 3950 4250 60  0000 C CNN
+F 3 "" H 3950 4250 60  0000 C CNN
+	1    3950 4250
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -689,7 +687,7 @@ Wire Wire Line
 Connection ~ 3850 3950
 Connection ~ 3900 4050
 Wire Wire Line
-	3800 4250 3900 4250
+	3800 4250 3950 4250
 Wire Wire Line
 	3800 4450 4000 4450
 Wire Wire Line
@@ -1331,4 +1329,25 @@ Text Notes 2600 2250 0    100  ~ 0
 Inertial Measurement Unit
 Wire Notes Line
 	7450 5250 9400 5250
+Text HLabel 4000 4550 2    60   Output ~ 0
+GYRO_INT1
+Wire Wire Line
+	3800 4550 4000 4550
+$Comp
+L TESTPAD TP?
+U 1 1 53C45860
+P 3950 4550
+F 0 "TP?" H 3980 4510 30  0000 C CNN
+F 1 "TESTPAD" H 3950 4600 60  0001 C CNN
+F 2 "" H 3950 4550 60  0000 C CNN
+F 3 "" H 3950 4550 60  0000 C CNN
+	1    3950 4550
+	0    -1   -1   0   
+$EndComp
+Connection ~ 3950 4550
+Wire Wire Line
+	3800 4150 3850 4150
+Wire Wire Line
+	3850 4150 3850 4250
+Connection ~ 3850 4250
 $EndSCHEMATC
