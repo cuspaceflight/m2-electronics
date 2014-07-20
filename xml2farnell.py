@@ -40,13 +40,15 @@ for comp in root.iter('comp'):
             found_farnell = True
     if not found_farnell:
         print("Part does not have Farnell ID: ", ref, val)
+        if ref[:2] not in ("TP", "GS"):
+            nofarnell.append(ref)
 
 with open(sys.argv[2], 'w') as f:
     for part in part_qtys:
         f.write("{}, {}, {} {}{}\n".format(part, part_qtys[part],
-                                            part_desc[part][0],
-                                            part_desc[part][1],
-                                            part_refs[part]))
+                                           part_desc[part][0],
+                                           part_desc[part][1],
+                                           part_refs[part]))
     f.write("\n\n\nNo Farnell codes:\n")
     f.write(', '.join(nofarnell))
     f.write("\n")

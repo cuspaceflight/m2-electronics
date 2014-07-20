@@ -238,7 +238,7 @@ F 0 "K201" V 600 800 50  0000 C CNN
 F 1 "CONN_3" V 700 800 40  0000 C CNN
 F 2 "" H 650 800 60  0000 C CNN
 F 3 "" H 650 800 60  0000 C CNN
-F 4 "1462950" H 650 800 60  0001 C CNN "Farnell"
+F 4 "1830748" H 650 800 60  0001 C CNN "Farnell"
 	1    650  800 
 	-1   0    0    1   
 $EndComp
@@ -963,7 +963,7 @@ F 0 "K202" V 600 2950 50  0000 C CNN
 F 1 "CONN_3" V 700 2950 40  0000 C CNN
 F 2 "" H 650 2950 60  0000 C CNN
 F 3 "" H 650 2950 60  0000 C CNN
-F 4 "1462950" H 650 2950 60  0001 C CNN "Farnell"
+F 4 "1830748" H 650 2950 60  0001 C CNN "Farnell"
 	1    650  2950
 	-1   0    0    1   
 $EndComp
@@ -1688,7 +1688,7 @@ F 0 "K203" V 600 5100 50  0000 C CNN
 F 1 "CONN_3" V 700 5100 40  0000 C CNN
 F 2 "" H 650 5100 60  0000 C CNN
 F 3 "" H 650 5100 60  0000 C CNN
-F 4 "1462950" H 650 5100 60  0001 C CNN "Farnell"
+F 4 "1830748" H 650 5100 60  0001 C CNN "Farnell"
 	1    650  5100
 	-1   0    0    1   
 $EndComp
@@ -2252,4 +2252,40 @@ Wire Notes Line
 	6950 6900 500  6900
 Text Notes 8550 5200 0    60   ~ 0
 INSTRUMENTATION AMPLIFIER\n==========================\n\nGain = 1 + 49400/R_G (AD8226 datasheet)\n\nR_G is 330 so G=150.70\n\nGauge factor GF=2\nMax strain 0.23% is 2.3E-3\nChange in R therefore 4.6E-3 * R0\nGauges are R0=120\nStrained R=(1+4.6E-3)R0=120.552\nGiving voltage V=[Rs/(Rs+R0) * Vs] - Vs/2=3.78mV\n\nErrors due to tolerance: as much as 2.47mV\nErrors due to temperature: up to 1mV\n\nTotal required headroom then say 7.5mV\nMax output is 3.3V (supply) - 0.1V (amp limit) = 3.2V\nHeadroom is 3.2 - (3.3/2) = 1.55V\nHighest permissible gain 1.55/7.5E-3 = 206\n\nSo gain of 150 leads sufficient headroom:\nMax differential signal amplitude: 1.55/150.7=10.2mV
+$Comp
+L PART U201
+U 1 1 53CEC561
+P 1300 650
+F 0 "U201" H 1350 650 60  0000 C CNN
+F 1 "HOUSING" H 1500 750 60  0000 C CNN
+F 2 "" H 1300 650 60  0000 C CNN
+F 3 "" H 1300 650 60  0000 C CNN
+F 4 "1830728" H 1300 650 60  0001 C CNN "Farnell"
+	1    1300 650 
+	1    0    0    -1  
+$EndComp
+$Comp
+L PART U202
+U 1 1 53CEC715
+P 1300 2800
+F 0 "U202" H 1350 2800 60  0000 C CNN
+F 1 "HOUSING" H 1500 2900 60  0000 C CNN
+F 2 "" H 1300 2800 60  0000 C CNN
+F 3 "" H 1300 2800 60  0000 C CNN
+F 4 "1830728" H 1300 2800 60  0001 C CNN "Farnell"
+	1    1300 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L PART U203
+U 1 1 53CECA98
+P 1300 4950
+F 0 "U203" H 1350 4950 60  0000 C CNN
+F 1 "HOUSING" H 1500 5050 60  0000 C CNN
+F 2 "" H 1300 4950 60  0000 C CNN
+F 3 "" H 1300 4950 60  0000 C CNN
+F 4 "1830728" H 1300 4950 60  0001 C CNN "Farnell"
+	1    1300 4950
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
