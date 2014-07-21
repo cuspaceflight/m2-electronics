@@ -2,13 +2,13 @@
 <export version="D">
     <design>
         <source>/home/adam/Projects/m2-electronics/m2r/pcb/m2r.sch</source>
-        <date>Sun 20 Jul 2014 22:46:25 BST</date>
+        <date>Mon 21 Jul 2014 01:33:29 BST</date>
         <tool>Eeschema (2014-jan-25)-product</tool>
     </design>
     <components>
         <comp ref="X9">
             <value>8M</value>
-            <footprint>HC49/S</footprint>
+            <footprint>Crystals:Crystal_HC49-U_Vertical</footprint>
             <fields>
                 <field name="Farnell">2063945</field>
             </fields>
@@ -45,7 +45,7 @@
         </comp>
         <comp ref="P1">
             <value>CONN_2</value>
-            <footprint>Connect:PINHEAD1-2</footprint>
+            <footprint>JST_PA:S02B-PASK-2</footprint>
             <fields>
                 <field name="Farnell">1830747</field>
             </fields>
@@ -174,7 +174,7 @@
         </comp>
         <comp ref="P3">
             <value>CONN_4</value>
-            <footprint>Connectors_Molex:Connector_Molex_PicoBlade_53261-0471</footprint>
+            <footprint>JST_PA:S04B-PASK-2</footprint>
             <fields>
                 <field name="RS">512-8484</field>
             </fields>
@@ -244,21 +244,21 @@
         </comp>
         <comp ref="GS1">
             <value>GS3</value>
-            <footprint>GS3</footprint>
+            <footprint>Connect:GS3</footprint>
             <libsource lib="conn" part="GS3"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537B3B82</tstamp>
         </comp>
         <comp ref="GS2">
             <value>GS3</value>
-            <footprint>GS3</footprint>
+            <footprint>Connect:GS3</footprint>
             <libsource lib="conn" part="GS3"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537B44BE</tstamp>
         </comp>
         <comp ref="C17">
             <value>10p</value>
-            <footprint>0402</footprint>
+            <footprint>Capacitors_SMD:c_0402</footprint>
             <fields>
                 <field name="Farnell">1885332</field>
             </fields>
@@ -268,7 +268,7 @@
         </comp>
         <comp ref="C19">
             <value>20p</value>
-            <footprint>0402</footprint>
+            <footprint>Capacitors_SMD:c_0402</footprint>
             <fields>
                 <field name="Farnell">1885343</field>
             </fields>
@@ -278,7 +278,7 @@
         </comp>
         <comp ref="C20">
             <value>6.2p</value>
-            <footprint>0402</footprint>
+            <footprint>Capacitors_SMD:c_0402</footprint>
             <fields>
                 <field name="Farnell">1885324</field>
             </fields>
@@ -288,7 +288,7 @@
         </comp>
         <comp ref="C18">
             <value>20p</value>
-            <footprint>0402</footprint>
+            <footprint>Capacitors_SMD:c_0402</footprint>
             <fields>
                 <field name="Farnell">1885343</field>
             </fields>
@@ -298,7 +298,7 @@
         </comp>
         <comp ref="C14">
             <value>100p</value>
-            <footprint>0402</footprint>
+            <footprint>Capacitors_SMD:c_0402</footprint>
             <fields>
                 <field name="Farnell">1327627</field>
             </fields>
@@ -337,7 +337,7 @@
         </comp>
         <comp ref="C16">
             <value>10µ</value>
-            <footprint>1206</footprint>
+            <footprint>Capacitors_SMD:c_1206</footprint>
             <fields>
                 <field name="Farnell">2211068</field>
             </fields>
@@ -347,7 +347,7 @@
         </comp>
         <comp ref="R3">
             <value>2</value>
-            <footprint>0402</footprint>
+            <footprint>SMD_Packages:SM0402_r</footprint>
             <fields>
                 <field name="Farnell">2141424</field>
             </fields>
@@ -357,7 +357,7 @@
         </comp>
         <comp ref="L2">
             <value>1n6</value>
-            <footprint>Capacitors_SMD:c_0603</footprint>
+            <footprint>SMD_Packages:SM0603</footprint>
             <fields>
                 <field name="Farnell">2285968</field>
             </fields>
@@ -367,7 +367,7 @@
         </comp>
         <comp ref="L1">
             <value>120n</value>
-            <footprint>Capacitors_SMD:c_0603</footprint>
+            <footprint>SMD_Packages:SM0603</footprint>
             <fields>
                 <field name="Farnell">2285957</field>
             </fields>
@@ -377,7 +377,7 @@
         </comp>
         <comp ref="L3">
             <value>5n6</value>
-            <footprint>0402</footprint>
+            <footprint>SMD_Packages:SM0402</footprint>
             <fields>
                 <field name="Farnell">2285660</field>
             </fields>
@@ -586,114 +586,133 @@
         </comp>
         <comp ref="TP1">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537EC935</tstamp>
         </comp>
         <comp ref="TP2">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537ED554</tstamp>
         </comp>
         <comp ref="TP7">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537ED9AF</tstamp>
         </comp>
         <comp ref="TP8">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537EDFC1</tstamp>
         </comp>
         <comp ref="TP3">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F5E03</tstamp>
         </comp>
         <comp ref="TP4">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F61C5</tstamp>
         </comp>
         <comp ref="TP5">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F62C4</tstamp>
         </comp>
         <comp ref="TP6">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F66DE</tstamp>
         </comp>
         <comp ref="TP18">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F7AA3</tstamp>
         </comp>
         <comp ref="TP9">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F8110</tstamp>
         </comp>
         <comp ref="TP10">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F858E</tstamp>
         </comp>
         <comp ref="TP11">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F85F3</tstamp>
         </comp>
         <comp ref="TP12">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F8655</tstamp>
         </comp>
         <comp ref="TP15">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F87F4</tstamp>
         </comp>
         <comp ref="TP16">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F8AA4</tstamp>
         </comp>
         <comp ref="TP17">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F8B0D</tstamp>
         </comp>
         <comp ref="TP19">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537F8CD7</tstamp>
         </comp>
         <comp ref="TP20">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>537FA1B7</tstamp>
         </comp>
         <comp ref="P7">
             <value>CONN_2</value>
+            <footprint>JST_PA:S02B-PASK-2</footprint>
             <fields>
                 <field name="Farnell">1830747</field>
             </fields>
@@ -862,7 +881,7 @@
         </comp>
         <comp ref="P2">
             <value>CONN_2</value>
-            <footprint>Connect:PINHEAD1-2</footprint>
+            <footprint>JST_PA:S02B-PASK-2</footprint>
             <fields>
                 <field name="Farnell">1830747</field>
             </fields>
@@ -882,12 +901,14 @@
         </comp>
         <comp ref="TP14">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>53CB4FEF</tstamp>
         </comp>
         <comp ref="TP13">
             <value>TESTPAD</value>
+            <footprint>Measurement_Points:Measurement_Point_Round-SMD-Pad_Small</footprint>
             <libsource lib="testpad" part="TESTPAD"/>
             <sheetpath names="/" tstamps="/"/>
             <tstamp>53CB5067</tstamp>
@@ -900,7 +921,7 @@
         </comp>
         <comp ref="P4">
             <value>CONN_4</value>
-            <footprint>Connectors_Molex:Connector_Molex_PicoBlade_53261-0471</footprint>
+            <footprint>JST_PA:S04B-PASK-2</footprint>
             <fields>
                 <field name="RS">512-8484</field>
             </fields>
@@ -955,16 +976,6 @@
         </comp>
     </components>
     <libparts>
-        <libpart lib="device" part="INDUCTOR_SMALL">
-            <fields>
-                <field name="Reference">L</field>
-                <field name="Value">INDUCTOR_SMALL</field>
-            </fields>
-            <pins>
-                <pin num="1" name="1" type="input"/>
-                <pin num="2" name="2" type="input"/>
-            </pins>
-        </libpart>
         <libpart lib="swd" part="SWD">
             <fields>
                 <field name="Reference">P</field>
@@ -981,69 +992,6 @@
                 <pin num="8" name="TDI" type="BiDi"/>
                 <pin num="9" name="GND" type="power_in"/>
                 <pin num="10" name="nRESET" type="output"/>
-            </pins>
-        </libpart>
-        <libpart lib="device" part="C">
-            <description>Condensateur non polarise</description>
-            <footprints>
-                <fp>SM*</fp>
-                <fp>C?</fp>
-                <fp>C1-1</fp>
-            </footprints>
-            <fields>
-                <field name="Reference">C</field>
-                <field name="Value">C</field>
-            </fields>
-            <pins>
-                <pin num="1" name="~" type="passive"/>
-                <pin num="2" name="~" type="passive"/>
-            </pins>
-        </libpart>
-        <libpart lib="device" part="R">
-            <description>Resistance</description>
-            <footprints>
-                <fp>R?</fp>
-                <fp>SM0603</fp>
-                <fp>SM0805</fp>
-                <fp>R?-*</fp>
-                <fp>SM1206</fp>
-            </footprints>
-            <fields>
-                <field name="Reference">R</field>
-                <field name="Value">R</field>
-            </fields>
-            <pins>
-                <pin num="1" name="~" type="passive"/>
-                <pin num="2" name="~" type="passive"/>
-            </pins>
-        </libpart>
-        <libpart lib="device" part="LED">
-            <footprints>
-                <fp>LED-3MM</fp>
-                <fp>LED-5MM</fp>
-                <fp>LED-10MM</fp>
-                <fp>LED-0603</fp>
-                <fp>LED-0805</fp>
-                <fp>LED-1206</fp>
-                <fp>LEDV</fp>
-            </footprints>
-            <fields>
-                <field name="Reference">D</field>
-                <field name="Value">LED</field>
-            </fields>
-            <pins>
-                <pin num="1" name="A" type="passive"/>
-                <pin num="2" name="K" type="passive"/>
-            </pins>
-        </libpart>
-        <libpart lib="device" part="CRYSTAL">
-            <fields>
-                <field name="Reference">X</field>
-                <field name="Value">CRYSTAL</field>
-            </fields>
-            <pins>
-                <pin num="1" name="1" type="passive"/>
-                <pin num="2" name="2" type="passive"/>
             </pins>
         </libpart>
         <libpart lib="mtx2" part="MTX2">
@@ -1076,40 +1024,6 @@
                 <pin num="6" name="SD" type="input"/>
                 <pin num="7" name="IN" type="power_in"/>
                 <pin num="8" name="IN" type="power_in"/>
-            </pins>
-        </libpart>
-        <libpart lib="device" part="CP1">
-            <description>Condensateur polarise</description>
-            <footprints>
-                <fp>CP*</fp>
-                <fp>SM*</fp>
-            </footprints>
-            <fields>
-                <field name="Reference">C</field>
-                <field name="Value">CP1</field>
-            </fields>
-            <pins>
-                <pin num="1" name="~" type="passive"/>
-                <pin num="2" name="~" type="passive"/>
-            </pins>
-        </libpart>
-        <libpart lib="part" part="PART">
-            <fields>
-                <field name="Reference">X</field>
-                <field name="Value">PART</field>
-            </fields>
-        </libpart>
-        <libpart lib="conn" part="CONN_4">
-            <description>Symbole general de connecteur</description>
-            <fields>
-                <field name="Reference">P</field>
-                <field name="Value">CONN_4</field>
-            </fields>
-            <pins>
-                <pin num="1" name="P1" type="passive"/>
-                <pin num="2" name="P2" type="passive"/>
-                <pin num="3" name="P3" type="passive"/>
-                <pin num="4" name="P4" type="passive"/>
             </pins>
         </libpart>
         <libpart lib="adl5324" part="ADL5324">
@@ -1300,16 +1214,51 @@
                 <pin num="1" name="TP" type="input"/>
             </pins>
         </libpart>
-        <libpart lib="conn" part="GS3">
+        <libpart lib="device" part="R">
+            <description>Resistance</description>
+            <footprints>
+                <fp>R?</fp>
+                <fp>SM0603</fp>
+                <fp>SM0805</fp>
+                <fp>R?-*</fp>
+                <fp>SM1206</fp>
+            </footprints>
             <fields>
-                <field name="Reference">GS</field>
-                <field name="Value">GS3</field>
-                <field name="Footprint">GS3</field>
+                <field name="Reference">R</field>
+                <field name="Value">R</field>
             </fields>
             <pins>
-                <pin num="1" name="G1" type="passive"/>
-                <pin num="2" name="G2" type="passive"/>
-                <pin num="3" name="G3" type="passive"/>
+                <pin num="1" name="~" type="passive"/>
+                <pin num="2" name="~" type="passive"/>
+            </pins>
+        </libpart>
+        <libpart lib="device" part="LED">
+            <footprints>
+                <fp>LED-3MM</fp>
+                <fp>LED-5MM</fp>
+                <fp>LED-10MM</fp>
+                <fp>LED-0603</fp>
+                <fp>LED-0805</fp>
+                <fp>LED-1206</fp>
+                <fp>LEDV</fp>
+            </footprints>
+            <fields>
+                <field name="Reference">D</field>
+                <field name="Value">LED</field>
+            </fields>
+            <pins>
+                <pin num="1" name="A" type="passive"/>
+                <pin num="2" name="K" type="passive"/>
+            </pins>
+        </libpart>
+        <libpart lib="device" part="INDUCTOR_SMALL">
+            <fields>
+                <field name="Reference">L</field>
+                <field name="Value">INDUCTOR_SMALL</field>
+            </fields>
+            <pins>
+                <pin num="1" name="1" type="input"/>
+                <pin num="2" name="2" type="input"/>
             </pins>
         </libpart>
         <libpart lib="conn" part="CONN_2">
@@ -1323,22 +1272,88 @@
                 <pin num="2" name="PM" type="passive"/>
             </pins>
         </libpart>
+        <libpart lib="device" part="C">
+            <description>Condensateur non polarise</description>
+            <footprints>
+                <fp>SM*</fp>
+                <fp>C?</fp>
+                <fp>C1-1</fp>
+            </footprints>
+            <fields>
+                <field name="Reference">C</field>
+                <field name="Value">C</field>
+            </fields>
+            <pins>
+                <pin num="1" name="~" type="passive"/>
+                <pin num="2" name="~" type="passive"/>
+            </pins>
+        </libpart>
+        <libpart lib="device" part="CRYSTAL">
+            <fields>
+                <field name="Reference">X</field>
+                <field name="Value">CRYSTAL</field>
+            </fields>
+            <pins>
+                <pin num="1" name="1" type="passive"/>
+                <pin num="2" name="2" type="passive"/>
+            </pins>
+        </libpart>
+        <libpart lib="device" part="CP1">
+            <description>Condensateur polarise</description>
+            <footprints>
+                <fp>CP*</fp>
+                <fp>SM*</fp>
+            </footprints>
+            <fields>
+                <field name="Reference">C</field>
+                <field name="Value">CP1</field>
+            </fields>
+            <pins>
+                <pin num="1" name="~" type="passive"/>
+                <pin num="2" name="~" type="passive"/>
+            </pins>
+        </libpart>
+        <libpart lib="part" part="PART">
+            <fields>
+                <field name="Reference">X</field>
+                <field name="Value">PART</field>
+            </fields>
+        </libpart>
+        <libpart lib="conn" part="CONN_4">
+            <description>Symbole general de connecteur</description>
+            <fields>
+                <field name="Reference">P</field>
+                <field name="Value">CONN_4</field>
+            </fields>
+            <pins>
+                <pin num="1" name="P1" type="passive"/>
+                <pin num="2" name="P2" type="passive"/>
+                <pin num="3" name="P3" type="passive"/>
+                <pin num="4" name="P4" type="passive"/>
+            </pins>
+        </libpart>
+        <libpart lib="conn" part="GS3">
+            <fields>
+                <field name="Reference">GS</field>
+                <field name="Value">GS3</field>
+                <field name="Footprint">GS3</field>
+            </fields>
+            <pins>
+                <pin num="1" name="G1" type="passive"/>
+                <pin num="2" name="G2" type="passive"/>
+                <pin num="3" name="G3" type="passive"/>
+            </pins>
+        </libpart>
     </libparts>
     <libraries>
-        <library logical="sma">
-            <uri>sma.lib</uri>
-        </library>
-        <library logical="device">
-            <uri>/usr/share/kicad/library/device.lib</uri>
+        <library logical="swd">
+            <uri>swd.lib</uri>
         </library>
         <library logical="conn">
             <uri>/usr/share/kicad/library/conn.lib</uri>
         </library>
-        <library logical="adp3335">
-            <uri>adp3335.lib</uri>
-        </library>
-        <library logical="swd">
-            <uri>swd.lib</uri>
+        <library logical="device">
+            <uri>/usr/share/kicad/library/device.lib</uri>
         </library>
         <library logical="adl5324">
             <uri>adl5324.lib</uri>
@@ -1348,6 +1363,9 @@
         </library>
         <library logical="adp3338">
             <uri>adp3338.lib</uri>
+        </library>
+        <library logical="sma">
+            <uri>sma.lib</uri>
         </library>
         <library logical="max-7q">
             <uri>max-7q.lib</uri>
@@ -1361,11 +1379,14 @@
         <library logical="jdga_quad_v">
             <uri>jdga_quad_v.lib</uri>
         </library>
+        <library logical="testpad">
+            <uri>testpad.lib</uri>
+        </library>
         <library logical="stm32f303c">
             <uri>stm32f303c.lib</uri>
         </library>
-        <library logical="testpad">
-            <uri>testpad.lib</uri>
+        <library logical="adp3335">
+            <uri>adp3335.lib</uri>
         </library>
         <library logical="mtx2">
             <uri>mtx2.lib</uri>
