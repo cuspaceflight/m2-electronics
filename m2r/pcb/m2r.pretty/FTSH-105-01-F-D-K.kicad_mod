@@ -1,5 +1,5 @@
-(module FTSH-105-01-F-D-K (layer F.Cu) (tedit 53CD459C)
-  (fp_text reference FTSH-105-01-F-D-K (at 2.54 -3.81) (layer F.SilkS) hide
+(module FTSH-105-01-F-D-K (layer F.Cu) (tedit 53CD9DFB)
+  (fp_text reference FTSH-105-01-F-D-K (at 2.5 -2.9) (layer F.SilkS) hide
     (effects (font (size 1 1) (thickness 0.15)))
   )
   (fp_text value VAL** (at 2.54 3.81) (layer F.SilkS)

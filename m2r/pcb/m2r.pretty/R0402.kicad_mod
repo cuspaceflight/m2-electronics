@@ -1,4 +1,4 @@
-(module R0402 (layer F.Cu) (tedit 53CD4C8F)
+(module R0402 (layer F.Cu) (tedit 53CDA370)
   (fp_text reference R0402 (at 0.4 -1.25) (layer F.SilkS) hide
     (effects (font (size 1 1) (thickness 0.15)))
   )
