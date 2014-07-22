@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-jan-25)-product   date = Tue 22 Jul 2014 01:06:06 BST
+Cmp-Mod V01 Created by Cvpcb (2014-jan-25)-product   date = Tue 22 Jul 2014 17:43:09 BST
 
 BeginCmp
 TimeStamp = /537D2E90;
@@ -299,6 +299,41 @@ TimeStamp = /538073C2;
 Reference = D6;
 ValeurCmp = YELLOW;
 IdModule  = m2r:LED0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /53CEC0C9;
+Reference = D7;
+ValeurCmp = ESD5V3S1U;
+IdModule  = m2r:TSLP-2-17;
+EndCmp
+
+BeginCmp
+TimeStamp = /53CEC6CF;
+Reference = D8;
+ValeurCmp = ESD5V3S1U;
+IdModule  = m2r:TSLP-2-17;
+EndCmp
+
+BeginCmp
+TimeStamp = /53CEBDEC;
+Reference = D9;
+ValeurCmp = ESD5V3S1U;
+IdModule  = m2r:TSLP-2-17;
+EndCmp
+
+BeginCmp
+TimeStamp = /53D09D94;
+Reference = D10;
+ValeurCmp = ESD5V3S1U;
+IdModule  = m2r:TSLP-2-17;
+EndCmp
+
+BeginCmp
+TimeStamp = /53CEBD54;
+Reference = D11;
+ValeurCmp = ESD5V3S1U;
+IdModule  = m2r:TSLP-2-17;
 EndCmp
 
 BeginCmp
@@ -810,6 +845,34 @@ TimeStamp = /5378F7D3;
 Reference = X10;
 ValeurCmp = 8M;
 IdModule  = m2r:HC49S;
+EndCmp
+
+BeginCmp
+TimeStamp = /53D04425;
+Reference = X11;
+ValeurCmp = M3 MOUNT;
+IdModule  = m2r:M3_MOUNT;
+EndCmp
+
+BeginCmp
+TimeStamp = /53D056D6;
+Reference = X12;
+ValeurCmp = M3 MOUNT;
+IdModule  = m2r:M3_MOUNT;
+EndCmp
+
+BeginCmp
+TimeStamp = /53D054A4;
+Reference = X13;
+ValeurCmp = M3 MOUNT;
+IdModule  = m2r:M3_MOUNT;
+EndCmp
+
+BeginCmp
+TimeStamp = /53D05770;
+Reference = X14;
+ValeurCmp = M3 MOUNT;
+IdModule  = m2r:M3_MOUNT;
 EndCmp
 
 EndListe
