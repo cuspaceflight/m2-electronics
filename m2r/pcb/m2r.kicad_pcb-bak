@@ -694,13 +694,13 @@
       (net 13 "Net-(C20-Pad1)"))
   )
 
-  (module m2r:C0603 (layer F.Cu) (tedit 53CF35BC) (tstamp 53CDE58E)
+  (module m2r:C0603 (layer F.Cu) (tedit 53CF3BF0) (tstamp 53CDE58E)
     (at 123.5 100.8 90)
     (path /537D6BF0)
     (fp_text reference C23 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10µ (at -1.9 -0.2 270) (layer F.SilkS)
+    (fp_text value 10µ (at 3.4 0.1 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start 1.75 0.5) (end -0.35 0.5) (layer F.SilkS) (width 0.15))
@@ -728,13 +728,13 @@
       (net 5 GND))
   )
 
-  (module m2r:C0603 (layer F.Cu) (tedit 53CF35C3) (tstamp 53CDE59C)
+  (module m2r:C0603 (layer F.Cu) (tedit 53CF3BE6) (tstamp 53CDE59C)
     (at 124.8 100.8 90)
     (path /537D59B4)
     (fp_text reference C25 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 100n (at -2.2 -0.1 270) (layer F.SilkS)
+    (fp_text value 100n (at 3.8 0 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start 1.75 0.5) (end -0.35 0.5) (layer F.SilkS) (width 0.15))

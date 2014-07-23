@@ -2812,7 +2812,7 @@
   )
 
   (module m2r:cusf_logo_full (layer B.Cu) (tedit 53CF2F8D) (tstamp 53CF31AF)
-    (at 139.5 95.9)
+    (at 139.6 94.2)
     (fp_text reference G*** (at 0 0) (layer B.SilkS) hide
       (effects (font (thickness 0.3)) (justify mirror))
     )
