@@ -1735,7 +1735,7 @@ F 2 "m2r:S02B-PASK-2" H 10500 3900 60  0001 C CNN
 F 3 "" H 10500 3900 60  0000 C CNN
 F 4 "1830747" H 10500 3900 60  0001 C CNN "Farnell"
 	1    10500 3900
-	1    0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
 L PART X8
@@ -1819,7 +1819,7 @@ F 2 "m2r:R0603" V 10080 4650 30  0001 C CNN
 F 3 "" H 10150 4650 30  0000 C CNN
 F 4 "2331989" H 10150 4650 60  0001 C CNN "Farnell"
 	1    10150 4650
-	0    1    1    0   
+	0    -1   1    0   
 $EndComp
 $Comp
 L LED D2
@@ -2011,9 +2011,9 @@ Text GLabel 3350 5900 2    60   Output ~ 0
 LED_3
 Text GLabel 3350 6000 2    60   Output ~ 0
 LED_4
-Text GLabel 3350 3350 2    60   Output ~ 0
-LED_A
 Text GLabel 3350 3250 2    60   Output ~ 0
+LED_A
+Text GLabel 3350 3350 2    60   Output ~ 0
 LED_C
 $Comp
 L R R5
