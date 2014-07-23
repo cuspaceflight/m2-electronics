@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /home/adam/Projects/m2-electronics/m2r/pcb/m2r.sch)
-    (date "Wed 23 Jul 2014 01:27:27 BST")
+    (date "Wed 23 Jul 2014 05:03:08 BST")
     (tool "Eeschema (2014-jul-16 BZR unknown)-product"))
   (components
     (comp (ref X10)
@@ -223,7 +223,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 537B56E0))
     (comp (ref C22)
-      (value 6.2p)
+      (value 6p2)
       (footprint m2r:C0402)
       (fields
         (field (name Farnell) 1885324))
