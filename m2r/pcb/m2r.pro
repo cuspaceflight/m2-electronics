@@ -1,4 +1,4 @@
-update=Wed 23 Jul 2014 15:06:35 BST
+update=Wed 23 Jul 2014 17:34:19 BST
 version=1
 last_client=kicad
 [cvpcb]
@@ -78,15 +78,16 @@ LibName53=adp3335
 LibName54=adp3333
 LibName55=mocd207m
 LibName56=esd5v3s1u
+LibName57=cga0402mlc-12g
 [pcbnew]
 version=1
 PageLayoutDescrFile=
 LastNetListRead=
 UseCmpFile=1
-PadDrill=0.2
-PadDrillOvalY=0.2
-PadSizeH=0.3
-PadSizeV=0.3
+PadDrill=1
+PadDrillOvalY=1
+PadSizeH=1.7
+PadSizeV=1.7
 PcbTextSizeV=1.5
 PcbTextSizeH=1.5
 PcbTextThickness=0.3

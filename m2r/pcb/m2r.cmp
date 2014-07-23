@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-jan-25)-product   date = Tue 22 Jul 2014 17:43:09 BST
+Cmp-Mod V01 Created by Cvpcb (2014-jul-16 BZR unknown)-product   date = Wed 23 Jul 2014 17:35:26 BST
 
 BeginCmp
 TimeStamp = /537D2E90;
@@ -157,7 +157,7 @@ EndCmp
 BeginCmp
 TimeStamp = /537B5A1A;
 Reference = C22;
-ValeurCmp = 6.2p;
+ValeurCmp = 6p2;
 IdModule  = m2r:C0402;
 EndCmp
 
@@ -302,38 +302,38 @@ IdModule  = m2r:LED0603;
 EndCmp
 
 BeginCmp
-TimeStamp = /53CEC0C9;
+TimeStamp = /53D0258B;
 Reference = D7;
-ValeurCmp = ESD5V3S1U;
-IdModule  = m2r:TSLP-2-17;
+ValeurCmp = CGA0402MLC-12G;
+IdModule  = m2r:R0402;
 EndCmp
 
 BeginCmp
-TimeStamp = /53CEC6CF;
+TimeStamp = /53D01898;
 Reference = D8;
-ValeurCmp = ESD5V3S1U;
-IdModule  = m2r:TSLP-2-17;
+ValeurCmp = CGA0402MLC-12G;
+IdModule  = m2r:R0402;
 EndCmp
 
 BeginCmp
-TimeStamp = /53CEBDEC;
+TimeStamp = /53D02CEB;
 Reference = D9;
-ValeurCmp = ESD5V3S1U;
-IdModule  = m2r:TSLP-2-17;
+ValeurCmp = CGA0402MLC-12G;
+IdModule  = m2r:R0402;
 EndCmp
 
 BeginCmp
-TimeStamp = /53D09D94;
+TimeStamp = /53D031DA;
 Reference = D10;
-ValeurCmp = ESD5V3S1U;
-IdModule  = m2r:TSLP-2-17;
+ValeurCmp = CGA0402MLC-12G;
+IdModule  = m2r:R0402;
 EndCmp
 
 BeginCmp
-TimeStamp = /53CEBD54;
+TimeStamp = /53D036C9;
 Reference = D11;
-ValeurCmp = ESD5V3S1U;
-IdModule  = m2r:TSLP-2-17;
+ValeurCmp = CGA0402MLC-12G;
+IdModule  = m2r:R0402;
 EndCmp
 
 BeginCmp
