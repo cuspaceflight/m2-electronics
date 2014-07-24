@@ -14,3 +14,5 @@ will depend on how much time is available.
 
 * Silk pin1 indicator on the GPS LNA is in the wrong position:
   it's on the bottom right but should be on the top right.
+* RockBLOCK connector ground pin only has a single via to ground, probably
+  wants additional grounding
