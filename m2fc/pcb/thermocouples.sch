@@ -1937,4 +1937,6 @@ F 4 "2067807" H 2700 5600 60  0001 C CNN "Farnell"
 	1    2700 5600
 	1    0    0    -1  
 $EndComp
+Text Notes 700  1150 0    60   ~ 0
+MAYBE ADD SHIELD\nCONNECTOR
 $EndSCHEMATC

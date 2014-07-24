@@ -1866,4 +1866,6 @@ F 4 "1830726" H 1550 1500 60  0001 C CNN "Farnell"
 	1    1550 1500
 	1    0    0    -1  
 $EndComp
+Text Notes 7650 650  0    60   ~ 0
+CHECK IF PULLUPS NEEDED
 $EndSCHEMATC

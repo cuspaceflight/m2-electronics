@@ -3425,7 +3425,7 @@
   (segment (start 136.75 124.25) (end 138 125.5) (width 0.4) (layer F.Cu) (net 4) (tstamp 53CEE31B))
   (segment (start 138 125.5) (end 138 125.75) (width 0.4) (layer F.Cu) (net 4) (tstamp 53CEE31D))
   (segment (start 129 73) (end 127.2 73) (width 0.3) (layer F.Cu) (net 5))
-  (segment (start 127.2 73) (end 127.25 72.95) (width 0.3) (layer F.Cu) (net 5) (tstamp 53D01ADF) (status C00000))
+  (segment (start 127.2 73) (end 127.25 72.95) (width 0.3) (layer F.Cu) (net 5) (tstamp 53D01ADF))
   (segment (start 121.1 85.4) (end 120.2 85.4) (width 0.3) (layer F.Cu) (net 5))
   (via (at 120.2 85.4) (size 0.8) (drill 0.6) (layers F.Cu B.Cu) (net 5))
   (segment (start 123.2 84) (end 123.9 84) (width 0.3) (layer F.Cu) (net 5))
