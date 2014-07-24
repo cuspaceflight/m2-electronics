@@ -1,6 +1,6 @@
-update=Thu 10 Jul 2014 03:02:29 BST
+update=Fri 25 Jul 2014 00:28:47 BST
 version=1
-last_client=eeschema
+last_client=kicad
 [cvpcb]
 version=1
 NetIExt=net
@@ -52,6 +52,8 @@ SubpartIdSeparator=0
 SubpartFirstId=65
 LibDir=
 NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
 RptD_X=0
 RptD_Y=100
 RptLab=1
@@ -110,3 +112,4 @@ LibName50=adp3335
 LibName51=ad8541
 LibName52=ad8656
 LibName53=stm32f405vgt
+LibName54=adum1201

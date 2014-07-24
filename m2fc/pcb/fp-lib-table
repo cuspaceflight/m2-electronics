@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name m2fc)(type KiCad)(uri "$(KIPRJMOD)/m2fc.pretty")(options "")(descr ""))
+)
