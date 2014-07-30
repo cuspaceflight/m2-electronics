@@ -1004,9 +1004,9 @@ Text Label 4450 4100 0    60   ~ 0
 SER_IN_2
 Text Label 4450 3600 0    60   ~ 0
 SD_CD
-Text Label 4450 2200 0    60   ~ 0
-HG_ACCEL_INT1
 Text Label 4450 2300 0    60   ~ 0
+HG_ACCEL_INT1
+Text Label 4450 2200 0    60   ~ 0
 HG_ACCEL_INT2
 Text Label 4450 4300 0    60   ~ 0
 LG_ACCEL_INT1
@@ -1036,7 +1036,7 @@ Text Label 4450 6200 0    60   ~ 0
 PYRO_2_F
 Text Label 8300 3700 0    60   ~ 0
 GYRO_INT1
-Text Label 4450 6700 0    60   ~ 0
+Text Label 4450 6500 0    60   ~ 0
 GYRO_INT1
 Text Label 6600 5950 2    60   ~ 0
 THERMO_3
@@ -1048,7 +1048,6 @@ NoConn ~ 4400 3800
 NoConn ~ 4400 3900
 NoConn ~ 4400 4500
 NoConn ~ 4400 4600
-NoConn ~ 4400 6500
 NoConn ~ 3100 6100
 NoConn ~ 3100 6200
 NoConn ~ 3100 6300
@@ -1086,17 +1085,6 @@ F 3 "" H 10550 900 60  0000 C CNN
 	1    10550 900 
 	0    1    1    0   
 $EndComp
-$Comp
-L GS2 GS103
-U 1 1 53CB171F
-P 10550 1150
-F 0 "GS103" H 10650 1300 50  0000 C CNN
-F 1 "GS2" H 10650 1001 40  0000 C CNN
-F 2 "Connect:GS2" V 10624 1150 30  0001 C CNN
-F 3 "" H 10550 1150 60  0000 C CNN
-	1    10550 1150
-	0    1    1    0   
-$EndComp
 Text Notes 9900 1500 0    60   ~ 0
 CONFIG JUMPERS
 $Comp
@@ -1114,14 +1102,10 @@ Text Label 10250 650  2    60   ~ 0
 SJ1
 Text Label 10250 900  2    60   ~ 0
 SJ2
-Text Label 10250 1150 2    60   ~ 0
-SJ3
 Text Label 4450 4800 0    60   ~ 0
 SJ1
 Text Label 4450 4900 0    60   ~ 0
 SJ2
-Text Label 4450 5000 0    60   ~ 0
-SJ3
 $Comp
 L STM32F405VGT IC102
 U 1 1 53C06851
@@ -2163,9 +2147,9 @@ Wire Wire Line
 Wire Wire Line
 	3100 5300 3050 5300
 Wire Wire Line
-	4400 6700 4450 6700
-Wire Wire Line
 	4400 6600 4450 6600
+Wire Wire Line
+	4400 6500 4450 6500
 Wire Wire Line
 	4400 4400 4450 4400
 Wire Wire Line
@@ -2216,17 +2200,12 @@ Wire Wire Line
 Wire Wire Line
 	8250 5400 8300 5400
 Wire Wire Line
-	10750 1150 10800 1150
-Wire Wire Line
 	10800 650  10800 1200
 Wire Wire Line
 	10750 900  10800 900 
-Connection ~ 10800 1150
 Wire Wire Line
 	10750 650  10800 650 
 Connection ~ 10800 900 
-Wire Wire Line
-	10350 1150 10250 1150
 Wire Wire Line
 	10350 900  10250 900 
 Wire Wire Line
@@ -2243,8 +2222,6 @@ Wire Wire Line
 	4400 4800 4450 4800
 Wire Wire Line
 	4400 4900 4450 4900
-Wire Wire Line
-	4400 5000 4450 5000
 Wire Wire Line
 	6050 1900 6050 2350
 Wire Wire Line
@@ -2386,4 +2363,6 @@ NoConn ~ 4400 3300
 NoConn ~ 4400 4700
 NoConn ~ 4400 5700
 NoConn ~ 4400 5800
+NoConn ~ 4400 6700
+NoConn ~ 4400 5000
 $EndSCHEMATC
