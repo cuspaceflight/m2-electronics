@@ -1,4 +1,4 @@
-update=Mon 28 Jul 2014 00:56:23 BST
+update=Wed 30 Jul 2014 04:08:34 BST
 version=1
 last_client=kicad
 [cvpcb]
@@ -34,7 +34,7 @@ PageLayoutDescrFile=
 SubpartIdSeparator=0
 SubpartFirstId=65
 LibDir=
-NetFmtName=
+NetFmtName=PcbnewAdvanced
 SpiceForceRefPrefix=0
 SpiceUseNetNumbers=0
 RptD_X=0
