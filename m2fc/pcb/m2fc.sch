@@ -147,9 +147,9 @@ U 1 1 53A5FF53
 P 1700 3850
 F 0 "X101" H 1700 4000 60  0000 C CNN
 F 1 "8M" H 1700 3700 60  0000 C CNN
-F 2 "m2fc:HC49S" H 1700 3850 60  0001 C CNN
+F 2 "m2fc:XTAL50x32" H 1700 3850 60  0001 C CNN
 F 3 "" H 1700 3850 60  0001 C CNN
-F 4 "2063945" H 1700 3850 60  0001 C CNN "Farnell"
+F 4 "2101329" H 1700 3850 60  0001 C CNN "Farnell"
 	1    1700 3850
 	0    1    1    0   
 $EndComp
@@ -1018,15 +1018,15 @@ Text Label 4450 4200 0    60   ~ 0
 BARO_CS
 Text Label 4450 5200 0    60   ~ 0
 MAGNO_DRDY
-Text Label 4450 5700 0    60   ~ 0
+Text Label 4450 2500 0    60   ~ 0
 LED_A
-Text Label 4450 5800 0    60   ~ 0
+Text Label 4450 2400 0    60   ~ 0
 LED_C
-Text Label 4450 4700 0    60   ~ 0
+Text Label 3050 5300 2    60   ~ 0
 LED_1
-Text Label 4450 4800 0    60   ~ 0
+Text Label 3050 5400 2    60   ~ 0
 LED_2
-Text Label 4450 4900 0    60   ~ 0
+Text Label 3050 5500 2    60   ~ 0
 LED_3
 Text Label 4450 5900 0    60   ~ 0
 PYRO_1_C
@@ -1043,8 +1043,6 @@ THERMO_3
 Text Label 4450 2100 0    60   ~ 0
 THERMO_3
 NoConn ~ 4400 1800
-NoConn ~ 4400 2400
-NoConn ~ 4400 2500
 NoConn ~ 4400 3500
 NoConn ~ 4400 3800
 NoConn ~ 4400 3900
@@ -1055,7 +1053,6 @@ NoConn ~ 3100 6100
 NoConn ~ 3100 6200
 NoConn ~ 3100 6300
 NoConn ~ 3100 5900
-NoConn ~ 3100 5300
 NoConn ~ 3100 5200
 Text Label 8300 4900 0    60   ~ 0
 PYRO_3_F
@@ -1119,11 +1116,11 @@ Text Label 10250 900  2    60   ~ 0
 SJ2
 Text Label 10250 1150 2    60   ~ 0
 SJ3
-Text Label 3050 5400 2    60   ~ 0
+Text Label 4450 4800 0    60   ~ 0
 SJ1
-Text Label 3050 5500 2    60   ~ 0
+Text Label 4450 4900 0    60   ~ 0
 SJ2
-Text Label 3050 5600 2    60   ~ 0
+Text Label 4450 5000 0    60   ~ 0
 SJ3
 $Comp
 L STM32F405VGT IC102
@@ -1323,7 +1320,7 @@ F4 "THERMO_3" O L 6650 5950 60
 $EndSheet
 Text Label 6600 5400 2    60   ~ 0
 LED_4
-Text Label 4450 5000 0    60   ~ 0
+Text Label 3050 5600 2    60   ~ 0
 LED_4
 NoConn ~ 4400 5400
 NoConn ~ 4400 5500
@@ -2158,13 +2155,13 @@ Wire Wire Line
 Wire Wire Line
 	4400 5900 4450 5900
 Wire Wire Line
-	4400 5800 4450 5800
+	4400 2500 4450 2500
 Wire Wire Line
-	4400 5700 4450 5700
+	4400 2400 4450 2400
 Wire Wire Line
-	4400 4800 4450 4800
+	3100 5400 3050 5400
 Wire Wire Line
-	4400 4700 4450 4700
+	3100 5300 3050 5300
 Wire Wire Line
 	4400 6700 4450 6700
 Wire Wire Line
@@ -2243,11 +2240,11 @@ Wire Notes Line
 Wire Notes Line
 	9850 1550 9850 500 
 Wire Wire Line
-	3100 5400 3050 5400
+	4400 4800 4450 4800
 Wire Wire Line
-	3100 5500 3050 5500
+	4400 4900 4450 4900
 Wire Wire Line
-	3100 5600 3050 5600
+	4400 5000 4450 5000
 Wire Wire Line
 	6050 1900 6050 2350
 Wire Wire Line
@@ -2289,9 +2286,9 @@ Wire Wire Line
 Wire Wire Line
 	6600 5400 6650 5400
 Wire Wire Line
-	4400 4900 4450 4900
+	3100 5500 3050 5500
 Wire Wire Line
-	4400 5000 4450 5000
+	3100 5600 3050 5600
 Wire Wire Line
 	5050 1150 5050 1200
 Connection ~ 5050 1150
@@ -2386,4 +2383,7 @@ Wire Wire Line
 NoConn ~ 4400 3100
 NoConn ~ 4400 3200
 NoConn ~ 4400 3300
+NoConn ~ 4400 4700
+NoConn ~ 4400 5700
+NoConn ~ 4400 5800
 $EndSCHEMATC
