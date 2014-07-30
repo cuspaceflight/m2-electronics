@@ -970,13 +970,13 @@ Text Label 3050 6700 2    60   ~ 0
 SER_OUT_1
 Text Label 3050 6800 2    60   ~ 0
 SER_IN_1
-Text Label 3050 6900 2    60   ~ 0
-GYRO_SCL
-Text Label 3050 7000 2    60   ~ 0
-GYRO_SDA
 Text Label 3050 7100 2    60   ~ 0
-MAGNO_SCL
+GYRO_SCL
 Text Label 3050 7200 2    60   ~ 0
+GYRO_SDA
+Text Label 3050 6900 2    60   ~ 0
+MAGNO_SCL
+Text Label 3050 7000 2    60   ~ 0
 MAGNO_SDA
 Text Label 3050 7300 2    60   ~ 0
 LG_ACCEL_CS
@@ -1012,11 +1012,11 @@ Text Label 4450 4300 0    60   ~ 0
 LG_ACCEL_INT1
 Text Label 4450 4400 0    60   ~ 0
 LG_ACCEL_INT2
-Text Label 4450 5200 0    60   ~ 0
+Text Label 4450 6600 0    60   ~ 0
 GYRO_DRDY
 Text Label 4450 4200 0    60   ~ 0
 BARO_CS
-Text Label 4450 6700 0    60   ~ 0
+Text Label 4450 5200 0    60   ~ 0
 MAGNO_DRDY
 Text Label 4450 5700 0    60   ~ 0
 LED_A
@@ -1036,7 +1036,7 @@ Text Label 4450 6200 0    60   ~ 0
 PYRO_2_F
 Text Label 8300 3700 0    60   ~ 0
 GYRO_INT1
-Text Label 4450 5300 0    60   ~ 0
+Text Label 4450 6700 0    60   ~ 0
 GYRO_INT1
 Text Label 6600 5950 2    60   ~ 0
 THERMO_3
@@ -1051,7 +1051,6 @@ NoConn ~ 4400 3900
 NoConn ~ 4400 4500
 NoConn ~ 4400 4600
 NoConn ~ 4400 6500
-NoConn ~ 4400 6600
 NoConn ~ 3100 6100
 NoConn ~ 3100 6200
 NoConn ~ 3100 6300
@@ -1678,13 +1677,13 @@ Wire Wire Line
 Wire Wire Line
 	3050 6800 3100 6800
 Wire Wire Line
-	3050 6900 3100 6900
-Wire Wire Line
-	3050 7000 3100 7000
-Wire Wire Line
 	3050 7100 3100 7100
 Wire Wire Line
 	3050 7200 3100 7200
+Wire Wire Line
+	3050 6900 3100 6900
+Wire Wire Line
+	3050 7000 3100 7000
 Wire Wire Line
 	3050 7300 3100 7300
 Wire Wire Line
@@ -1693,8 +1692,6 @@ Wire Wire Line
 	3050 7500 3100 7500
 Wire Wire Line
 	3050 7600 3100 7600
-Wire Wire Line
-	4450 6700 4400 6700
 Wire Wire Line
 	4450 6200 4400 6200
 Wire Wire Line
@@ -1712,9 +1709,9 @@ Wire Wire Line
 Wire Wire Line
 	4400 4700 4450 4700
 Wire Wire Line
-	4400 5300 4450 5300
+	4400 6700 4450 6700
 Wire Wire Line
-	4400 5200 4450 5200
+	4400 6600 4450 6600
 Wire Wire Line
 	4400 4400 4450 4400
 Wire Wire Line
@@ -2169,4 +2166,7 @@ Wire Wire Line
 Connection ~ 8450 2150
 Wire Wire Line
 	8350 2250 8350 2400
+Wire Wire Line
+	4400 5200 4450 5200
+NoConn ~ 4400 5300
 $EndSCHEMATC
