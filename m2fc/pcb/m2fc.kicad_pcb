@@ -5,7 +5,7 @@
     (no_connects 729)
     (area 41.099999 29.856488 150.100001 100.100001)
     (thickness 1.6)
-    (drawings 33)
+    (drawings 27)
     (tracks 0)
     (zones 0)
     (modules 353)
@@ -772,7 +772,7 @@
   )
 
   (module m2fc:R0402 (layer F.Cu) (tedit 53CDA370) (tstamp 53D89ED7)
-    (at 54.8 86.4 270)
+    (at 61.8 86.4 270)
     (path /53B649CD/53DABA89)
     (fp_text reference D201 (at 0.4 -1.25 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -789,7 +789,7 @@
   )
 
   (module m2fc:R0402 (layer F.Cu) (tedit 53CDA370) (tstamp 53D89EDF)
-    (at 56.6 86.4 270)
+    (at 63.6 86.4 270)
     (path /53B649CD/53DAC023)
     (fp_text reference D202 (at 0.4 -1.25 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -806,7 +806,7 @@
   )
 
   (module m2fc:R0402 (layer F.Cu) (tedit 53CDA370) (tstamp 53D89EE7)
-    (at 65.8 86.4 270)
+    (at 72.8 86.4 270)
     (path /53B649CD/53DBDC30)
     (fp_text reference D203 (at 0.4 -1.25 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -823,7 +823,7 @@
   )
 
   (module m2fc:R0402 (layer F.Cu) (tedit 53CDA370) (tstamp 53D89EEF)
-    (at 67.6 86.4 270)
+    (at 74.6 86.4 270)
     (path /53B649CD/53DBDC3F)
     (fp_text reference D204 (at 0.4 -1.25 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -840,7 +840,7 @@
   )
 
   (module m2fc:R0402 (layer F.Cu) (tedit 53CDA370) (tstamp 53D89EF7)
-    (at 76.8 86.4 270)
+    (at 83.8 86.4 270)
     (path /53B649CD/53DBF05A)
     (fp_text reference D205 (at 0.4 -1.25 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -857,7 +857,7 @@
   )
 
   (module m2fc:R0402 (layer F.Cu) (tedit 53CDA370) (tstamp 53D89EFF)
-    (at 78.6 86.4 270)
+    (at 85.6 86.4 270)
     (path /53B649CD/53DBF069)
     (fp_text reference D206 (at 0.4 -1.25 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1033,12 +1033,12 @@
   )
 
   (module m2fc:SOD323 (layer F.Cu) (tedit 53D87D96) (tstamp 53D89F6D)
-    (at 117.8 102.6)
+    (at 114.4 87.6 270)
     (path /53B9637D/53DBE189)
-    (fp_text reference D501 (at 1.2 -1.7) (layer F.SilkS)
+    (fp_text reference D501 (at 1.2 -1.7 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value DIODESCH (at 1.4 1.7) (layer F.SilkS) hide
+    (fp_text value DIODESCH (at 1.4 1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start 1.1 -0.6) (end 1.1 0.6) (layer F.SilkS) (width 0.15))
@@ -1049,9 +1049,9 @@
     (fp_line (start 0.6 0.6) (end 0.6 -0.6) (layer F.SilkS) (width 0.15))
     (fp_line (start 0 0.6) (end 2.5 0.6) (layer F.SilkS) (width 0.15))
     (fp_line (start 0 -0.6) (end 2.4 -0.6) (layer F.SilkS) (width 0.15))
-    (pad 2 smd rect (at 0 0) (size 1 0.7) (drill (offset -0.1 0)) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 0 0 270) (size 1 0.7) (drill (offset -0.1 0)) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 1 smd rect (at 2.4 0) (size 1 0.7) (drill (offset 0.1 0)) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 2.4 0 270) (size 1 0.7) (drill (offset 0.1 0)) (layers F.Cu F.Paste F.Mask)
       (net 43 /Pyros/PYRO_1_C))
   )
 
@@ -1073,12 +1073,12 @@
   )
 
   (module m2fc:SOD323 (layer F.Cu) (tedit 53D87D96) (tstamp 53D89F83)
-    (at 129.8 103.4)
+    (at 129 86 90)
     (path /53B9637D/53DBE5AA)
-    (fp_text reference D503 (at 1.2 -1.7) (layer F.SilkS)
+    (fp_text reference D503 (at 1.2 -1.7 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value DIODESCH (at 1.4 1.7) (layer F.SilkS) hide
+    (fp_text value DIODESCH (at 1.4 1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start 1.1 -0.6) (end 1.1 0.6) (layer F.SilkS) (width 0.15))
@@ -1089,9 +1089,9 @@
     (fp_line (start 0.6 0.6) (end 0.6 -0.6) (layer F.SilkS) (width 0.15))
     (fp_line (start 0 0.6) (end 2.5 0.6) (layer F.SilkS) (width 0.15))
     (fp_line (start 0 -0.6) (end 2.4 -0.6) (layer F.SilkS) (width 0.15))
-    (pad 2 smd rect (at 0 0) (size 1 0.7) (drill (offset -0.1 0)) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 0 0 90) (size 1 0.7) (drill (offset -0.1 0)) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 1 smd rect (at 2.4 0) (size 1 0.7) (drill (offset 0.1 0)) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 2.4 0 90) (size 1 0.7) (drill (offset 0.1 0)) (layers F.Cu F.Paste F.Mask)
       (net 44 /Pyros/PYRO_2_C))
   )
 
@@ -1113,7 +1113,7 @@
   )
 
   (module m2fc:SOD323 (layer F.Cu) (tedit 53D87D96) (tstamp 53D89F99)
-    (at 145.6 104.2)
+    (at 141.2 87.6)
     (path /53B9637D/53DBE65C)
     (fp_text reference D505 (at 1.2 -1.7) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1570,7 +1570,7 @@
   )
 
   (module m2fc:MSOP8 (layer F.Cu) (tedit 53CD920E) (tstamp 53D8A081)
-    (at 58 85 180)
+    (at 65 85 180)
     (path /53B649CD/53C527FE)
     (fp_text reference IC201 (at 2.2 -1.5 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1601,7 +1601,7 @@
   )
 
   (module m2fc:MSOP8 (layer F.Cu) (tedit 53CD920E) (tstamp 53D8A091)
-    (at 53.6 75)
+    (at 60.6 75)
     (path /53B649CD/53C5716C)
     (fp_text reference IC202 (at 2.2 -1.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1632,7 +1632,7 @@
   )
 
   (module m2fc:SC-70-5 (layer F.Cu) (tedit 53D85E99) (tstamp 53D8A09E)
-    (at 54.4 81.6)
+    (at 61.4 81.6)
     (path /53B649CD/53C52BE8)
     (fp_text reference IC203 (at 0 -3.7) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1657,7 +1657,7 @@
   )
 
   (module m2fc:MSOP8 (layer F.Cu) (tedit 53CD920E) (tstamp 53D8A0AE)
-    (at 69 85 180)
+    (at 76 85 180)
     (path /53B649CD/53DBDAF5)
     (fp_text reference IC204 (at 2.2 -1.5 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1688,7 +1688,7 @@
   )
 
   (module m2fc:MSOP8 (layer F.Cu) (tedit 53CD920E) (tstamp 53D8E427)
-    (at 64.6 75)
+    (at 71.6 75)
     (path /53B649CD/53DBDBDB)
     (fp_text reference IC205 (at 2.2 -1.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1719,7 +1719,7 @@
   )
 
   (module m2fc:SC-70-5 (layer F.Cu) (tedit 53D85E99) (tstamp 53D8A0CB)
-    (at 65.4 81.6)
+    (at 72.4 81.6)
     (path /53B649CD/53DBDB03)
     (fp_text reference IC206 (at 0 -3.7) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1744,7 +1744,7 @@
   )
 
   (module m2fc:MSOP8 (layer F.Cu) (tedit 53CD920E) (tstamp 53D8A0DB)
-    (at 80 85 180)
+    (at 87 85 180)
     (path /53B649CD/53DBEF1F)
     (fp_text reference IC207 (at 2.2 -1.5 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1775,7 +1775,7 @@
   )
 
   (module m2fc:MSOP8 (layer F.Cu) (tedit 53CD920E) (tstamp 53D8A0EB)
-    (at 75.6 75)
+    (at 82.6 75)
     (path /53B649CD/53DBF005)
     (fp_text reference IC208 (at 2.2 -1.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1806,7 +1806,7 @@
   )
 
   (module m2fc:SC-70-5 (layer F.Cu) (tedit 53D85E99) (tstamp 53D8A0F8)
-    (at 76.4 81.6)
+    (at 83.4 81.6)
     (path /53B649CD/53DBEF2D)
     (fp_text reference IC209 (at 0 -3.7) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1831,7 +1831,7 @@
   )
 
   (module m2fc:ADXL3x5 (layer F.Cu) (tedit 53D87C32) (tstamp 53D8A114)
-    (at 96.2 81.8 90)
+    (at 96.2 81.4 90)
     (path /53B65BB5/53B66D34)
     (fp_text reference IC301 (at -1.7 1.7 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1880,7 +1880,7 @@
   )
 
   (module m2fc:ADXL3x5 (layer F.Cu) (tedit 53D87C32) (tstamp 53D8A130)
-    (at 117.2 64)
+    (at 117.6 64)
     (path /53B65BB5/53B66D7C)
     (fp_text reference IC302 (at -1.7 1.7 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1966,7 +1966,7 @@
   )
 
   (module m2fc:L3G4200D (layer F.Cu) (tedit 53D87B2D) (tstamp 53D8A181)
-    (at 107.4 79.8)
+    (at 107.4 80.8)
     (path /53B65BB5/53C8A050)
     (fp_text reference IC305 (at 1.4 -2.6) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2843,7 +2843,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3A0)
-    (at 59.4 87.4 180)
+    (at 66.4 87.4 180)
     (path /53B649CD/53C547E8)
     (fp_text reference R201 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2860,7 +2860,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3A8)
-    (at 58.4 80 270)
+    (at 65.4 80 270)
     (path /53B649CD/53C52081)
     (fp_text reference R202 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2877,7 +2877,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3B0)
-    (at 59.8 84.6 90)
+    (at 66.8 84.6 90)
     (path /53B649CD/53C52888)
     (fp_text reference R203 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2894,7 +2894,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3B8)
-    (at 51.4 83 270)
+    (at 58.4 83 270)
     (path /53B649CD/53C570F6)
     (fp_text reference R204 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2911,7 +2911,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3C0)
-    (at 52.8 80 270)
+    (at 59.8 80 270)
     (path /53B649CD/53C570FD)
     (fp_text reference R205 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2928,7 +2928,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3C8)
-    (at 51.4 75 270)
+    (at 58.4 75 270)
     (path /53B649CD/53C5710B)
     (fp_text reference R206 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2945,7 +2945,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3D0)
-    (at 52.8 72 270)
+    (at 59.8 72 270)
     (path /53B649CD/53C57112)
     (fp_text reference R207 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2962,7 +2962,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53D8DAC2) (tstamp 53D8A3D8)
-    (at 57 81.6 90)
+    (at 64 81.6 90)
     (path /53B649CD/53C52297)
     (fp_text reference R208 (at 0.5 -1.5 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2979,7 +2979,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3E0)
-    (at 68.8 87.4)
+    (at 75.8 87.4)
     (path /53B649CD/53DBDB2A)
     (fp_text reference R209 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -2996,7 +2996,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3E8)
-    (at 69.4 80 270)
+    (at 76.4 80 270)
     (path /53B649CD/53DBDADA)
     (fp_text reference R210 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3013,7 +3013,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3F0)
-    (at 70.8 84.6 90)
+    (at 77.8 84.6 90)
     (path /53B649CD/53DBDAFC)
     (fp_text reference R211 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3030,7 +3030,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A3F8)
-    (at 62.4 83 270)
+    (at 69.4 83 270)
     (path /53B649CD/53DBDB78)
     (fp_text reference R212 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3047,7 +3047,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A400)
-    (at 63.8 80 270)
+    (at 70.8 80 270)
     (path /53B649CD/53DBDB7F)
     (fp_text reference R213 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3064,7 +3064,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A408)
-    (at 62.4 75 270)
+    (at 69.4 75 270)
     (path /53B649CD/53DBDB8D)
     (fp_text reference R214 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3081,7 +3081,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A410)
-    (at 63.8 72 270)
+    (at 70.8 72 270)
     (path /53B649CD/53DBDB94)
     (fp_text reference R215 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3098,7 +3098,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8E38C)
-    (at 68 81.6 90)
+    (at 75 81.6 90)
     (path /53B649CD/53DBDAE1)
     (fp_text reference R216 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3115,7 +3115,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A420)
-    (at 79.8 87.4)
+    (at 86.8 87.4)
     (path /53B649CD/53DBEF54)
     (fp_text reference R217 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3132,7 +3132,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A428)
-    (at 80.4 80 270)
+    (at 87.4 80 270)
     (path /53B649CD/53DBEF04)
     (fp_text reference R218 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3149,7 +3149,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A430)
-    (at 81.8 84.6 90)
+    (at 88.8 84.6 90)
     (path /53B649CD/53DBEF26)
     (fp_text reference R219 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3166,7 +3166,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A438)
-    (at 73.4 83 270)
+    (at 80.4 83 270)
     (path /53B649CD/53DBEFA2)
     (fp_text reference R220 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3183,7 +3183,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A440)
-    (at 74.8 80 270)
+    (at 81.8 80 270)
     (path /53B649CD/53DBEFA9)
     (fp_text reference R221 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3200,7 +3200,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A448)
-    (at 73.4 75 270)
+    (at 80.4 75 270)
     (path /53B649CD/53DBEFB7)
     (fp_text reference R222 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3217,7 +3217,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A450)
-    (at 74.8 72 270)
+    (at 81.8 72 270)
     (path /53B649CD/53DBEFBE)
     (fp_text reference R223 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3234,7 +3234,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8E4F3)
-    (at 79 81.6 90)
+    (at 86 81.6 90)
     (path /53B649CD/53DBEF0B)
     (fp_text reference R224 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3251,24 +3251,24 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A460)
-    (at 229.193571 59.715)
+    (at 102.2 83.2 90)
     (path /53B65BB5/53B66D05)
-    (fp_text reference R301 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R301 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 96 /IMU/HG_ACCEL_CS))
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A468)
-    (at 214.713571 75.015)
+    (at 117 70)
     (path /53B65BB5/53B66D4C)
     (fp_text reference R302 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3285,7 +3285,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A470)
-    (at 210.993571 79.915)
+    (at 103.6 83)
     (path /53B65BB5/53B67974)
     (fp_text reference R303 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3302,24 +3302,24 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A478)
-    (at 222.413571 69.715)
+    (at 93.4 59.8 90)
     (path /53B65BB5/53B67FB7)
-    (fp_text reference R304 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R304 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 111 /IMU/MAGNO_SDA))
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A480)
-    (at 219.113571 74.615)
+    (at 103.6 81.6)
     (path /53B65BB5/53B6796C)
     (fp_text reference R305 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3336,53 +3336,53 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A488)
-    (at 213.613571 70.115)
+    (at 94.8 59.8 90)
     (path /53B65BB5/53B67FAF)
-    (fp_text reference R306 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R306 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 110 /IMU/MAGNO_SCL))
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A490)
-    (at 224.793571 64.815)
+    (at 108 56 90)
     (path /53B65BB5/53B686EA)
-    (fp_text reference R307 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R307 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 143 /IMU/BARO_CS))
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A498)
-    (at 206.593571 80.115)
+    (at 106.6 76.8 270)
     (path /53B65BB5/53B67990)
-    (fp_text reference R308 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R308 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 35 "Net-(C313-Pad1)"))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
@@ -3591,36 +3591,36 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A500)
-    (at 119.4 101)
+    (at 118 87.4 180)
     (path /53B9637D/53B98B17)
-    (fp_text reference R506 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R506 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 78 "Net-(D502-Pad1)"))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A508)
-    (at 120.4 103.6)
+    (at 116 88.8 270)
     (path /53B9637D/53B98B0F)
-    (fp_text reference R507 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R507 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 78 "Net-(D502-Pad1)"))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 43 /Pyros/PYRO_1_C))
   )
 
@@ -3710,36 +3710,36 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A538)
-    (at 130.8 102.2)
+    (at 126 87.4 180)
     (path /53B9637D/53D96F93)
-    (fp_text reference R513 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R513 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 79 "Net-(D504-Pad1)"))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A540)
-    (at 134.2 104.6)
+    (at 127.4 86 90)
     (path /53B9637D/53D96F8C)
-    (fp_text reference R514 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R514 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 79 "Net-(D504-Pad1)"))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 44 /Pyros/PYRO_2_C))
   )
 
@@ -3812,7 +3812,7 @@
   )
 
   (module m2fc:PWR4318 (layer F.Cu) (tedit 53D86560) (tstamp 53D8A568)
-    (at 140.6 84.4 180)
+    (at 141.2 84.4 180)
     (path /53B9637D/53D97622)
     (fp_text reference R519 (at 4.6 -1.3 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3829,7 +3829,7 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A570)
-    (at 141.8 103.6)
+    (at 137.8 87.4)
     (path /53B9637D/53D9764C)
     (fp_text reference R520 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3846,19 +3846,19 @@
   )
 
   (module m2fc:R0603 (layer F.Cu) (tedit 53CDA429) (tstamp 53D8A578)
-    (at 144.6 101.8)
+    (at 140 89 270)
     (path /53B9637D/53D97645)
-    (fp_text reference R521 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference R521 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10k (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10k (at 0.75 1.45 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 80 "Net-(D506-Pad1)"))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 45 /Pyros/PYRO_3_C))
   )
 
@@ -4350,7 +4350,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A657)
-    (at 59.6 76)
+    (at 66.6 76)
     (path /53B649CD/53C57179)
     (fp_text reference TP201 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4363,7 +4363,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A65C)
-    (at 70.6 76)
+    (at 77.6 76)
     (path /53B649CD/53DBDBE8)
     (fp_text reference TP202 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4376,7 +4376,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A661)
-    (at 81.6 76)
+    (at 88.6 76)
     (path /53B649CD/53DBF012)
     (fp_text reference TP203 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4389,7 +4389,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A666)
-    (at 197.544048 70.165)
+    (at 100.2 77.6)
     (path /53B65BB5/53B7E735)
     (fp_text reference TP301 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4402,7 +4402,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A66B)
-    (at 216.984048 54.865)
+    (at 121.6 68.4)
     (path /53B65BB5/53B7EBF2)
     (fp_text reference TP302 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4415,7 +4415,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A670)
-    (at 211.104048 59.965)
+    (at 99 77.6)
     (path /53B65BB5/53B7EA40)
     (fp_text reference TP303 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4428,7 +4428,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A675)
-    (at 196.624048 75.265)
+    (at 121.6 67.2)
     (path /53B65BB5/53B7EE6E)
     (fp_text reference TP304 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4441,7 +4441,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A67A)
-    (at 188.504048 82.565)
+    (at 102.2 80.8)
     (path /53B65BB5/53B7EA8E)
     (fp_text reference TP305 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4454,7 +4454,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A67F)
-    (at 204.324048 70.165)
+    (at 120 70)
     (path /53B65BB5/53B7EEA5)
     (fp_text reference TP306 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4467,7 +4467,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A684)
-    (at 211.104048 65.065)
+    (at 103 76.8)
     (path /53B65BB5/53B7EB4A)
     (fp_text reference TP307 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4480,7 +4480,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A689)
-    (at 223.764048 54.865)
+    (at 121.6 64.8)
     (path /53B65BB5/53B7EEE9)
     (fp_text reference TP308 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4493,7 +4493,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A68E)
-    (at 189.424048 77.465)
+    (at 95 79)
     (path /53B65BB5/53B7EB7D)
     (fp_text reference TP309 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4506,7 +4506,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A693)
-    (at 190.764048 67.265)
+    (at 121.6 63.6)
     (path /53B65BB5/53B7EF22)
     (fp_text reference TP310 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4519,7 +4519,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A698)
-    (at 181.724048 80.985)
+    (at 95 81.6)
     (path /53B65BB5/53B7EBB1)
     (fp_text reference TP311 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4532,7 +4532,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A69D)
-    (at 204.324048 59.965)
+    (at 121.6 62.4)
     (path /53B65BB5/53B7EFCE)
     (fp_text reference TP312 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4545,7 +4545,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6A2)
-    (at 210.204048 54.865)
+    (at 106 81.6)
     (path /53B65BB5/53B7F6F1)
     (fp_text reference TP313 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4558,7 +4558,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6A7)
-    (at 196.644048 54.865)
+    (at 101.2 57.6)
     (path /53B65BB5/53B7FCE8)
     (fp_text reference TP314 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4571,7 +4571,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6AC)
-    (at 189.844048 72.365)
+    (at 106 83)
     (path /53B65BB5/53B7FC53)
     (fp_text reference TP315 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4584,7 +4584,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6B1)
-    (at 197.544048 65.065)
+    (at 100 57.6)
     (path /53B65BB5/53B7FF46)
     (fp_text reference TP316 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4597,7 +4597,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6B6)
-    (at 197.544048 59.965)
+    (at 102.8 52.2)
     (path /53B65BB5/53B7F063)
     (fp_text reference TP317 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4610,7 +4610,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6BB)
-    (at 182.644048 75.885)
+    (at 104 52.2)
     (path /53B65BB5/53B7F27D)
     (fp_text reference TP318 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4623,7 +4623,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6C0)
-    (at 204.324048 65.065)
+    (at 105.2 52.2)
     (path /53B65BB5/53B7F2BA)
     (fp_text reference TP319 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4636,7 +4636,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6C5)
-    (at 203.424048 54.865)
+    (at 100 56.4)
     (path /53B65BB5/53B7FF8E)
     (fp_text reference TP320 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4649,7 +4649,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6CA)
-    (at 183.064048 70.785)
+    (at 108 53.2)
     (path /53B65BB5/53B7F2F8)
     (fp_text reference TP321 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4662,7 +4662,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6CF)
-    (at 190.764048 62.165)
+    (at 108.6 85.2)
     (path /53B65BB5/53B7FC94)
     (fp_text reference TP322 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4675,7 +4675,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6D4)
-    (at 174.944048 80.085)
+    (at 109.8 85.2)
     (path /53B65BB5/53C45860)
     (fp_text reference TP323 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4766,7 +4766,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A6F7)
-    (at 124.2 104.4)
+    (at 115.2 91.8)
     (path /53B9637D/53D94504)
     (fp_text reference TP503 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4805,7 +4805,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A706)
-    (at 137.6 103.6)
+    (at 127.4 83.2)
     (path /53B9637D/53D96FD6)
     (fp_text reference TP506 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -4844,7 +4844,7 @@
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D8A715)
-    (at 148 102)
+    (at 143 89.2)
     (path /53B9637D/53D9768F)
     (fp_text reference TP509 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5041,7 +5041,7 @@
   )
 
   (module m2fc:HMC5883L (layer F.Cu) (tedit 53D89950) (tstamp 53D8A164)
-    (at 94.8 56.6 180)
+    (at 94.8 56.2 180)
     (path /53B65BB5/53B67FA5)
     (fp_text reference IC304 (at 1.1 -1.8 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5451,24 +5451,24 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89DB7)
-    (at 140.6 102)
+    (at 141.4 90.6 90)
     (path /53B9637D/53D97696)
-    (fp_text reference C503 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C503 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 100n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 100n (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 45 /Pyros/PYRO_3_C))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89DAF)
-    (at 134.6 102.6)
+    (at 127.4 82)
     (path /53B9637D/53D96FDD)
     (fp_text reference C502 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5485,19 +5485,19 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89DA7)
-    (at 123.4 102.4)
+    (at 112.6 87.8 90)
     (path /53B9637D/53D94B70)
-    (fp_text reference C501 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C501 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 100n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 100n (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 43 /Pyros/PYRO_1_C))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
@@ -5638,228 +5638,228 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D5F)
-    (at 210.313571 75.015)
+    (at 89.2 55.8 90)
     (path /53B65BB5/53D90BCC)
-    (fp_text reference C314 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C314 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 4µ7 (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 4µ7 (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 36 "Net-(C314-Pad2)"))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D57)
-    (at 215.993571 59.915)
+    (at 108 76.8 270)
     (path /53B65BB5/53B679A0)
-    (fp_text reference C313 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C313 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 470n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 470n (at 0.75 1.45 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 35 "Net-(C313-Pad1)"))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 32 "Net-(C311-Pad2)"))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D4F)
-    (at 202.193571 80.115)
+    (at 90.6 54.2 270)
     (path /53B65BB5/53B67FCE)
-    (fp_text reference C312 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C312 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 220n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 220n (at 0.75 1.45 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 33 "Net-(C312-Pad1)"))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 34 "Net-(C312-Pad2)"))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D47)
-    (at 218.013571 69.715)
+    (at 109.4 76.8 270)
     (path /53B65BB5/53B67998)
-    (fp_text reference C311 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C311 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10n (at 0.75 1.45 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 32 "Net-(C311-Pad2)"))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D3F)
-    (at 228.653571 54.815)
+    (at 105.2 80.2 180)
     (path /53B65BB5/53B6797E)
-    (fp_text reference C310 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C310 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 100n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 100n (at 0.75 1.45 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D37)
-    (at 205.913571 75.215)
+    (at 105.2 78.8 180)
     (path /53B65BB5/53D87447)
-    (fp_text reference C309 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C309 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10µ (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10µ (at 0.75 1.45 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D2F)
-    (at 197.793571 80.315)
+    (at 92 58.2 270)
     (path /53B65BB5/53B67FDC)
-    (fp_text reference C308 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C308 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 100n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 100n (at 0.75 1.45 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D27)
-    (at 220.393571 59.915)
+    (at 101.4 55.8 90)
     (path /53B65BB5/53B686FD)
-    (fp_text reference C307 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C307 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 100n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 100n (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D1F)
-    (at 215.993571 64.815)
+    (at 114.2 68.6 90)
     (path /53B65BB5/53D870F1)
-    (fp_text reference C306 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C306 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10µ (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10µ (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D17)
-    (at 209.213571 70.115)
+    (at 115.6 68.6 90)
     (path /53B65BB5/53B66D73)
-    (fp_text reference C305 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C305 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 100n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 100n (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D0F)
-    (at 201.513571 75.215)
+    (at 115.6 64 270)
     (path /53B65BB5/53B66D6B)
-    (fp_text reference C304 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C304 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 100n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 100n (at 0.75 1.45 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89D07)
-    (at 193.393571 82.515)
+    (at 101.6 79.2 90)
     (path /53B65BB5/53D86DFD)
-    (fp_text reference C303 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C303 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 10µ (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 10µ (at 0.75 1.45 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CFF)
-    (at 220.393571 64.815)
+    (at 100.2 83.2 180)
     (path /53B65BB5/53B66D2C)
-    (fp_text reference C302 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C302 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 100n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 100n (at 0.75 1.45 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 4 +3.3V))
-    (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CF7)
-    (at 224.793571 59.915)
+    (at 95.6 83.2)
     (path /53B65BB5/53B66D24)
     (fp_text reference C301 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5876,7 +5876,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CEF)
-    (at 79.2 73.6 90)
+    (at 86.2 73.6 90)
     (path /53B649CD/53DBF08A)
     (fp_text reference C239 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5893,7 +5893,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CE7)
-    (at 76.2 73.6)
+    (at 83.2 73.6)
     (path /53B649CD/53DBEFE6)
     (fp_text reference C238 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5910,7 +5910,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CDF)
-    (at 79.4 78.4 180)
+    (at 86.4 78.4 180)
     (path /53B649CD/53DBEF77)
     (fp_text reference C237 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5927,7 +5927,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CD7)
-    (at 74 86.2)
+    (at 81 86.2)
     (path /53B649CD/53DBEF70)
     (fp_text reference C236 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5944,7 +5944,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CCF)
-    (at 81.8 81.6 90)
+    (at 88.8 81.6 90)
     (path /53B649CD/53DBEF18)
     (fp_text reference C235 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5961,7 +5961,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CC7)
-    (at 76.2 72)
+    (at 83.2 72)
     (path /53B649CD/53DBEFC5)
     (fp_text reference C234 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5978,7 +5978,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CBF)
-    (at 74.8 78.4)
+    (at 81.8 78.4)
     (path /53B649CD/53DBEFB0)
     (fp_text reference C233 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -5995,7 +5995,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CB7)
-    (at 80.8 78.4)
+    (at 87.8 78.4)
     (path /53B649CD/53DBF083)
     (fp_text reference C232 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6012,7 +6012,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CAF)
-    (at 75.6 87.4 180)
+    (at 82.6 87.4 180)
     (path /53B649CD/53DBF07C)
     (fp_text reference C231 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6029,7 +6029,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89CA7)
-    (at 83 80 270)
+    (at 90 80 270)
     (path /53B649CD/53DBF075)
     (fp_text reference C230 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6046,7 +6046,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C9F)
-    (at 73.4 72 270)
+    (at 80.4 72 270)
     (path /53B649CD/53DBEFCC)
     (fp_text reference C229 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6063,7 +6063,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C97)
-    (at 73.4 80 270)
+    (at 80.4 80 270)
     (path /53B649CD/53DBEFD3)
     (fp_text reference C228 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6080,7 +6080,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C8F)
-    (at 81.4 86.2 180)
+    (at 88.4 86.2 180)
     (path /53B649CD/53DBEF5B)
     (fp_text reference C227 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6097,7 +6097,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C87)
-    (at 68.2 73.6 90)
+    (at 75.2 73.6 90)
     (path /53B649CD/53DBDC60)
     (fp_text reference C226 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6114,7 +6114,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C7F)
-    (at 65.2 73.6)
+    (at 72.2 73.6)
     (path /53B649CD/53DBDBBC)
     (fp_text reference C225 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6131,7 +6131,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C77)
-    (at 68.4 78.4 180)
+    (at 75.4 78.4 180)
     (path /53B649CD/53DBDB4D)
     (fp_text reference C224 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6148,7 +6148,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C6F)
-    (at 63 86.2)
+    (at 70 86.2)
     (path /53B649CD/53DBDB46)
     (fp_text reference C223 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6165,7 +6165,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C67)
-    (at 70.8 81.6 90)
+    (at 77.8 81.6 90)
     (path /53B649CD/53DBDAEE)
     (fp_text reference C222 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6182,7 +6182,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C5F)
-    (at 65.2 72)
+    (at 72.2 72)
     (path /53B649CD/53DBDB9B)
     (fp_text reference C221 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6199,7 +6199,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C57)
-    (at 63.8 78.4)
+    (at 70.8 78.4)
     (path /53B649CD/53DBDB86)
     (fp_text reference C220 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6216,7 +6216,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C4F)
-    (at 69.8 78.4)
+    (at 76.8 78.4)
     (path /53B649CD/53DBDC59)
     (fp_text reference C219 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6233,7 +6233,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D8E4FC)
-    (at 64.6 87.4 180)
+    (at 71.6 87.4 180)
     (path /53B649CD/53DBDC52)
     (fp_text reference C218 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6250,7 +6250,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C3F)
-    (at 72 80 270)
+    (at 79 80 270)
     (path /53B649CD/53DBDC4B)
     (fp_text reference C217 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6267,7 +6267,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C37)
-    (at 62.4 73.6 90)
+    (at 69.4 73.6 90)
     (path /53B649CD/53DBDBA2)
     (fp_text reference C216 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6284,7 +6284,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C2F)
-    (at 62.4 80 270)
+    (at 69.4 80 270)
     (path /53B649CD/53DBDBA9)
     (fp_text reference C215 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6301,7 +6301,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C27)
-    (at 70.4 86.2 180)
+    (at 77.4 86.2 180)
     (path /53B649CD/53DBDB31)
     (fp_text reference C214 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6318,7 +6318,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C1F)
-    (at 57.2 73.6 90)
+    (at 64.2 73.6 90)
     (path /53B649CD/53D899DD)
     (fp_text reference C213 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6335,7 +6335,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C17)
-    (at 54.2 73.6)
+    (at 61.2 73.6)
     (path /53B649CD/53C57140)
     (fp_text reference C212 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6352,7 +6352,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C0F)
-    (at 57.4 78.4 180)
+    (at 64.4 78.4 180)
     (path /53B649CD/53C556CA)
     (fp_text reference C211 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6369,7 +6369,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89C07)
-    (at 52 86.2)
+    (at 59 86.2)
     (path /53B649CD/53C55682)
     (fp_text reference C210 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6386,7 +6386,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89BFF)
-    (at 59.8 81.6 90)
+    (at 66.8 81.6 90)
     (path /53B649CD/53C525B5)
     (fp_text reference C209 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6403,7 +6403,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89BF7)
-    (at 54.2 72)
+    (at 61.2 72)
     (path /53B649CD/53C57119)
     (fp_text reference C208 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6420,7 +6420,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89BEF)
-    (at 52.8 78.4)
+    (at 59.8 78.4)
     (path /53B649CD/53C57104)
     (fp_text reference C207 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6437,7 +6437,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89BE7)
-    (at 58.8 78.4)
+    (at 65.8 78.4)
     (path /53B649CD/53D8894F)
     (fp_text reference C206 (at 0.7 -1.35) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6454,7 +6454,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89BDF)
-    (at 53.6 87.4 180)
+    (at 60.6 87.4 180)
     (path /53B649CD/53D888DA)
     (fp_text reference C205 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6471,7 +6471,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89BD7)
-    (at 61 80 270)
+    (at 68 80 270)
     (path /53B649CD/53D88822)
     (fp_text reference C204 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6488,7 +6488,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89BCF)
-    (at 51.4 72 270)
+    (at 58.4 72 270)
     (path /53B649CD/53C57120)
     (fp_text reference C203 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6505,7 +6505,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89BC7)
-    (at 51.4 80 270)
+    (at 58.4 80 270)
     (path /53B649CD/53C57127)
     (fp_text reference C202 (at 0.7 -1.35 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -6522,7 +6522,7 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D89BBF)
-    (at 59.4 86.2 180)
+    (at 66.4 86.2 180)
     (path /53B649CD/53C54914)
     (fp_text reference C201 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -7061,8 +7061,8 @@
       (net 203 "Net-(Q506-PadD)"))
   )
 
-  (module m2fc:M3_MOUNT (layer F.Cu) (tedit 53D87D36) (tstamp 53D911AB)
-    (at 45.6 79.2)
+  (module m2fc:M3_MOUNT (layer F.Cu) (tedit 53D87D36) (tstamp 53D927DC)
+    (at 54.2 78.2)
     (path /53DA165C)
     (fp_text reference U107 (at 0 -4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -7188,29 +7188,46 @@
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D920C7)
-    (at 93.6 76.8 270)
+    (at 93.4 83.8 180)
     (path /53DACC0B)
-    (fp_text reference C124 (at 0.7 -1.35 270) (layer F.SilkS) hide
+    (fp_text reference C124 (at 0.7 -1.35 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 2µ2 (at 0.75 1.45 270) (layer F.SilkS)
+    (fp_text value 2µ2 (at 0.75 1.45 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 3 +BATT))
-    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 1.6 0 180) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D920CF)
-    (at 88.8 79.2)
+    (at 90.2 84.6 90)
     (path /53DAE153)
-    (fp_text reference C125 (at 0.7 -1.35) (layer F.SilkS) hide
+    (fp_text reference C125 (at 0.7 -1.35 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 1n (at 0.75 1.45) (layer F.SilkS)
+    (fp_text value 1n (at 0.75 1.45 90) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
+    (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
+    (pad 1 smd rect (at 0 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+      (net 207 VAA))
+    (pad 2 smd rect (at 1.6 0 90) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
+      (net 208 "Net-(C125-Pad2)"))
+  )
+
+  (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D920D7)
+    (at 91.8 75.8)
+    (path /53DAF2F8)
+    (fp_text reference C126 (at 0.7 -1.35) (layer F.SilkS) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_text value 2µ2 (at 0.75 1.45) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
@@ -7218,59 +7235,42 @@
     (pad 1 smd rect (at 0 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 207 VAA))
     (pad 2 smd rect (at 1.6 0) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
-      (net 208 "Net-(C125-Pad2)"))
-  )
-
-  (module m2fc:C0603 (layer F.Cu) (tedit 53D8DBFD) (tstamp 53D920D7)
-    (at 85.6 76.8 270)
-    (path /53DAF2F8)
-    (fp_text reference C126 (at 0.7 -1.35 270) (layer F.SilkS) hide
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_text value 2µ2 (at 0.75 1.45 270) (layer F.SilkS)
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_line (start -0.4 0.5) (end 2 0.5) (layer F.SilkS) (width 0.15))
-    (fp_line (start -0.4 -0.5) (end 2 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
-      (net 207 VAA))
-    (pad 2 smd rect (at 1.6 0 270) (size 0.8 0.8) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
   )
 
   (module m2fc:MSOP8 (layer F.Cu) (tedit 53CD920E) (tstamp 53D920E7)
-    (at 87.4 75.8)
+    (at 93.6 77.6 270)
     (path /53DAC936)
-    (fp_text reference IC103 (at 2.2 -1.5) (layer F.SilkS)
+    (fp_text reference IC103 (at 2.2 -1.5 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value ADP3335 (at 2.5 3.5) (layer F.SilkS) hide
+    (fp_text value ADP3335 (at 2.5 3.5 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_circle (center 0 -0.5) (end 0.2 -0.5) (layer F.SilkS) (width 0.15))
     (fp_circle (center 0 -0.5) (end 0.1 -0.5) (layer F.SilkS) (width 0.15))
     (fp_line (start 0 2.5) (end 4.5 2.5) (layer F.SilkS) (width 0.15))
     (fp_line (start 0 -0.5) (end 4.5 -0.5) (layer F.SilkS) (width 0.15))
-    (pad 1 smd rect (at 0 0) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
+    (pad 1 smd rect (at 0 0 270) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
       (net 207 VAA))
-    (pad 2 smd rect (at 0 0.65) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
+    (pad 2 smd rect (at 0 0.65 270) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
       (net 207 VAA))
-    (pad 3 smd rect (at 0 1.3) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
+    (pad 3 smd rect (at 0 1.3 270) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
       (net 207 VAA))
-    (pad 4 smd rect (at 0 1.95) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
+    (pad 4 smd rect (at 0 1.95 270) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
-    (pad 5 smd rect (at 4.4 1.95) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
+    (pad 5 smd rect (at 4.4 1.95 270) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
       (net 208 "Net-(C125-Pad2)"))
-    (pad 6 smd rect (at 4.4 1.3) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
+    (pad 6 smd rect (at 4.4 1.3 270) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
       (net 3 +BATT))
-    (pad 7 smd rect (at 4.4 0.65) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
+    (pad 7 smd rect (at 4.4 0.65 270) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
       (net 3 +BATT))
-    (pad 8 smd rect (at 4.4 0) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
+    (pad 8 smd rect (at 4.4 0 270) (size 1.4 0.4) (layers F.Cu F.Paste F.Mask)
       (net 3 +BATT))
   )
 
   (module m2fc:TESTPAD (layer F.Cu) (tedit 53CF3F64) (tstamp 53D920EC)
-    (at 87.4 75)
+    (at 91.8 74.2)
     (path /53DAEBD2)
     (fp_text reference TP111 (at 0 -1.4) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -7282,13 +7282,7 @@
       (net 207 VAA))
   )
 
-  (gr_line (start 42.6 83.6) (end 50 83.6) (angle 90) (layer Edge.Cuts) (width 0.2))
-  (gr_line (start 41.2 76.2) (end 41.2 82.2) (angle 90) (layer Edge.Cuts) (width 0.2))
-  (gr_line (start 50 74.8) (end 42.6 74.8) (angle 90) (layer Edge.Cuts) (width 0.2))
-  (gr_arc (start 42.6 82.2) (end 42.6 83.6) (angle 90) (layer Edge.Cuts) (width 0.2))
-  (gr_arc (start 42.6 76.2) (end 41.2 76.2) (angle 90) (layer Edge.Cuts) (width 0.2))
-  (gr_line (start 50 74.8) (end 50 44) (angle 90) (layer Edge.Cuts) (width 0.2))
-  (gr_line (start 50 100) (end 50 83.6) (angle 90) (layer Edge.Cuts) (width 0.2))
+  (gr_line (start 50 100) (end 50 44) (angle 90) (layer Edge.Cuts) (width 0.2))
   (dimension 70 (width 0.3) (layer Dwgs.User)
     (gr_text "70.000 mm" (at 160.35 65 270) (layer Dwgs.User)
       (effects (font (size 1.5 1.5) (thickness 0.3)))
