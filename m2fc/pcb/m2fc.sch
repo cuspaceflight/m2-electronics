@@ -127,7 +127,7 @@ F 2 "m2fc:S02B-PASK-2" H 700 850 60  0001 C CNN
 F 3 "" H 700 850 60  0001 C CNN
 F 4 "1830747" V 700 850 60  0001 C CNN "Farnell"
 	1    700  850 
-	0    1    -1   0   
+	0    -1   -1   0   
 $EndComp
 $Comp
 L C C123
@@ -452,7 +452,7 @@ F 2 "m2fc:S02B-PASK-2" H 1050 850 60  0001 C CNN
 F 3 "" H 1050 850 60  0001 C CNN
 F 4 "1830747" V 1050 850 60  0001 C CNN "Farnell"
 	1    1050 850 
-	0    1    -1   0   
+	0    -1   -1   0   
 $EndComp
 $Comp
 L +3.3V #PWR015
@@ -1219,7 +1219,7 @@ F 2 "m2fc:S02B-PASK-2" H 4900 750 60  0001 C CNN
 F 3 "" H 4900 750 60  0001 C CNN
 F 4 "1830747" V 4900 750 60  0001 C CNN "Farnell"
 	1    4900 750 
-	0    1    -1   0   
+	0    -1   -1   0   
 $EndComp
 $Comp
 L GND #PWR028

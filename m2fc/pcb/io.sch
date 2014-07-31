@@ -501,9 +501,9 @@ F 4 "1759037" H 5450 4850 60  0001 C CNN "Farnell"
 $EndComp
 Text Notes 3350 5250 0    60   ~ 0
 SERIAL IN/OUT 2
-Text HLabel 4000 4500 0    60   Input ~ 0
+Text HLabel 4000 4600 0    60   Input ~ 0
 SER_OUT_2
-Text HLabel 4000 4600 0    60   Output ~ 0
+Text HLabel 4000 4500 0    60   Output ~ 0
 SER_IN_2
 $Comp
 L TESTPAD TP403
@@ -972,4 +972,6 @@ F 4 "2211164" H 4000 2600 60  0001 C CNN "Farnell"
 	1    4000 2600
 	0    -1   -1   0   
 $EndComp
+Text Notes 3350 5100 0    60   ~ 0
+NB Different Serial Pinouts
 $EndSCHEMATC
