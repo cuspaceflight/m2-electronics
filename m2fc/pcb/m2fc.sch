@@ -1030,9 +1030,9 @@ Text Label 3050 5500 2    60   ~ 0
 LED_3
 Text Label 4450 5900 0    60   ~ 0
 PYRO_1_C
-Text Label 4450 6100 0    60   ~ 0
+Text Label 4450 6000 0    60   ~ 0
 PYRO_2_C
-Text Label 4450 6200 0    60   ~ 0
+Text Label 4450 6300 0    60   ~ 0
 PYRO_2_F
 Text Label 8300 3700 0    60   ~ 0
 GYRO_INT1
@@ -1058,9 +1058,9 @@ Text Label 8300 4800 0    60   ~ 0
 PYRO_3_C
 Text Label 4450 6400 0    60   ~ 0
 PYRO_3_F
-Text Label 4450 6300 0    60   ~ 0
+Text Label 4450 6100 0    60   ~ 0
 PYRO_3_C
-Text Label 4450 6000 0    60   ~ 0
+Text Label 4450 6200 0    60   ~ 0
 PYRO_1_F
 $Comp
 L GS2 GS101
