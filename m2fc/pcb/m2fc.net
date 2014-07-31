@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /home/adam/Projects/m2-electronics/m2fc/pcb/m2fc.sch)
-    (date "Thu 31 Jul 2014 10:57:39 BST")
+    (date "Thu 31 Jul 2014 11:16:21 BST")
     (tool "Eeschema (2014-jan-25)-product"))
   (components
     (comp (ref P102)
@@ -3660,7 +3660,7 @@
       (node (ref IC102) (pin 27))
       (node (ref IC102) (pin 94))
       (node (ref IC102) (pin 74))
-      (node (ref P101) (pin 1))
+      (node (ref P101) (pin 2))
       (node (ref C112) (pin 2))
       (node (ref R102) (pin 2))
       (node (ref C121) (pin 2))
@@ -3863,7 +3863,7 @@
       (node (ref D101) (pin 1))
       (node (ref R101) (pin 1))
       (node (ref IC103) (pin 6))
-      (node (ref P101) (pin 2))
+      (node (ref P101) (pin 1))
       (node (ref C102) (pin 1))
       (node (ref Q505) (pin S))
       (node (ref IC101) (pin 6))
