@@ -1,4 +1,4 @@
-(module M3_MOUNT (layer F.Cu) (tedit 53CFED5A)
+(module M3_MOUNT (layer F.Cu) (tedit 53DC15F0)
   (fp_text reference M3_MOUNT (at 0 -4) (layer F.SilkS) hide
     (effects (font (size 1 1) (thickness 0.15)))
   )
@@ -6,5 +6,5 @@
     (effects (font (size 1 1) (thickness 0.15)))
   )
   (fp_circle (center 0 0) (end 3.3 0) (layer F.SilkS) (width 0.15))
-  (pad "" np_thru_hole circle (at 0 0) (size 3.3 3.3) (drill 3.3) (layers *.Cu *.Mask F.SilkS))
+  (pad "" np_thru_hole circle (at 0 0) (size 3.3 3.3) (drill 3.3) (layers *.Cu *.Mask F.Paste F.SilkS))
 )
