@@ -12,9 +12,9 @@ static msg_t Thread1(void *arg) {
   (void)arg;
   chRegSetThreadName("blinker");
   while (TRUE) {
-    palSetPad(GPIOA, GPIOA_LED1);       /* Orange.  */
+    palSetPad(GPIOA, GPIOA_LED_4);       /* Orange.  */
     chThdSleepMilliseconds(500);
-    palClearPad(GPIOA, GPIOA_LED1);     /* Orange.  */
+    palClearPad(GPIOA, GPIOA_LED_4);     /* Orange.  */
     chThdSleepMilliseconds(500);
   }
 }

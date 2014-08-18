@@ -155,7 +155,7 @@ TOPT = -mthumb -DTHUMB
 
 # Define C warning options here
 CWARN = -Wall -Wextra -Wshadow -Wimplicit-function-declaration               \
-		-Wstrict-prototypes -Wredundant-decls -Wmissing-prototypes -Wundef
+		-Wstrict-prototypes -Wredundant-decls -Wundef
 
 # Define C++ warning options here
 CPPWARN = -Wall -Wextra
@@ -205,6 +205,15 @@ ULIBDIR =
 
 # List all user libraries here
 ULIBS =
+
+flash: build/$(PROJECT).elf
+	arm-none-eabi-gdb --batch \
+		              -ex 'target extended-remote /dev/ttyACM0' \
+					  -ex 'monitor version' \
+					  -ex 'monitor swdp_scan' \
+					  -ex 'attach 1' \
+					  -ex 'load' build/$(PROJECT).elf
+
 
 #
 # End of user defines

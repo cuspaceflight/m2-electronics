@@ -664,7 +664,7 @@
                                      PIN_ODR_HIGH(GPIOD_SJ1)                |\
                                      PIN_ODR_HIGH(GPIOD_PIN14)              |\
                                      PIN_ODR_HIGH(GPIOD_PIN15))
-#define VAL_GPIOD_ARFL              (PIN_AFIO_AF(GPIOD_PIN0, 0)             |\
+#define VAL_GPIOD_AFRL              (PIN_AFIO_AF(GPIOD_PIN0, 0)             |\
                                      PIN_AFIO_AF(GPIOD_SD_CD, 0)            |\
                                      PIN_AFIO_AF(GPIOD_SD_CMD, 12)          |\
                                      PIN_AFIO_AF(GPIOD_PIN3, 0)             |\
@@ -781,7 +781,7 @@
                                      PIN_ODR_HIGH(GPIOE_GYRO_INT1)          |\
                                      PIN_ODR_HIGH(GPIOE_GYRO_DRDY)          |\
                                      PIN_ODR_HIGH(GPIOE_PIN15))
-#define VAL_GPIOE_ARFL              (PIN_AFIO_AF(GPIOE_MAGNO_DRDY, 0)       |\
+#define VAL_GPIOE_AFRL              (PIN_AFIO_AF(GPIOE_MAGNO_DRDY, 0)       |\
                                      PIN_AFIO_AF(GPIOE_PIN1, 0)             |\
                                      PIN_AFIO_AF(GPIOE_PIN2, 0)             |\
                                      PIN_AFIO_AF(GPIOE_PIN3, 0)             |\
