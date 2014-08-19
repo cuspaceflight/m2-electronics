@@ -46,10 +46,10 @@
 #define GPIOA_HG_ACCEL_MISO         6
 #define GPIOA_HG_ACCEL_MOSI         7
 #define GPIOA_PIN8                  8
-#define GPIOA_LED_1                 9
-#define GPIOA_LED_2                 10
-#define GPIOA_LED_3                 11
-#define GPIOA_LED_4                 12
+#define GPIOA_LED_SDCARD            9
+#define GPIOA_LED_PYROS             10
+#define GPIOA_LED_SENSORS           11
+#define GPIOA_LED_STATUS            12
 #define GPIOA_SWDIO                 13
 #define GPIOA_SWCLK                 14
 #define GPIOA_PIN15                 15
@@ -224,10 +224,10 @@
  * PA6  - HG_ACCEL_MISO             (alternate 5).
  * PA7  - HG_ACCEL_MOSI             (alternate 5).
  * PA8  - PIN8                      (input pullup).
- * PA9  - LED_1                     (output pushpull).
- * PA10 - LED_2                     (output pushpull).
- * PA11 - LED_3                     (output pushpull).
- * PA12 - LED_4                     (output pushpull).
+ * PA9  - LED_SDCARD                (output pushpull).
+ * PA10 - LED_PYROS                 (output pushpull).
+ * PA11 - LED_SENSORS               (output pushpull).
+ * PA12 - LED_STATUS                (output pushpull).
  * PA13 - SWDIO                     (alternate 0).
  * PA14 - SWCLK                     (alternate 0).
  * PA15 - PIN15                     (input pullup).
@@ -241,10 +241,10 @@
                                      PIN_MODE_ALTERNATE(GPIOA_HG_ACCEL_MISO)|\
                                      PIN_MODE_ALTERNATE(GPIOA_HG_ACCEL_MOSI)|\
                                      PIN_MODE_INPUT(GPIOA_PIN8)             |\
-                                     PIN_MODE_OUTPUT(GPIOA_LED_1)           |\
-                                     PIN_MODE_OUTPUT(GPIOA_LED_2)           |\
-                                     PIN_MODE_OUTPUT(GPIOA_LED_3)           |\
-                                     PIN_MODE_OUTPUT(GPIOA_LED_4)           |\
+                                     PIN_MODE_OUTPUT(GPIOA_LED_SDCARD)      |\
+                                     PIN_MODE_OUTPUT(GPIOA_LED_PYROS)       |\
+                                     PIN_MODE_OUTPUT(GPIOA_LED_SENSORS)     |\
+                                     PIN_MODE_OUTPUT(GPIOA_LED_STATUS)      |\
                                      PIN_MODE_ALTERNATE(GPIOA_SWDIO)        |\
                                      PIN_MODE_ALTERNATE(GPIOA_SWCLK)        |\
                                      PIN_MODE_INPUT(GPIOA_PIN15))
@@ -257,10 +257,10 @@
                                      PIN_OTYPE_PUSHPULL(GPIOA_HG_ACCEL_MISO)|\
                                      PIN_OTYPE_PUSHPULL(GPIOA_HG_ACCEL_MOSI)|\
                                      PIN_OTYPE_PUSHPULL(GPIOA_PIN8)         |\
-                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_1)        |\
-                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_2)        |\
-                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_3)        |\
-                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_4)        |\
+                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_SDCARD)   |\
+                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_PYROS)    |\
+                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_SENSORS)  |\
+                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_STATUS)   |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_SWDIO)        |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_SWCLK)        |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_PIN15))
@@ -273,10 +273,10 @@
                                      PIN_OSPEED_25M(GPIOA_HG_ACCEL_MISO)    |\
                                      PIN_OSPEED_25M(GPIOA_HG_ACCEL_MOSI)    |\
                                      PIN_OSPEED_2M(GPIOA_PIN8)              |\
-                                     PIN_OSPEED_2M(GPIOA_LED_1)             |\
-                                     PIN_OSPEED_2M(GPIOA_LED_2)             |\
-                                     PIN_OSPEED_2M(GPIOA_LED_3)             |\
-                                     PIN_OSPEED_2M(GPIOA_LED_4)             |\
+                                     PIN_OSPEED_2M(GPIOA_LED_SDCARD)        |\
+                                     PIN_OSPEED_2M(GPIOA_LED_PYROS)         |\
+                                     PIN_OSPEED_2M(GPIOA_LED_SENSORS)       |\
+                                     PIN_OSPEED_2M(GPIOA_LED_STATUS)        |\
                                      PIN_OSPEED_100M(GPIOA_SWDIO)           |\
                                      PIN_OSPEED_100M(GPIOA_SWCLK)           |\
                                      PIN_OSPEED_2M(GPIOA_PIN15))
@@ -289,10 +289,10 @@
                                      PIN_PUPDR_FLOATING(GPIOA_HG_ACCEL_MISO)|\
                                      PIN_PUPDR_FLOATING(GPIOA_HG_ACCEL_MOSI)|\
                                      PIN_PUPDR_PULLUP(GPIOA_PIN8)           |\
-                                     PIN_PUPDR_FLOATING(GPIOA_LED_1)        |\
-                                     PIN_PUPDR_FLOATING(GPIOA_LED_2)        |\
-                                     PIN_PUPDR_FLOATING(GPIOA_LED_3)        |\
-                                     PIN_PUPDR_FLOATING(GPIOA_LED_4)        |\
+                                     PIN_PUPDR_FLOATING(GPIOA_LED_SDCARD)   |\
+                                     PIN_PUPDR_FLOATING(GPIOA_LED_PYROS)    |\
+                                     PIN_PUPDR_FLOATING(GPIOA_LED_SENSORS)  |\
+                                     PIN_PUPDR_FLOATING(GPIOA_LED_STATUS)   |\
                                      PIN_PUPDR_FLOATING(GPIOA_SWDIO)        |\
                                      PIN_PUPDR_FLOATING(GPIOA_SWCLK)        |\
                                      PIN_PUPDR_PULLUP(GPIOA_PIN15))
@@ -305,10 +305,10 @@
                                      PIN_ODR_HIGH(GPIOA_HG_ACCEL_MISO)      |\
                                      PIN_ODR_HIGH(GPIOA_HG_ACCEL_MOSI)      |\
                                      PIN_ODR_HIGH(GPIOA_PIN8)               |\
-                                     PIN_ODR_LOW(GPIOA_LED_1)               |\
-                                     PIN_ODR_LOW(GPIOA_LED_2)               |\
-                                     PIN_ODR_LOW(GPIOA_LED_3)               |\
-                                     PIN_ODR_LOW(GPIOA_LED_4)               |\
+                                     PIN_ODR_LOW(GPIOA_LED_SDCARD)          |\
+                                     PIN_ODR_LOW(GPIOA_LED_PYROS)           |\
+                                     PIN_ODR_LOW(GPIOA_LED_SENSORS)         |\
+                                     PIN_ODR_LOW(GPIOA_LED_STATUS)          |\
                                      PIN_ODR_HIGH(GPIOA_SWDIO)              |\
                                      PIN_ODR_HIGH(GPIOA_SWCLK)              |\
                                      PIN_ODR_HIGH(GPIOA_PIN15))
@@ -321,10 +321,10 @@
                                      PIN_AFIO_AF(GPIOA_HG_ACCEL_MISO, 5)    |\
                                      PIN_AFIO_AF(GPIOA_HG_ACCEL_MOSI, 5))
 #define VAL_GPIOA_AFRH              (PIN_AFIO_AF(GPIOA_PIN8, 0)             |\
-                                     PIN_AFIO_AF(GPIOA_LED_1, 0)            |\
-                                     PIN_AFIO_AF(GPIOA_LED_2, 0)            |\
-                                     PIN_AFIO_AF(GPIOA_LED_3, 0)            |\
-                                     PIN_AFIO_AF(GPIOA_LED_4, 0)            |\
+                                     PIN_AFIO_AF(GPIOA_LED_SDCARD, 0)       |\
+                                     PIN_AFIO_AF(GPIOA_LED_PYROS, 0)        |\
+                                     PIN_AFIO_AF(GPIOA_LED_SENSORS, 0)      |\
+                                     PIN_AFIO_AF(GPIOA_LED_STATUS, 0)       |\
                                      PIN_AFIO_AF(GPIOA_SWDIO, 0)            |\
                                      PIN_AFIO_AF(GPIOA_SWCLK, 0)            |\
                                      PIN_AFIO_AF(GPIOA_PIN15, 0))

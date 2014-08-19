@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16
+  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16
 endif
 
 # C specific options here (added to USE_OPT).
@@ -88,7 +88,8 @@ CSRC = $(PORTSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
        $(CHIBIOS)/os/various/chprintf.c \
-       main.c
+       main.c \
+	   ms5611.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -206,14 +207,6 @@ ULIBDIR =
 # List all user libraries here
 ULIBS =
 
-flash: build/$(PROJECT).elf
-	arm-none-eabi-gdb --batch \
-		              -ex 'target extended-remote /dev/ttyACM0' \
-					  -ex 'monitor version' \
-					  -ex 'monitor swdp_scan' \
-					  -ex 'attach 1' \
-					  -ex 'load' build/$(PROJECT).elf
-
 
 #
 # End of user defines
@@ -221,3 +214,23 @@ flash: build/$(PROJECT).elf
 
 RULESPATH = $(CHIBIOS)/os/ports/GCC/ARMCMx
 include $(RULESPATH)/rules.mk
+
+##############################################################################
+# Black Magic Probe flashing via GDB
+#
+flash: build/$(PROJECT).elf
+	arm-none-eabi-gdb --batch \
+		              -ex 'target extended-remote /dev/ttyACM1' \
+					  -ex 'monitor version' \
+					  -ex 'monitor swdp_scan' \
+					  -ex 'attach 1' \
+					  -ex 'load' build/$(PROJECT).elf
+
+debug: build/$(PROJECT).elf
+	arm-none-eabi-gdb -ex 'target extended-remote /dev/ttyACM1' \
+		              -ex 'monitor swdp_scan' \
+					  -ex 'attach 1' \
+					  -ex "file build/$(PROJECT).elf"
+#
+# End BMP flashing
+##############################################################################

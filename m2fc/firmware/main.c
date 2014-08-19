@@ -1,65 +1,39 @@
-#include "ch.h"
-#include "hal.h"
-#include "test.h"
-
 /*
- * This is a periodic thread that does absolutely nothing except flashing
- * a LED.
+ * M2FC
+ * 2014 Adam Greig, Cambridge University Spaceflight
  */
-static WORKING_AREA(waThread1, 128);
-static msg_t Thread1(void *arg) {
 
-  (void)arg;
-  chRegSetThreadName("blinker");
-  while (TRUE) {
-    palSetPad(GPIOA, GPIOA_LED_4);       /* Orange.  */
-    chThdSleepMilliseconds(500);
-    palClearPad(GPIOA, GPIOA_LED_4);     /* Orange.  */
-    chThdSleepMilliseconds(500);
-  }
+#include <ch.h>
+#include <hal.h>
+
+#include "ms5611.h"
+
+static WORKING_AREA(waMS5611, 128);
+static WORKING_AREA(waThreadHB, 128);
+static msg_t ThreadHeartbeat(void *arg) {
+    (void)arg;
+    chRegSetThreadName("heartbeat");
+    while (TRUE) {
+        palSetPad(GPIOA, GPIOA_LED_STATUS);
+        chThdSleepMilliseconds(500);
+        palClearPad(GPIOA, GPIOA_LED_STATUS);
+        chThdSleepMilliseconds(500);
+    }
+
+    return (msg_t)NULL;
 }
 
-/*
- * Application entry point.
- */
 int main(void) {
+    halInit();
+    chSysInit();
 
-  /*
-   * System initializations.
-   * - HAL initialization, this also initializes the configured device drivers
-   *   and performs the board-specific initializations.
-   * - Kernel initialization, the main() function becomes a thread and the
-   *   RTOS is active.
-   */
-  halInit();
-  chSysInit();
+    chThdCreateStatic(waThreadHB, sizeof(waThreadHB), NORMALPRIO,
+                      ThreadHeartbeat, NULL);
 
-  /*
-   * Activates the serial driver 2 using the driver default configuration.
-   * PA2(TX) and PA3(RX) are routed to USART2.
-   */
-  sdStart(&SD2, NULL);
+    chThdCreateStatic(waMS5611, sizeof(waMS5611), NORMALPRIO,
+                      ms5611_thread, NULL);
 
-  /*
-   * If the user button is pressed after the reset then the test suite is
-   * executed immediately before activating the various device drivers in
-   * order to not alter the benchmark scores.
-   */
-  /*if (palReadPad(GPIOA, GPIOA_BUTTON))*/
-  TestThread(&SD2);
-
-  /*
-   * Creates the example thread.
-   */
-  chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
-
-  /*
-   * Normal main() thread activity, in this demo it does nothing except
-   * sleeping in a loop and check the button state, when the button is
-   * pressed the test procedure is launched with output on the serial
-   * driver 2.
-   */
-  while (TRUE) {
-    chThdSleepMilliseconds(500);
-  }
+    while (TRUE) {
+        chThdSleepMilliseconds(500);
+    }
 }
