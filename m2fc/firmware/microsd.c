@@ -11,31 +11,95 @@
 #include "chprintf.h"
 #include "ff.h"
 
+#define MICROSD_MEMPOOL_SIZE 1024
+#define MICROSD_CACHE_SIZE 16384
+
 static MemoryPool microsd_mp;
-static microsd_message microsd_mp_b[256];
+static volatile char microsd_mp_b[MICROSD_MEMPOOL_SIZE * 16]
+                     __attribute__((aligned(sizeof(stkalign_t))));
 
 static Mailbox microsd_mb;
-static msg_t microsd_mb_q[256];
+static volatile msg_t microsd_mb_q[MICROSD_MEMPOOL_SIZE];
 
+static volatile char microsd_cache[MICROSD_CACHE_SIZE];
+
+static void microsd_mem_init(void);
 static void microsd_open_file(FIL* fp);
 static void microsd_unmount(FIL* fp);
-static void microsd_write_line(FIL* fp, char* line);
+static void microsd_write(FIL* fp);
 
-void microsd_mem_init()
+int32_t last_write_time;
+
+
+void microsd_log_c(uint8_t channel, const char* data)
 {
-    chPoolInit(&microsd_mp, sizeof(microsd_message), NULL);
-    chPoolLoadArray(&microsd_mp, (void*)microsd_mp_b, 256);
-    chMBInit(&microsd_mb, microsd_mb_q, 256);
+    volatile char *msg;
+    msg = (char*)chPoolAlloc(&microsd_mp);
+    msg[6] = (char)0;
+    msg[7] = (char)channel;
+    memcpy((void*)msg, (void*)&halGetCounterValue(), 4);
+    memcpy((void*)&msg[8], data, 8);
+    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
 }
 
-void microsd_log(char* data)
+void microsd_log_s64(uint8_t channel, int64_t *data)
 {
-    microsd_message *msg;
-    msg = (microsd_message*)chPoolAlloc(&microsd_mp);
-    msg->rt = halGetCounterValue();
-    memcpy(msg->thread, chRegGetThreadName(chThdSelf()), 10);
-    memcpy(msg->data, data, 41);
+    char *msg;
+    msg = (void*)chPoolAlloc(&microsd_mp);
+    msg[6] = (char)1;
+    msg[7] = (char)channel;
+    memcpy(msg, (void*)&halGetCounterValue(), 4);
+    memcpy(&msg[8], data, 8);
     chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
+}
+
+void microsd_log_s32(uint8_t channel, int32_t *data_a, int32_t *data_b)
+{
+    char *msg;
+    msg = (void*)chPoolAlloc(&microsd_mp);
+    msg[6] = (char)2;
+    msg[7] = (char)channel;
+    memcpy(msg, (void*)&halGetCounterValue(), 4);
+    memcpy(&msg[8],  data_a, 4);
+    memcpy(&msg[12], data_b, 4);
+    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
+}
+
+void microsd_log_s16(uint8_t channel, int16_t *data_a, int16_t *data_b,
+                                  int16_t *data_c, int16_t *data_d)
+{
+    char *msg;
+    msg = (void*)chPoolAlloc(&microsd_mp);
+    msg[6] = (char)3;
+    msg[7] = (char)channel;
+    memcpy(msg, (void*)&halGetCounterValue(), 4);
+    memcpy(&msg[8],  data_a, 2);
+    memcpy(&msg[10], data_b, 2);
+    memcpy(&msg[12], data_c, 2);
+    memcpy(&msg[14], data_d, 2);
+    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
+}
+
+void microsd_log_u16(uint8_t channel, uint16_t *data_a, uint16_t *data_b,
+                                      uint16_t *data_c, uint16_t *data_d)
+{
+    char *msg;
+    msg = (void*)chPoolAlloc(&microsd_mp);
+    msg[6] = (char)4;
+    msg[7] = (char)channel;
+    memcpy(msg, (void*)&halGetCounterValue(), 4);
+    memcpy(&msg[8],  data_a, 2);
+    memcpy(&msg[10], data_b, 2);
+    memcpy(&msg[12], data_c, 2);
+    memcpy(&msg[14], data_d, 2);
+    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
+}
+
+static void microsd_mem_init()
+{
+    chPoolInit(&microsd_mp, 16, NULL);
+    chPoolLoadArray(&microsd_mp, (void*)microsd_mp_b, MICROSD_MEMPOOL_SIZE);
+    chMBInit(&microsd_mb, (msg_t*)microsd_mb_q, MICROSD_MEMPOOL_SIZE);
 }
 
 static void microsd_open_file(FIL* fp)
@@ -45,15 +109,11 @@ static void microsd_open_file(FIL* fp)
     FRESULT err;
     BYTE mode = FA_WRITE | FA_CREATE_NEW;
 
-    chsnprintf(fname, 16, "log_%05d.txt", file_idx);
-    err = f_open(fp, fname, mode);
-    while(err != FR_OK) {
-        chprintf((BaseSequentialStream*)&SD2,
-                 "Could not open file '%s', err %d\r\n", fname, err);
+    do {
         file_idx++;
-        chsnprintf(fname, 16, "log_%05d.txt", file_idx);
+        chsnprintf(fname, 16, "log_%05d.bin", file_idx);
         err = f_open(fp, fname, mode);
-    }
+    } while(err != FR_OK);
 }
 
 static void microsd_unmount(FIL* fp)
@@ -62,15 +122,19 @@ static void microsd_unmount(FIL* fp)
     sdcDisconnect(&SDCD1);
 }
 
-static void microsd_write_line(FIL* fp, char* line)
+static void microsd_write(FIL* fp)
 {
-    int n;
-    n = f_puts(line, fp);
-    if(n == -1) {
+    int32_t t0 = chTimeNow();
+    UINT n;
+    FRESULT err;
+
+    err = f_write(fp, (void*)microsd_cache, MICROSD_CACHE_SIZE, &n);
+    if(err != FR_OK || n != MICROSD_CACHE_SIZE) {
         /* TODO: be sad */
         while(1);
     }
     f_sync(fp);
+    last_write_time = chTimeNow() - t0;
 }
 
 msg_t microsd_thread(void* arg)
@@ -79,12 +143,13 @@ msg_t microsd_thread(void* arg)
     static FIL fp;
     static FRESULT err;
     msg_t status, msgp;
-    microsd_message *msg;
-    char logline[64];
+    char *msg;
+    volatile char *cachep = microsd_cache;
 
     (void)arg;
 
     microsd_mem_init();
+    microsd_log_c(0x00, "CUSFCUSF");
 
     chRegSetThreadName("MicroSD");
 
@@ -104,87 +169,29 @@ msg_t microsd_thread(void* arg)
     }
 
     microsd_open_file(&fp);
+    f_lseek(&fp, 1024 * MICROSD_CACHE_SIZE);
+    f_lseek(&fp, 0);
 
     while(TRUE) {
-        status = chMBFetch(&microsd_mb, &msgp, 50);
-        if(status == RDY_TIMEOUT) {
+        status = chMBFetch(&microsd_mb, &msgp, TIME_INFINITE);
+        if(status != RDY_OK || msgp == 0) {
             continue;
         }
 
-        msg = (microsd_message*)msgp;
-        chsnprintf(logline, 64, "%10u,%10s,%s\n",
-                   msg->rt, msg->thread, msg->data);
-        microsd_write_line(&fp, logline);
-        chPoolFree(&microsd_mp, (msg_t*)msgp);
+        msg = (char*)msgp;
+        memcpy((void*)cachep, msg, 16);
+        /*
+        chprintf((BaseSequentialStream*)&SD2,
+                "About to free %x\r\n", (void*)msg);
+        */
+        chPoolFree(&microsd_mp, (void*)msg);
+        if(cachep + 16 == microsd_cache + MICROSD_CACHE_SIZE) {
+            microsd_write(&fp);
+            cachep = microsd_cache;
+        } else {
+            cachep += 16;
+        }
     }
 
     microsd_unmount(&fp);
 }
-
-/*
-static FRESULT scan_files(BaseSequentialStream *chp, char *path) {
-  FRESULT res;
-  FILINFO fno;
-  DIR dir;
-  int i;
-  char *fn;
-
-#if _USE_LFN
-  fno.lfname = 0;
-  fno.lfsize = 0;
-#endif
-  res = f_opendir(&dir, path);
-  if (res == FR_OK) {
-    i = strlen(path);
-    for (;;) {
-      res = f_readdir(&dir, &fno);
-      if (res != FR_OK || fno.fname[0] == 0)
-        break;
-      if (fno.fname[0] == '.')
-        continue;
-      fn = fno.fname;
-      if (fno.fattrib & AM_DIR) {
-        path[i++] = '/';
-        strcpy(&path[i], fn);
-        res = scan_files(chp, path);
-        if (res != FR_OK)
-          break;
-        path[--i] = 0;
-      }
-      else {
-        chprintf(chp, "%s/%s\r\n", path, fn);
-      }
-    }
-  }
-  return res;
-}
-
-
-static void cmd_tree(BaseSequentialStream *chp, int argc, char *argv[]) {
-  FRESULT err;
-  uint32_t clusters;
-  FATFS *fsp;
-
-  (void)argv;
-  if (argc > 0) {
-    chprintf(chp, "Usage: tree\r\n");
-    return;
-  }
-  if (!fs_ready) {
-    chprintf(chp, "File System not mounted\r\n");
-    return;
-  }
-  err = f_getfree("/", &clusters, &fsp);
-  if (err != FR_OK) {
-    chprintf(chp, "FS: f_getfree() failed\r\n");
-    return;
-  }
-  chprintf(chp,
-           "FS: %lu free clusters, %lu sectors per cluster, %lu bytes free\r\n",
-           clusters, (uint32_t)SDC_FS.csize,
-           clusters * (uint32_t)SDC_FS.csize * (uint32_t)MMCSD_BLOCK_SIZE);
-  fbuff[0] = 0;
-  scan_files(chp, (char *)fbuff);
-}
-
-*/

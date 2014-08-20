@@ -169,6 +169,11 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x)
 
     /* DATA_FORMAT: Full resolution, maximum range */
     adxl3x5_write_u8(SPID, 0x31, (1<<3) | (1<<1) | (1<<0));
+
+    /* Discard ten samples to allow it to settle after turning off test */
+    for(i=0; i<10; i++) {
+        adxl3x5_read_accel(SPID, accels_cur);
+    }
 }
 
 /*
@@ -185,19 +190,15 @@ msg_t adxl345_thread(void *arg)
         SPI_CR1_BR_1 | SPI_CR1_BR_0 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
     static int16_t accels[3];
-    char log[41];
 
     chRegSetThreadName("ADXL345");
 
     spiStart(&ADXL345_SPID, &spi_cfg);
     adxl3x5_init(&ADXL345_SPID, 3);
 
-    microsd_log("Init complete");
-
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
-        chsnprintf(log, 41, "%d,%d,%d", accels[0], accels[1], accels[2]);
-        microsd_log(log);
+        microsd_log_s16(0x10, &accels[0], &accels[1], &accels[2], 0);
     }
 
     return (msg_t)NULL;
@@ -217,19 +218,15 @@ msg_t adxl375_thread(void *arg)
         SPI_CR1_BR_2 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
     static int16_t accels[3];
-    char log[41];
 
     chRegSetThreadName("ADXL375");
 
     spiStart(&ADXL375_SPID, &spi_cfg);
     adxl3x5_init(&ADXL375_SPID, 7);
 
-    microsd_log("Init complete");
-
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);
-        chsnprintf(log, 41, "%d,%d,%d", accels[0], accels[1], accels[2]);
-        microsd_log(log);
+        microsd_log_s16(0x20, &accels[0], &accels[1], &accels[2], 0);
     }
 
     return (msg_t)NULL;

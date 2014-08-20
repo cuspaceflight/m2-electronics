@@ -24,6 +24,7 @@ static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
 
 static void cmd_threads(BaseSequentialStream *chp, int argc, char *argv[]) {
   static const char *states[] = {THD_STATE_NAMES};
+  uint64_t busy = 0, total = 0;
   Thread *tp;
 
   (void)argv;
@@ -41,8 +42,13 @@ static void cmd_threads(BaseSequentialStream *chp, int argc, char *argv[]) {
             (uint32_t)tp, (uint32_t)tp->p_ctx.r13,
             (uint32_t)tp->p_prio, (uint32_t)(tp->p_refs - 1),
             states[tp->p_state], (uint32_t)tp->p_time);
+    if(tp->p_prio != 1) {
+        busy += tp->p_time;
+    }
+    total += tp->p_time;
     tp = chRegNextThread(tp);
   } while (tp != NULL);
+  chprintf(chp, "CPU Usage: %ld%%\r\n", busy*100/total);
 }
 
 static void cmd_rt(BaseSequentialStream *chp, int argc, char *argv[]) {

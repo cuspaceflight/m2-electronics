@@ -59,8 +59,6 @@ int main(void) {
 
     m2fc_shell_run();
 
-    microsd_log("Main done, sleeping");
-
     chThdSetPriority(LOWPRIO);
     chThdSleep(TIME_INFINITE);
 

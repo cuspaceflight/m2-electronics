@@ -21,6 +21,8 @@ bool_t pyro_continuity(pyro_channel channel)
         pad = GPIOE_PYRO_2_C;
     } else if(channel == PYRO_3) {
         pad = GPIOE_PYRO_3_C;
+    } else {
+        return FALSE;
     }
 
     if(palReadPad(GPIOE, pad) == PAL_LOW) {
@@ -50,6 +52,8 @@ void pyro_fire(uint8_t channel, uint16_t duration_ms)
         pad = GPIOE_PYRO_3_F;
         chVTReset(&vt3);
         chVTSet(&vt3, MS2ST(duration_ms), pyro_off_3, NULL);
+    } else {
+        return;
     }
 
     palSetPad(GPIOE, pad);

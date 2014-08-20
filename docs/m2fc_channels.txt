@@ -1,0 +1,22 @@
+0x00 STARTUP char* "CUSFCUSF"
+
+0x10 LG ACCEL int16 x, int16 y, int16 z, int16 0
+0x20 HG ACCEL int16 x, int16 y, int16 z, int16 0
+
+0x30 BARO int32 pressure, int32 temperature
+0x31 BARO uint16 d0, uint16 c1, uint16 c2, uint16 c3,
+0x32 BARO uint16 c4, uint16 c5, uint16 c6, uint16 d7
+
+0x40 MAGNO
+0x50 GYRO
+
+0xA0 STRAIN int16 ch1, int16 ch2, int16 ch3
+0xB0 THERMO int16 ch1, int16 ch2, int16 ch3
+
+0xC0 MISSION
+
+0xEE SERIAL IN 1
+0xEF SERIAL OUT 1
+
+0xFE SERIAL IN 2
+0xFF SERIAL OUT 2

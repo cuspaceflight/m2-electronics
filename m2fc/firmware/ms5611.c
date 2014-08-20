@@ -8,6 +8,7 @@
 #include "microsd.h"
 
 #include "hal.h"
+#include "chprintf.h"
 
 #define MS5611_SPID        SPID3
 #define MS5611_SPI_CS_PORT GPIOD
@@ -73,12 +74,18 @@ static void ms5611_read_s24(uint8_t adr, int32_t* d)
  */
 static void ms5611_read_cal(MS5611CalData* cal_data)
 {
+    uint16_t d0, d7;
+    ms5611_read_u16(0xA0, &d0);
     ms5611_read_u16(0xA2, &(cal_data->c1));
     ms5611_read_u16(0xA4, &(cal_data->c2));
     ms5611_read_u16(0xA6, &(cal_data->c3));
     ms5611_read_u16(0xA8, &(cal_data->c4));
     ms5611_read_u16(0xAA, &(cal_data->c5));
     ms5611_read_u16(0xAC, &(cal_data->c6));
+    ms5611_read_u16(0xAE, &d7);
+
+    microsd_log_u16(0x31, &d0, &cal_data->c1, &cal_data->c2, &cal_data->c3);
+    microsd_log_u16(0x32, &cal_data->c4, &cal_data->c5, &cal_data->c6, &d7);
 }
 
 /*
@@ -122,6 +129,8 @@ static void ms5611_read(MS5611CalData* cal_data,
            ((int64_t)cal_data->c3 * dt) / (1<<8);
 
     *pressure = ((d1 * sens) / (1<<21) - off) / (1<<15);
+
+    microsd_log_s32(0x30, pressure, temperature);
 }
 
 /*
@@ -142,19 +151,14 @@ msg_t ms5611_thread(void *arg)
 
     static MS5611CalData cal_data;
     static int32_t temperature, pressure;
-    char log[41];
 
     chRegSetThreadName("MS5611");
 
     spiStart(&MS5611_SPID, &spi_cfg);
     ms5611_init(&cal_data);
 
-    microsd_log("Init complete");
-
     while (TRUE) {
         ms5611_read(&cal_data, &temperature, &pressure);
-        chsnprintf(log, 41, "%d,%d", temperature, pressure);
-        microsd_log(log);
     }
 
     return (msg_t)NULL;
