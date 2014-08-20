@@ -240,6 +240,13 @@
 #define STM32_SPI_DMA_ERROR_HOOK(spip)      chSysHalt()
 
 /*
+ * Set the SDIO DMA stream. It defaults to (2, 3), same as SPI1, which
+ * will cause serious problems. (2, 6) is used for TIM1, SPI6, CRYP_IN,
+ * USART6 and SPI5, none of which I'm using.
+ */
+#define STM32_SDC_SDIO_DMA_STREAM           STM32_DMA_STREAM_ID(2, 6)
+
+/*
  * UART driver system settings.
  */
 #define STM32_UART_USE_USART1               FALSE

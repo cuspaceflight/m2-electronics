@@ -142,6 +142,7 @@ msg_t ms5611_thread(void *arg)
 
     static MS5611CalData cal_data;
     static int32_t temperature, pressure;
+    char log[41];
 
     chRegSetThreadName("MS5611");
 
@@ -152,6 +153,8 @@ msg_t ms5611_thread(void *arg)
 
     while (TRUE) {
         ms5611_read(&cal_data, &temperature, &pressure);
+        chsnprintf(log, 41, "%d,%d", temperature, pressure);
+        microsd_log(log);
     }
 
     return (msg_t)NULL;

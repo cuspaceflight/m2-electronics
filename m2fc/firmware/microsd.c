@@ -5,9 +5,11 @@
  */
 
 #include <string.h>
+#include <stdio.h>
 #include "microsd.h"
 #include "hal.h"
 #include "chprintf.h"
+#include "ff.h"
 
 static MemoryPool microsd_mp;
 static microsd_message microsd_mp_b[256];
@@ -23,11 +25,10 @@ void microsd_mem_init()
 {
     chPoolInit(&microsd_mp, sizeof(microsd_message), NULL);
     chPoolLoadArray(&microsd_mp, (void*)microsd_mp_b, 256);
-
     chMBInit(&microsd_mb, microsd_mb_q, 256);
 }
 
-void microsd_log(const char* data)
+void microsd_log(char* data)
 {
     microsd_message *msg;
     msg = (microsd_message*)chPoolAlloc(&microsd_mp);
@@ -47,10 +48,8 @@ static void microsd_open_file(FIL* fp)
     chsnprintf(fname, 16, "log_%05d.txt", file_idx);
     err = f_open(fp, fname, mode);
     while(err != FR_OK) {
-        /*
         chprintf((BaseSequentialStream*)&SD2,
                  "Could not open file '%s', err %d\r\n", fname, err);
-        */
         file_idx++;
         chsnprintf(fname, 16, "log_%05d.txt", file_idx);
         err = f_open(fp, fname, mode);
@@ -85,12 +84,13 @@ msg_t microsd_thread(void* arg)
 
     (void)arg;
 
+    microsd_mem_init();
+
     chRegSetThreadName("MicroSD");
 
     sdcStart(&SDCD1, NULL);
 
-    chThdSleepMilliseconds(5);
-
+    
     if(sdcConnect(&SDCD1)) {
         /* TODO: be sad */
         while(1);
@@ -106,8 +106,8 @@ msg_t microsd_thread(void* arg)
     microsd_open_file(&fp);
 
     while(TRUE) {
-        status = chMBFetch(&microsd_mb, &msgp, 1000);
-        if(status != RDY_OK) {
+        status = chMBFetch(&microsd_mb, &msgp, 50);
+        if(status == RDY_TIMEOUT) {
             continue;
         }
 

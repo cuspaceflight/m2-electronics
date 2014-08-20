@@ -16,7 +16,7 @@ typedef struct {
 } microsd_message __attribute__((aligned(sizeof(stkalign_t))));
 
 void microsd_mem_init(void);
-void microsd_log(const char* data);
+void microsd_log(char* data);
 msg_t microsd_thread(void* arg);
 
 #endif /* MICROSD_H */

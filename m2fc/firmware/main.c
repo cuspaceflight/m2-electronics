@@ -18,11 +18,11 @@
 #include "m2fc_shell.h"
 
 
-static WORKING_AREA(waMS5611, 128);
-static WORKING_AREA(waADXL345, 128);
-static WORKING_AREA(waADXL375, 128);
+static WORKING_AREA(waMS5611, 256);
+static WORKING_AREA(waADXL345, 256);
+static WORKING_AREA(waADXL375, 256);
 static WORKING_AREA(waThreadHB, 128);
-static WORKING_AREA(waMicroSD, 2048);
+static WORKING_AREA(waMicroSD, 512);
 
 static msg_t ThreadHeartbeat(void *arg) {
     (void)arg;
@@ -40,13 +40,10 @@ static msg_t ThreadHeartbeat(void *arg) {
 int main(void) {
     halInit();
     chSysInit();
+    chRegSetThreadName("main");
 
-    microsd_mem_init();
-
-    /*
     chThdCreateStatic(waMicroSD, sizeof(waMicroSD), HIGHPRIO,
                       microsd_thread, NULL);
-    */
 
     chThdCreateStatic(waMS5611, sizeof(waMS5611), NORMALPRIO,
                       ms5611_thread, NULL);
@@ -62,9 +59,8 @@ int main(void) {
 
     m2fc_shell_run();
 
-    microsd_log("main done, sleeping");
+    microsd_log("Main done, sleeping");
 
-    chRegSetThreadName("main");
     chThdSetPriority(LOWPRIO);
     chThdSleep(TIME_INFINITE);
 

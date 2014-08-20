@@ -8,6 +8,7 @@
 #include "microsd.h"
 
 #include "hal.h"
+#include "chprintf.h"
 
 #define ADXL345_SPID         SPID2
 #define ADXL345_SPI_CS_PORT  GPIOB
@@ -184,6 +185,7 @@ msg_t adxl345_thread(void *arg)
         SPI_CR1_BR_1 | SPI_CR1_BR_0 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
     static int16_t accels[3];
+    char log[41];
 
     chRegSetThreadName("ADXL345");
 
@@ -194,6 +196,8 @@ msg_t adxl345_thread(void *arg)
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
+        chsnprintf(log, 41, "%d,%d,%d", accels[0], accels[1], accels[2]);
+        microsd_log(log);
     }
 
     return (msg_t)NULL;
@@ -213,6 +217,7 @@ msg_t adxl375_thread(void *arg)
         SPI_CR1_BR_2 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
     static int16_t accels[3];
+    char log[41];
 
     chRegSetThreadName("ADXL375");
 
@@ -223,6 +228,8 @@ msg_t adxl375_thread(void *arg)
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);
+        chsnprintf(log, 41, "%d,%d,%d", accels[0], accels[1], accels[2]);
+        microsd_log(log);
     }
 
     return (msg_t)NULL;

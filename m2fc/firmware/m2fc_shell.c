@@ -4,9 +4,8 @@
  * 2014 Adam Greig, Cambridge University Spaceflight
  */
 #include "m2fc_shell.h"
-#include "hal.h"
+#include <hal.h>
 #include "chprintf.h"
-#include "ff.h"
 
 static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
   size_t n, size;
@@ -58,77 +57,12 @@ static void cmd_rt(BaseSequentialStream *chp, int argc, char *argv[]) {
     chprintf(chp, "Real time clock frequency: %u\r\n", f);
 }
 
-static FATFS SDC_FS;
-static bool_t fs_ready = FALSE;
-
-static void cmd_mount(BaseSequentialStream *chp, int argc, char* argv[]) {
-    FRESULT err;
-    (void)argc;
-    (void)argv;
-
-    if (sdcConnect(&SDCD1)) {
-        chprintf(chp, "Failed to connect\r\n");
-        return;
-    }
-
-    err = f_mount(0, &SDC_FS);
-    if(err != FR_OK) {
-        chprintf(chp, "Failed to mount\r\n");
-        sdcDisconnect(&SDCD1);
-        return;
-    }
-
-    fs_ready = TRUE;
-}
-
-static void cmd_unmount(BaseSequentialStream *chp, int argc, char* argv[]) {
-    (void)argc;
-    (void)argv;
-    sdcDisconnect(&SDCD1);
-    fs_ready = FALSE;
-    chprintf(chp, "OK\r\n");
-}
-
-static void cmd_hello(BaseSequentialStream *chp, int argc, char* argv[]) {
-    FIL fsrc;
-    FRESULT err;
-    int written;
-    (void)argc;
-    (void)argv;
-    /*
-     * Open the text file
-     */
-    err = f_open(&fsrc, "hello.txt", FA_READ | FA_WRITE | FA_CREATE_ALWAYS);
-    if (err != FR_OK) {
-        chprintf(chp, "FS: f_open(\"hello.txt\") failed.\r\n");
-        return;
-    } else {
-        chprintf(chp, "FS: f_open(\"hello.txt\") succeeded\r\n");
-    }
-    /*
-     * Write text to the file.
-     */
-    written = f_puts ("Hello World", &fsrc);
-    if (written == -1) {
-        chprintf(chp, "FS: f_puts(\"Hello World\",\"hello.txt\") failed\r\n");
-    } else {
-        chprintf(chp, "FS: f_puts(\"Hello World\",\"hello.txt\") succeeded\r\n");
-    }
-    /*
-     * Close the file
-     */
-    f_close(&fsrc);
-}
-
 void m2fc_shell_run()
 {
     static const ShellCommand commands[] = {
         {"mem", cmd_mem},
         {"threads", cmd_threads},
         {"rt", cmd_rt},
-        {"mount", cmd_mount},
-        {"unmount", cmd_unmount},
-        {"hello", cmd_hello},
         {NULL, NULL}
     };
     static const ShellConfig shell_cfg = {
@@ -139,4 +73,3 @@ void m2fc_shell_run()
     sdStart(&SD2, NULL);
     shellCreate(&shell_cfg, 2048, NORMALPRIO);
 }
-
