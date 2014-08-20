@@ -5,7 +5,8 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16
+  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 \
+			-fsingle-precision-constant
 endif
 
 # C specific options here (added to USE_OPT).
@@ -158,7 +159,7 @@ TOPT = -mthumb -DTHUMB
 
 # Define C warning options here
 CWARN = -Wall -Wextra -Wshadow -Wimplicit-function-declaration               \
-		-Wstrict-prototypes -Wredundant-decls -Wundef
+		-Wstrict-prototypes -Wredundant-decls -Wundef -Wdouble-promotion
 
 # Define C++ warning options here
 CPPWARN = -Wall -Wextra
