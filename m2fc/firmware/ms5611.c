@@ -98,6 +98,9 @@ static void ms5611_init(MS5611CalData* cal_data)
  *
  * `cal_data` is previously read calibration data.
  * `temperature` and `pressure` are written to.
+ *
+ * `temperature` is in centidegrees Celcius,
+ * `pressure` is in Pascals.
  */
 static void ms5611_read(MS5611CalData* cal_data,
                         int32_t* temperature, int32_t* pressure)

@@ -8,6 +8,7 @@
 
 #include "ms5611.h"
 #include "adxl3x5.h"
+#include "pyro.h"
 
 static WORKING_AREA(waMS5611, 128);
 static WORKING_AREA(waADXL345, 128);
@@ -45,6 +46,6 @@ int main(void) {
 
 
     while (TRUE) {
-        chThdSleepMilliseconds(500);
+        chThdSleepMilliseconds(1000);
     }
 }
