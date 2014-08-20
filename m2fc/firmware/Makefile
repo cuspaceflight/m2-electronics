@@ -89,7 +89,8 @@ CSRC = $(PORTSRC) \
        $(BOARDSRC) \
        $(CHIBIOS)/os/various/chprintf.c \
        main.c \
-	   ms5611.c
+	   ms5611.c \
+	   adxl3x5.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

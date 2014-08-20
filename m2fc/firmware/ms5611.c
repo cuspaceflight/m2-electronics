@@ -5,22 +5,24 @@
  */
 
 #include "ms5611.h"
+#include <hal.h>
+
 #define MS5611_SPID        SPID3
 #define MS5611_SPI_CS_PORT GPIOD
 #define MS5611_SPI_CS_PIN  GPIOD_BARO_CS
 
-void ms5611_reset(void);
-void ms5611_read_u16(uint8_t adr, uint16_t* c);
-void ms5611_read_s24(uint8_t adr, int32_t* d);
-void ms5611_init(MS5611CalData* cal_data);
-void ms5611_read_cal(MS5611CalData* cal_data);
-void ms5611_read(MS5611CalData* cal_data,
-                 int32_t* temperature, int32_t* pressure);
+static void ms5611_reset(void);
+static void ms5611_read_u16(uint8_t adr, uint16_t* c);
+static void ms5611_read_s24(uint8_t adr, int32_t* d);
+static void ms5611_init(MS5611CalData* cal_data);
+static void ms5611_read_cal(MS5611CalData* cal_data);
+static void ms5611_read(MS5611CalData* cal_data,
+                        int32_t* temperature, int32_t* pressure);
 
 /*
  * Resets the MS5611. Sends 0x1E, waits 3ms.
  */
-void ms5611_reset()
+static void ms5611_reset()
 {
     uint8_t adr = 0x1E;
     spiSelect(&MS5611_SPID);
@@ -32,7 +34,7 @@ void ms5611_reset()
 /*
  * Reads a uint16 from the MS5611 address `adr`, stores it to `c`.
  */
-void ms5611_read_u16(uint8_t adr, uint16_t* c)
+static void ms5611_read_u16(uint8_t adr, uint16_t* c)
 {
     uint8_t rx[2];
     spiSelect(&MS5611_SPID);
@@ -46,7 +48,7 @@ void ms5611_read_u16(uint8_t adr, uint16_t* c)
 /*
  * Reads an int24 from the MS5611 address `adr`, stores it to `d`.
  */
-void ms5611_read_s24(uint8_t adr, int32_t* d)
+static void ms5611_read_s24(uint8_t adr, int32_t* d)
 {
     uint8_t adc_adr = 0x00, rx[3];
 
@@ -67,7 +69,7 @@ void ms5611_read_s24(uint8_t adr, int32_t* d)
 /*
  * Reads MS5611 calibration data, writes it to `cal_data`.
  */
-void ms5611_read_cal(MS5611CalData* cal_data)
+static void ms5611_read_cal(MS5611CalData* cal_data)
 {
     ms5611_read_u16(0xA2, &(cal_data->c1));
     ms5611_read_u16(0xA4, &(cal_data->c2));
@@ -85,7 +87,7 @@ void ms5611_read_cal(MS5611CalData* cal_data)
  *
  * cal_data should be a pointer to some memory to store the calibration in.
  */
-void ms5611_init(MS5611CalData* cal_data)
+static void ms5611_init(MS5611CalData* cal_data)
 {
     ms5611_reset();
     ms5611_read_cal(cal_data);
@@ -97,11 +99,11 @@ void ms5611_init(MS5611CalData* cal_data)
  * `cal_data` is previously read calibration data.
  * `temperature` and `pressure` are written to.
  */
-void ms5611_read(MS5611CalData* cal_data,
-                 int32_t* temperature, int32_t* pressure)
+static void ms5611_read(MS5611CalData* cal_data,
+                        int32_t* temperature, int32_t* pressure)
 {
     int32_t d1, d2;
-    int64_t off, sens, off2, sens2, t2, dt;
+    int64_t off, sens, dt;
     ms5611_read_s24(0x40, &d1);
     ms5611_read_s24(0x50, &d2);
 
