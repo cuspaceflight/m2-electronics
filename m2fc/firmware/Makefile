@@ -79,7 +79,7 @@ include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 include $(CHIBIOS)/test/test.mk
 
 # Define linker script file here
-LDSCRIPT= $(PORTLD)/STM32F405xG.ld
+LDSCRIPT= $(PORTLD)/STM32F407xG_CCM.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -93,7 +93,8 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/chprintf.c \
 	   $(CHIBIOS)/os/various/evtimer.c \
 	   $(CHIBIOS)/os/various/shell.c \
-       main.c ms5611.c adxl3x5.c pyro.c
+	   $(CHIBIOS)/os/various/memstreams.c \
+       main.c ms5611.c adxl3x5.c pyro.c microsd.c m2fc_shell.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

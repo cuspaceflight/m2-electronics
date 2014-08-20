@@ -5,7 +5,9 @@
  */
 
 #include "ms5611.h"
-#include <hal.h>
+#include "microsd.h"
+
+#include "hal.h"
 
 #define MS5611_SPID        SPID3
 #define MS5611_SPI_CS_PORT GPIOD
@@ -141,8 +143,12 @@ msg_t ms5611_thread(void *arg)
     static MS5611CalData cal_data;
     static int32_t temperature, pressure;
 
+    chRegSetThreadName("MS5611");
+
     spiStart(&MS5611_SPID, &spi_cfg);
     ms5611_init(&cal_data);
+
+    microsd_log("Init complete");
 
     while (TRUE) {
         ms5611_read(&cal_data, &temperature, &pressure);

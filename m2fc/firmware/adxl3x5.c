@@ -5,7 +5,9 @@
  */
 
 #include "adxl3x5.h"
-#include <hal.h>
+#include "microsd.h"
+
+#include "hal.h"
 
 #define ADXL345_SPID         SPID2
 #define ADXL345_SPI_CS_PORT  GPIOB
@@ -166,7 +168,6 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x)
 
     /* DATA_FORMAT: Full resolution, maximum range */
     adxl3x5_write_u8(SPID, 0x31, (1<<3) | (1<<1) | (1<<0));
-
 }
 
 /*
@@ -184,8 +185,12 @@ msg_t adxl345_thread(void *arg)
     };
     static int16_t accels[3];
 
+    chRegSetThreadName("ADXL345");
+
     spiStart(&ADXL345_SPID, &spi_cfg);
     adxl3x5_init(&ADXL345_SPID, 3);
+
+    microsd_log("Init complete");
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
@@ -209,8 +214,12 @@ msg_t adxl375_thread(void *arg)
     };
     static int16_t accels[3];
 
+    chRegSetThreadName("ADXL375");
+
     spiStart(&ADXL375_SPID, &spi_cfg);
     adxl3x5_init(&ADXL375_SPID, 7);
+
+    microsd_log("Init complete");
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);
