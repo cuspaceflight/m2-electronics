@@ -7,8 +7,10 @@
 #include <math.h>
 #include "state_estimation.h"
 
-static state_estimate_t x = {0f, 0f, 0f};
-static float p[3][3] = {{0f, 0f, 0f}, {0f, 0f, 0f}, {0f, 0f, 0f}};
+static float x[3]    = { 0.0f, 0.0f, 0.0f};
+static float p[3][3] = {{0.0f, 0.0f, 0.0f},
+                        {0.0f, 0.0f, 0.0f},
+                        {0.0f, 0.0f, 0.0f}};
 static int32_t t = 0;
 
 void state_estimation_update_accel(float accel, float r);
@@ -26,7 +28,7 @@ void state_estimation_new_pressure(float pressure)
 
     y = h - x[0];
 
-    s_inv = 1f / (p[0][0] + r);
+    s_inv = 1.0f / (p[0][0] + r);
 
     k[0] = p[0][0] * s_inv;
     k[1] = p[1][0] * s_inv;
@@ -34,26 +36,28 @@ void state_estimation_new_pressure(float pressure)
 
     x[0] += k[0] * y;
 
-    p[0][0] -= k0 * p[0][0];
-    p[0][1] -= k0 * p[0][1];
-    p[0][2] -= k0 * p[0][2];
-    p[1][0] -= k1 * p[0][0];
-    p[1][1] -= k1 * p[0][1];
-    p[1][2] -= k1 * p[0][2];
-    p[2][0] -= k2 * p[0][0];
-    p[2][1] -= k2 * p[0][1];
-    p[2][2] -= k2 * p[0][2];
+    p[0][0] -= k[0] * p[0][0];
+    p[0][1] -= k[0] * p[0][1];
+    p[0][2] -= k[0] * p[0][2];
+    p[1][0] -= k[1] * p[0][0];
+    p[1][1] -= k[1] * p[0][1];
+    p[1][2] -= k[1] * p[0][2];
+    p[2][0] -= k[2] * p[0][0];
+    p[2][1] -= k[2] * p[0][1];
+    p[2][2] -= k[2] * p[0][2];
 
     /* Release lock */
 }
 
 float state_estimation_pressure_to_altitude(float pressure)
 {
+    (void)pressure;
+    return 0.0f;
 }
 
 void state_estimation_new_lg_accel(float lg_accel)
 {
-    if(abs(lg_accel) > 150.0f) {
+    if(fabsf(lg_accel) > 150.0f) {
         /* The low-g accelerometer is limited to +-16g, so
          * we'll just discard anything above 150m/s (15.3g).
          */
@@ -83,9 +87,9 @@ void state_estimation_update_accel(float a, float r)
 
     /* Acquire lock */
 
-    y = accel - x[2];
+    y = a - x[2];
 
-    s_inv = 1f / (p[2][2] + r);
+    s_inv = 1.0f / (p[2][2] + r);
 
     k[0] = p[0][2] * s_inv;
     k[1] = p[1][2] * s_inv;
@@ -93,15 +97,15 @@ void state_estimation_update_accel(float a, float r)
 
     x[2] += k[2] * y;
 
-    p[0][0] -= k0 * p[2][0];
-    p[0][1] -= k0 * p[2][1];
-    p[0][2] -= k0 * p[2][2];
-    p[1][0] -= k1 * p[2][0];
-    p[1][1] -= k1 * p[2][1];
-    p[1][2] -= k1 * p[2][2];
-    p[2][0] -= k2 * p[2][0];
-    p[2][1] -= k2 * p[2][1];
-    p[2][2] -= k2 * p[2][2];
+    p[0][0] -= k[0] * p[2][0];
+    p[0][1] -= k[0] * p[2][1];
+    p[0][2] -= k[0] * p[2][2];
+    p[1][0] -= k[1] * p[2][0];
+    p[1][1] -= k[1] * p[2][1];
+    p[1][2] -= k[1] * p[2][2];
+    p[2][0] -= k[2] * p[2][0];
+    p[2][1] -= k[2] * p[2][1];
+    p[2][2] -= k[2] * p[2][2];
 
     /* Release lock */
 }
@@ -111,9 +115,9 @@ void state_estimation_update_accel(float a, float r)
  */
 state_estimate_t state_estimation_get_state()
 {
-    float new_p[3][3];
     float q, dt;
-    int32_t dti, i, j;
+    int32_t dti;
+    state_estimate_t x_out;
 
     /* TODO Determine this q-value */
     q = 200.0;
@@ -142,6 +146,11 @@ state_estimate_t state_estimation_get_state()
     p[2][1] += dt * p[2][2];
     p[2][2] += dt * q; /* TODO: Should this be dt * q? */
 
+    x_out.h = x[0];
+    x_out.v = x[1];
+    x_out.a = x[2];
+    
     /* Release lock */
-    return x;
+
+    return x_out;
 }

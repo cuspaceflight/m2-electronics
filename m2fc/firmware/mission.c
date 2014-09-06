@@ -12,6 +12,10 @@ typedef enum {
     STATE_MAIN_DESCENT, STATE_LAND, STATE_LANDED, NUM_STATES
 } state_t;
 
+struct instance_data {
+    int32_t t0;
+};
+
 typedef struct instance_data instance_data_t;
 typedef state_t state_func_t(instance_data_t *data);
 
