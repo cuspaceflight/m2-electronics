@@ -22,6 +22,7 @@ void microsd_log_s16(uint8_t channel, int16_t *data_a, int16_t *data_b,
                                       int16_t *data_c, int16_t *data_d);
 void microsd_log_u16(uint8_t channel, uint16_t *data_a, uint16_t *data_b,
                                       uint16_t *data_c, uint16_t *data_d);
+void microsd_log_f(uint8_t channel, float *data);
 
 /* The MicroSD logging thread. Run me. */
 msg_t microsd_thread(void* arg);

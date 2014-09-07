@@ -6,13 +6,15 @@
 
 #include <math.h>
 #include "state_estimation.h"
+#include "microsd.h"
+#include "time_utils.h"
 
 /* Kalman filter state and covariance storage */
 static float x[3]    = { 0.0f, 0.0f, 0.0f};
 static float p[3][3] = {{0.0f, 0.0f, 0.0f},
                         {0.0f, 0.0f, 0.0f},
                         {0.0f, 0.0f, 0.0f}};
-static int32_t t_clk = 0;
+static uint32_t t_clk = 0;
 
 /* Locks to protect the global shared Kalman state */
 static BinarySemaphore kalman_lock;
@@ -29,6 +31,8 @@ const float Tb[7] = {
     288.15f, 216.65, 216.65, 228.65, 270.65, 270.65, 214.65};
 const float Hb[7] = {
     0.0f, 11000.0f, 20000.0f, 32000.0f, 47000.0f, 51000.0f, 71000.0f};
+
+volatile uint8_t state_estimation_trust_barometer = 1;
 
 void state_estimation_update_accel(float accel, float r);
 float state_estimation_pressure_to_altitude(float pressure);
@@ -102,28 +106,27 @@ float state_estimation_pressure_to_altitude(float pressure)
  * Reverses the standard equation for non-zero lapse regions,
  * P = Pb (Tb / (Tb + Lb(h - hb)))^(M g0 / R* Lb)
  */
-float state_estimation_p2a_nonzero_lapse(float p, int b)
+float state_estimation_p2a_nonzero_lapse(float pressure, int b)
 {
     float lb = Lb[b];
     float hb = Hb[b];
     float pb = Pb[b];
     float tb = Tb[b];
 
-    return hb + tb/lb * (powf(p/pb, (-Rs*lb)/(g0*M)) - 1.0f);
+    return hb + tb/lb * (powf(pressure/pb, (-Rs*lb)/(g0*M)) - 1.0f);
 }
 
 /* Convert a pressure and an atmospheric level b into an altitude.
  * Reverses the standard equation for zero-lapse regions,
  * P = Pb exp( -g0 M (h-hb) / R* Tb)
  */
-float state_estimation_p2a_zero_lapse(float p, int b)
+float state_estimation_p2a_zero_lapse(float pressure, int b)
 {
-    float lb = Lb[b];
     float hb = Hb[b];
     float pb = Pb[b];
     float tb = Tb[b];
 
-    return hb + (Rs * tb)/(g0 * M) * (logf(p) - logf(pb));
+    return hb + (Rs * tb)/(g0 * M) * (logf(pressure) - logf(pb));
 }
 
 void state_estimation_new_lg_accel(float lg_accel)
@@ -145,7 +148,7 @@ void state_estimation_new_lg_accel(float lg_accel)
 void state_estimation_new_hg_accel(float hg_accel)
 {
     /* TODO: validate choice of r */
-    state_estimation_update_accel(hg_accel, 3.8468f);
+    state_estimation_update_accel(hg_accel, 0.9617f);
 }
 
 /* Run the Kalman update for a single acceleration value.
@@ -218,6 +221,10 @@ state_estimate_t state_estimation_get_state()
     x_out.h = x[0];
     x_out.v = x[1];
     x_out.a = x[2];
+
+    microsd_log_f(0xD0, &x[0]);
+    microsd_log_f(0xD1, &x[1]);
+    microsd_log_f(0xD2, &x[2]);
     
     /* Release lock */
     chBSemSignal(&kalman_lock);

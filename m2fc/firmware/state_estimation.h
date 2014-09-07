@@ -16,7 +16,7 @@ typedef struct { float h; float v; float a; } state_estimate_t;
  * transonic regime. Set by the mission control thread and read by
  * the barometer thread when it goes to update the state estimate.
  */
-volatile uint8_t state_estimation_trust_barometer;
+extern volatile uint8_t state_estimation_trust_barometer;
 
 /* Update with a new pressure reading (in Pascals) */
 void state_estimation_new_pressure(float pressure);
