@@ -12,6 +12,12 @@
 
 typedef struct { float h; float v; float a; } state_estimate_t;
 
+/* Used to signal that the barometer is not trustworthy due to
+ * transonic regime. Set by the mission control thread and read by
+ * the barometer thread when it goes to update the state estimate.
+ */
+volatile uint8_t state_estimation_trust_barometer;
+
 /* Update with a new pressure reading (in Pascals) */
 void state_estimation_new_pressure(float pressure);
 
@@ -23,5 +29,9 @@ void state_estimation_new_hg_accel(float hg_accel);
 
 /* Compute and return the latest state estimate */
 state_estimate_t state_estimation_get_state(void);
+
+/* Initialise state estimation. Must be called before
+ * update or prediction steps above are called. */
+void state_estimation_init(void);
 
 #endif /* STATE_ESTIMATION_H */
