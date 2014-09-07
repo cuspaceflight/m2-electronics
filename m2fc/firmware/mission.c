@@ -129,6 +129,7 @@ state_t do_state_landed(instance_data_t *data)
 
 msg_t mission_thread(void* arg)
 {
+    int32_t csi, nsi;
     (void)arg;
     state_t cur_state = STATE_PAD;
     state_t new_state;
@@ -139,8 +140,11 @@ msg_t mission_thread(void* arg)
     while(1) {
         data.state = state_estimation_get_state();
         new_state = run_state(cur_state, &data);
-        if(new_state != cur_state)
-            microsd_log_s32(0xC0, (int32_t*)&cur_state, (int32_t*)&new_state);
+        if(new_state != cur_state) {
+            csi = (int32_t)cur_state;
+            nsi = (int32_t)new_state;
+            microsd_log_s32(0xC0, &csi, &nsi);
+        }
         cur_state = new_state;
         chThdSleepMilliseconds(1);
     }

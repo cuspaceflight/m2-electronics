@@ -5,16 +5,17 @@
  */
 
 #include "time_utils.h"
+#include "hal.h"
 
 uint32_t time_ticks_since(uint32_t *t0)
 {
     uint32_t t1 = halGetCounterValue();
-    if(t1 < t0) {
-        t0 = t1;
-        return 0xffffffff - t0 + t1;
+    if(t1 < *t0) {
+        *t0 = t1;
+        return 0xffffffff - *t0 + t1;
     } else {
-        t0 = t1;
-        return t1 - t0;
+        *t0 = t1;
+        return t1 - *t0;
     }
 }
 

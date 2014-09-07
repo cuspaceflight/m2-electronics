@@ -265,7 +265,7 @@ msg_t adxl375_thread(void *arg)
         ADXL375_SPI_CS_PIN,
         SPI_CR1_BR_2 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
-    static int16_t accels[3];
+    int16_t accels[3];
 
     chRegSetThreadName("ADXL375");
 

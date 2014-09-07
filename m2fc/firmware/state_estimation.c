@@ -71,6 +71,8 @@ void state_estimation_new_pressure(float pressure)
 
     x[0] += k[0] * y;
 
+    microsd_log_f(0xD2, &pressure, &x[0]);
+
     p[0][0] -= k[0] * p[0][0];
     p[0][1] -= k[0] * p[0][1];
     p[0][2] -= k[0] * p[0][2];
@@ -171,6 +173,7 @@ void state_estimation_update_accel(float a, float r)
     k[2] = p[2][2] * s_inv;
 
     x[2] += k[2] * y;
+    microsd_log_f(0xD3, &a, &x[2]);
 
     p[0][0] -= k[0] * p[2][0];
     p[0][1] -= k[0] * p[2][1];
@@ -222,9 +225,8 @@ state_estimate_t state_estimation_get_state()
     x_out.v = x[1];
     x_out.a = x[2];
 
-    microsd_log_f(0xD0, &x[0]);
-    microsd_log_f(0xD1, &x[1]);
-    microsd_log_f(0xD2, &x[2]);
+    microsd_log_f(0xD0, &x[0], &x[1]);
+    microsd_log_f(0xD1, &x[2], &x[2]);
     
     /* Release lock */
     chBSemSignal(&kalman_lock);

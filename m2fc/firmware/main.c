@@ -16,11 +16,14 @@
 #include "pyro.h"
 #include "microsd.h"
 #include "m2fc_shell.h"
+#include "mission.h"
+#include "state_estimation.h"
 
 
 static WORKING_AREA(waMS5611, 256);
-static WORKING_AREA(waADXL345, 256);
-static WORKING_AREA(waADXL375, 256);
+static WORKING_AREA(waADXL345, 512);
+static WORKING_AREA(waADXL375, 512);
+static WORKING_AREA(waMission, 256);
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waMicroSD, 512);
 
@@ -42,6 +45,8 @@ int main(void) {
     chSysInit();
     chRegSetThreadName("main");
 
+    state_estimation_init();
+
     chThdCreateStatic(waMicroSD, sizeof(waMicroSD), HIGHPRIO,
                       microsd_thread, NULL);
 
@@ -53,6 +58,9 @@ int main(void) {
 
     chThdCreateStatic(waADXL375, sizeof(waADXL375), NORMALPRIO,
                       adxl375_thread, NULL);
+
+    chThdCreateStatic(waMission, sizeof(waMission), NORMALPRIO,
+                      mission_thread, NULL);
 
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), NORMALPRIO,
                       ThreadHeartbeat, NULL);

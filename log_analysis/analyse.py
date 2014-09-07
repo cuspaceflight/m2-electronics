@@ -17,6 +17,10 @@ def main():
     lg_accel_x = []
     lg_accel_y = []
     lg_accel_z = []
+    states = []
+    se_h = []
+    se_v = []
+    se_a = []
 
     f = open(sys.argv[1], "rb")
     while True:
@@ -33,7 +37,10 @@ def main():
         if mode == 0:
             data = struct.unpack("8s", packet[8:])
         elif mode == 1:
-            data = struct.unpack("q", packet[8:])
+            if channel in [0xD0, 0xD1, 0xD2]:
+                data = struct.unpack("ff", packet[8:])
+            else:
+                data = struct.unpack("q", packet[8:])
         elif mode == 2:
             data = struct.unpack("ii", packet[8:])
         elif mode == 3:
@@ -52,11 +59,42 @@ def main():
         if channel == 0x30:
             pressures.append(data[0])
             temperatures.append(data[1])
+        if channel == 0xC0:
+            states.append(data[0])
+            print("{} -> {}".format(data[0], data[1]))
+        if channel == 0xD0:
+            se_h.append(data[0])
+        if channel == 0xD1:
+            se_v.append(data[0])
+        if channel == 0xD2:
+            se_a.append(data[0])
 
-    plt.plot(lg_accel_x)
-    plt.plot(lg_accel_y)
-    plt.plot(lg_accel_z)
+    plt.plot(lg_accel_x, label="x")
+    plt.plot(lg_accel_y, label="y")
+    plt.plot(lg_accel_z, label="z")
+    plt.title("Low G Accelerometer")
+    plt.legend()
     plt.show()
+    plt.plot(hg_accel_x, label="x")
+    plt.plot(hg_accel_y, label="y")
+    plt.plot(hg_accel_z, label="z")
+    plt.title("High G Accelerometer")
+    plt.legend()
+    plt.show()
+    plt.plot(pressures)
+    plt.title("Pressure")
+    plt.show()
+    plt.plot(temperatures)
+    plt.title("Barometer Temperature")
+    plt.show()
+    plt.plot(se_h, label="Height")
+    plt.plot(se_v, label="Velocity")
+    plt.plot(se_a, label="Acceleration")
+    plt.title("State Estimation")
+    plt.legend()
+    plt.show()
+
+    print(states)
 
 
 if __name__ == "__main__":
