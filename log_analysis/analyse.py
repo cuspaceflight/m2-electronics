@@ -1,4 +1,5 @@
 import sys
+import json
 import struct
 import numpy as np
 import matplotlib.pyplot as plt
@@ -37,37 +38,40 @@ def main():
         if mode == 0:
             data = struct.unpack("8s", packet[8:])
         elif mode == 1:
-            if channel in [0xD0, 0xD1, 0xD2]:
-                data = struct.unpack("ff", packet[8:])
-            else:
-                data = struct.unpack("q", packet[8:])
+            data = struct.unpack("q", packet[8:])
         elif mode == 2:
             data = struct.unpack("ii", packet[8:])
         elif mode == 3:
             data = struct.unpack("hhhh", packet[8:])
         elif mode == 4:
             data = struct.unpack("HHHH", packet[8:])
+        elif mode == 5:
+            data = struct.unpack("ff", packet[8:])
 
         if channel == 0x10:
             lg_accel_x.append(data[0] / 265.)
             lg_accel_y.append(data[1] / 265.)
             lg_accel_z.append(data[2] / 256.)
-        if channel == 0x20:
+        elif channel == 0x20:
             hg_accel_x.append(data[0] / 256.)
             hg_accel_y.append(data[1] / 256.)
             hg_accel_z.append(data[2] / 256.)
-        if channel == 0x30:
+            print("Saw HG data")
+        elif channel == 0x30:
             pressures.append(data[0])
             temperatures.append(data[1])
-        if channel == 0xC0:
+        elif channel == 0xC0:
             states.append(data[0])
             print("{} -> {}".format(data[0], data[1]))
-        if channel == 0xD0:
+        elif channel == 0xD0:
             se_h.append(data[0])
-        if channel == 0xD1:
-            se_v.append(data[0])
-        if channel == 0xD2:
+            se_v.append(data[1])
+        elif channel == 0xD1:
             se_a.append(data[0])
+        elif channel in [0xD2, 0xD3]:
+            pass
+        else:
+            print("Unknown channel {}".format(channel))
 
     plt.plot(lg_accel_x, label="x")
     plt.plot(lg_accel_y, label="y")
@@ -94,8 +98,22 @@ def main():
     plt.legend()
     plt.show()
 
-    print(states)
+    #print(states)
 
+    with open(sys.argv[1]+".json", "w") as f:
+        json.dump({
+            "lg_accel_x": lg_accel_x,
+            "lg_accel_y": lg_accel_y,
+            "lg_accel_z": lg_accel_z,
+            "hg_accel_x": hg_accel_x,
+            "hg_accel_y": hg_accel_y,
+            "hg_accel_z": hg_accel_z,
+            "pressure": pressures,
+            "temperature": temperatures,
+            "states": states,
+            "se_h": se_h,
+            "se_v": se_v,
+            "se_a": se_a}, f) 
 
 if __name__ == "__main__":
     main()
