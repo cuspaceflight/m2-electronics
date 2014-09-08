@@ -10,16 +10,17 @@
 uint32_t time_ticks_since(uint32_t *t0)
 {
     uint32_t t1 = halGetCounterValue();
-    if(t1 < *t0) {
+    uint32_t tp = *t0;
+    if(t1 < tp) {
         *t0 = t1;
-        return 0xffffffff - *t0 + t1;
+        return t1 + ((0xffffffff - tp) + 1);
     } else {
         *t0 = t1;
-        return t1 - *t0;
+        return t1 - tp;
     }
 }
 
 float time_seconds_since(uint32_t *t0)
 {
-    return (float)time_ticks_since(t0) / 168000000.0f;
+    return (float)time_ticks_since(t0) / (float)halGetCounterFrequency();
 }
