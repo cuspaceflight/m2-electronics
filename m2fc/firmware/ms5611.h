@@ -8,6 +8,7 @@
 #define MS5611_H
 
 #include <ch.h>
+#include "state_estimation.h"
 
 typedef struct {
     uint16_t c1, c2, c3, c4, c5, c6;

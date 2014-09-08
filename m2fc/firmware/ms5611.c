@@ -159,6 +159,7 @@ msg_t ms5611_thread(void *arg)
 
     while (TRUE) {
         ms5611_read(&cal_data, &temperature, &pressure);
+        state_estimation_new_pressure((float)pressure);
     }
 
     return (msg_t)NULL;

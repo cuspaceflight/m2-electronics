@@ -94,7 +94,8 @@ CSRC = $(PORTSRC) \
 	   $(CHIBIOS)/os/various/evtimer.c \
 	   $(CHIBIOS)/os/various/shell.c \
 	   $(CHIBIOS)/os/various/memstreams.c \
-       main.c ms5611.c adxl3x5.c pyro.c microsd.c m2fc_shell.c
+       main.c ms5611.c adxl3x5.c pyro.c microsd.c m2fc_shell.c \
+	   state_estimation.c mission.c time_utils.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -211,7 +212,7 @@ UINCDIR =
 ULIBDIR =
 
 # List all user libraries here
-ULIBS =
+ULIBS = -lm
 
 
 #
@@ -226,14 +227,14 @@ include $(RULESPATH)/rules.mk
 #
 flash: build/$(PROJECT).elf
 	arm-none-eabi-gdb --batch \
-		              -ex 'target extended-remote /dev/ttyACM1' \
+		              -ex 'target extended-remote /dev/ttyACM0' \
 					  -ex 'monitor version' \
 					  -ex 'monitor swdp_scan' \
 					  -ex 'attach 1' \
 					  -ex 'load' build/$(PROJECT).elf
 
 debug: build/$(PROJECT).elf
-	arm-none-eabi-gdb -ex 'target extended-remote /dev/ttyACM1' \
+	arm-none-eabi-gdb -ex 'target extended-remote /dev/ttyACM0' \
 		              -ex 'monitor swdp_scan' \
 					  -ex 'attach 1' \
 					  -ex "file build/$(PROJECT).elf"

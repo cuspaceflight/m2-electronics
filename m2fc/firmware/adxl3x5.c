@@ -6,6 +6,7 @@
 
 #include "adxl3x5.h"
 #include "microsd.h"
+#include "state_estimation.h"
 
 #include "hal.h"
 #include "chprintf.h"
@@ -72,8 +73,9 @@ static void adxl3x5_read_accel(SPIDriver* SPID, int16_t* accels)
 
 /*
  * Initialise the ADXL3x5 device. `x` is a parameter, 4 or 7.
- * Sets registers for 3200Hz operation in high power mode,
+ * Sets registers for 800Hz operation in high power mode,
  * enables measurement, and runs a self test to verify device performance.
+ * TODO: Consider going back to 3200Hz ODR.
  */
 static void adxl3x5_init(SPIDriver* SPID, uint8_t x)
 {
@@ -88,8 +90,8 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x)
         while(1);
     }
 
-    /* BW_RATE: Set high power mode and 3200Hz ODR */
-    adxl3x5_write_u8(SPID, 0x2C, 0x0F);
+    /* BW_RATE: Set high power mode and 800Hz ODR */
+    adxl3x5_write_u8(SPID, 0x2C, 0x0D);
 
     /* POWER_CTL: Enter MEASURE mode */
     adxl3x5_write_u8(SPID, 0x2D, (1<<3));
@@ -170,6 +172,9 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x)
     /* DATA_FORMAT: Full resolution, maximum range */
     adxl3x5_write_u8(SPID, 0x31, (1<<3) | (1<<1) | (1<<0));
 
+    /* INT_ENABLE: Enable DATA READY interrupt on INT1 */
+    adxl3x5_write_u8(SPID, 0x2E, (1<<7));
+
     /* Discard ten samples to allow it to settle after turning off test */
     for(i=0; i<10; i++) {
         adxl3x5_read_accel(SPID, accels_cur);
@@ -177,10 +182,49 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x)
 }
 
 /*
+static const EXTConfig extcfg = {
+  {
+    {EXT_CH_MODE_RISING_EDGE | EXT_CH_MODE_AUTOSTART | EXT_MODE_GPIOC, extcb1},
+    {EXT_CH_MODE_RISING_EDGE | EXT_CH_MODE_AUTOSTART | EXT_MODE_GPIOD, extcb1},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL}
+  }
+};
+*/
+
+/*
+static void extcb(EXTDriver *extp, expchannel_t channel)
+{
+    (void)extp;
+    (void)channel;
+}
+*/
+
+/*
  * ADXL345 (low-g accelerometer) main thread.
  */
 msg_t adxl345_thread(void *arg)
 {
+    float axis_accel;
     (void)arg;
 
     static const SPIConfig spi_cfg = {
@@ -199,6 +243,9 @@ msg_t adxl345_thread(void *arg)
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
         microsd_log_s16(0x10, &accels[0], &accels[1], &accels[2], 0);
+        axis_accel = (float)accels[1] * 0.0039f;
+        state_estimation_new_lg_accel(axis_accel);
+        chThdSleepMilliseconds(1);
     }
 
     return (msg_t)NULL;
@@ -209,6 +256,7 @@ msg_t adxl345_thread(void *arg)
  */
 msg_t adxl375_thread(void *arg)
 {
+    float axis_accel;
     (void)arg;
 
     static const SPIConfig spi_cfg = {
@@ -217,7 +265,7 @@ msg_t adxl375_thread(void *arg)
         ADXL375_SPI_CS_PIN,
         SPI_CR1_BR_2 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
-    static int16_t accels[3];
+    int16_t accels[3];
 
     chRegSetThreadName("ADXL375");
 
@@ -227,6 +275,9 @@ msg_t adxl375_thread(void *arg)
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);
         microsd_log_s16(0x20, &accels[0], &accels[1], &accels[2], 0);
+        axis_accel = (float)accels[1] * -0.049f;
+        state_estimation_new_hg_accel(axis_accel);
+        chThdSleepMilliseconds(1);
     }
 
     return (msg_t)NULL;

@@ -95,6 +95,18 @@ void microsd_log_u16(uint8_t channel, uint16_t *data_a, uint16_t *data_b,
     chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
 }
 
+void microsd_log_f(uint8_t channel, float *data_a, float *data_b)
+{
+    char *msg;
+    msg = (void*)chPoolAlloc(&microsd_mp);
+    msg[6] = (char)5;
+    msg[7] = (char)channel;
+    memcpy(msg, (void*)&halGetCounterValue(), 4);
+    memcpy(&msg[8], data_a, 4);
+    memcpy(&msg[12], data_b, 4);
+    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
+}
+
 static void microsd_mem_init()
 {
     chPoolInit(&microsd_mp, 16, NULL);
