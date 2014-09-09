@@ -5,6 +5,7 @@
  */
 
 #include "pyro.h"
+#include "config.h"
 #include <hal.h>
 
 void pyro_off_1(void* arg);
@@ -76,4 +77,18 @@ void pyro_off_3(void* arg)
 {
     (void)arg;
     palClearPad(GPIOE, GPIOE_PYRO_3_F);
+}
+
+void pyro_fire_drogue(uint16_t duration_ms)
+{
+    /* TODO: Check this is the nosecone m2fc */
+    pyro_fire(PYRO_1, PYRO_FIRETIME);
+    pyro_fire(PYRO_2, PYRO_FIRETIME);
+    pyro_fire(PYRO_3, PYRO_FIRETIME);
+}
+
+void pyro_fire_main(uint16_t duration_ms)
+{
+    /* TODO: Check this is the body tube m2fc */
+    pyro_fire(PYRO_1, PYRO_FIRETIME);
 }

@@ -10,10 +10,10 @@
 #include "time_utils.h"
 
 /* Kalman filter state and covariance storage */
-static float x[3]    = { 0.0f, 0.0f, 0.0f};
-static float p[3][3] = {{0.0f, 0.0f, 0.0f},
-                        {0.0f, 0.0f, 0.0f},
-                        {0.0f, 0.0f, 0.0f}};
+static float x[3]    = {  0.0f, 0.0f, 0.0f};
+static float p[3][3] = {{10.0f, 0.0f, 0.0f},
+                        { 0.0f, 0.1f, 0.0f},
+                        { 0.0f, 0.0f, 0.1f}};
 static uint32_t t_clk = 0;
 
 /* Locks to protect the global shared Kalman state */
@@ -43,8 +43,15 @@ void state_estimation_new_pressure(float pressure)
 {
     float y, r, s_inv, k[3];
     float res = 6.5f;
-    float h = state_estimation_pressure_to_altitude(pressure);
-    float hd = state_estimation_pressure_to_altitude(pressure + res);
+    float h, hd;
+
+    /* Discard data when mission control believes we are transonic. */
+    if(!state_estimation_trust_barometer)
+        return;
+
+    /* Convert pressure reading (and +resolution) into an altitude */
+    h = state_estimation_pressure_to_altitude(pressure);
+    hd = state_estimation_pressure_to_altitude(pressure + res);
 
     /* If there was an error (couldn't find suitable altitude band) for this
      * pressure, just don't use it. It's probably wrong. */
@@ -54,25 +61,24 @@ void state_estimation_new_pressure(float pressure)
     /* TODO: validate choice of r */
     r = (h - hd) * (h - hd);
 
-    /* Discard data when mission control believes we are transonic. */
-    if(!state_estimation_trust_barometer)
-        return;
-
     /* Acquire lock */
     chBSemWait(&kalman_lock);
 
+    /* Measurement residual */
     y = h - x[0];
 
+    /* Precision */
     s_inv = 1.0f / (p[0][0] + r);
 
+    /* Compute optimal Kalman gains */
     k[0] = p[0][0] * s_inv;
     k[1] = p[1][0] * s_inv;
     k[2] = p[2][0] * s_inv;
 
+    /* New state after measurement */
     x[0] += k[0] * y;
 
-    microsd_log_f(0xD2, &pressure, &x[0]);
-
+    /* Update P matrix post-measurement */
     p[0][0] -= k[0] * p[0][0];
     p[0][1] -= k[0] * p[0][1];
     p[0][2] -= k[0] * p[0][2];
@@ -83,6 +89,9 @@ void state_estimation_new_pressure(float pressure)
     p[2][1] -= k[2] * p[0][1];
     p[2][2] -= k[2] * p[0][2];
 
+    /* Log new pressure reading and the consequent new state altitude */
+    microsd_log_f(0xD2, &pressure, &x[0]);
+
     /* Release lock */
     chBSemSignal(&kalman_lock);
 }
@@ -90,6 +99,10 @@ void state_estimation_new_pressure(float pressure)
 float state_estimation_pressure_to_altitude(float pressure)
 {
     int b;
+    /* For each level of the US Standard Atmosphere 1976, check if the pressure
+     * is inside that level, and if so either use the zero lapse rate equation
+     * if the lapse rate is zero, otherwise the non-zero lapse rate.
+     */
     for(b = 0; b < 6; b++) {
         if(pressure <= Pb[b] && pressure > Pb[b+1]) {
             if(Lb[b] == 0.0f) {
@@ -100,6 +113,9 @@ float state_estimation_pressure_to_altitude(float pressure)
         }
     }
 
+    /* If no levels matched, something is wrong, returning -9999f will cause
+     * this pressure value to be ignored.
+     */
     return -9999.0f;
 }
 
@@ -164,17 +180,21 @@ void state_estimation_update_accel(float a, float r)
     /* Acquire lock */
     chBSemWait(&kalman_lock);
 
+    /* Measurement residual */
     y = a - x[2];
 
+    /* Precision */
     s_inv = 1.0f / (p[2][2] + r);
 
+    /* Compute optimal Kalman gains */
     k[0] = p[0][2] * s_inv;
     k[1] = p[1][2] * s_inv;
     k[2] = p[2][2] * s_inv;
 
+    /* Update state */
     x[2] += k[2] * y;
-    microsd_log_f(0xD3, &a, &x[2]);
 
+    /* Update covariance */
     p[0][0] -= k[0] * p[2][0];
     p[0][1] -= k[0] * p[2][1];
     p[0][2] -= k[0] * p[2][2];
@@ -184,6 +204,9 @@ void state_estimation_update_accel(float a, float r)
     p[2][0] -= k[2] * p[2][0];
     p[2][1] -= k[2] * p[2][1];
     p[2][2] -= k[2] * p[2][2];
+
+    /* Log new acceleration value the consequent new state acceleration */
+    microsd_log_f(0xD3, &a, &x[2]);
 
     /* Release lock */
     chBSemSignal(&kalman_lock);
@@ -198,7 +221,7 @@ state_estimate_t state_estimation_get_state()
     state_estimate_t x_out;
 
     /* TODO Determine this q-value */
-    q = 200.0;
+    q = 0.1 * dt;
 
     /* Acquire lock */
     chBSemWait(&kalman_lock);
@@ -206,11 +229,12 @@ state_estimate_t state_estimation_get_state()
     /* Find elapsed time */
     dt = time_seconds_since(&t_clk);
 
-    /* Update state */
-    x[0] += dt * x[1];
-    x[1] += dt * x[2];
+    /* Update state, x_{k|k-1} = F_k x_{k-1|k-1} */
+    x[0] = x[0] + dt * x[1] + dt * dt * x[2] / 2;
+    x[1] = x[1] + dt * x[2];
+    x[2] = x[2];
 
-    /* Update covariance */
+    /* Update covariance, P_{k|k-1} = F_k P_{k-1|k-1} F'_k */
     p[0][0] += dt * p[1][0] + dt * p[0][1] + dt * dt * p[1][1];
     p[0][1] += dt * p[1][1] + dt * p[0][2] + dt * dt * p[1][2];
     p[0][2] += dt * p[1][2];
@@ -219,18 +243,31 @@ state_estimate_t state_estimation_get_state()
     p[1][2] += dt * p[2][2];
     p[2][0] += dt * p[2][1];
     p[2][1] += dt * p[2][2];
-    p[2][2] += dt * q;
+    p[2][2] += 0;
 
+    /* Add process noise, P_{k|k-1} += Q */
+    p[0][0] += dt * dt * dt * dt * q / 4;
+    p[0][1] += dt * dt * dt * q / 2;
+    p[0][2] += dt * dt * q / 2;
+    p[1][0] += dt * dt * dt * q / 2;
+    p[1][1] += dt * dt * q;
+    p[1][2] += dt * q;
+    p[2][0] += dt * dt * q / 2;
+    p[2][1] += dt * q;
+    p[2][2] += q;
+
+    /* Copy state to return struct */
     x_out.h = x[0];
     x_out.v = x[1];
     x_out.a = x[2];
 
-    microsd_log_f(0xD0, &x[0], &x[1]);
-    microsd_log_f(0xD1, &x[2], &x[2]);
-    
     /* Release lock */
     chBSemSignal(&kalman_lock);
 
+    /* Log the newly predicted state */
+    microsd_log_f(0xD0, &x_out.h, x_out.v);
+    microsd_log_f(0xD1, &x_out.a, x_out.a);
+    
     return x_out;
 }
 

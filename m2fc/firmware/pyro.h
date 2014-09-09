@@ -19,4 +19,11 @@ bool_t pyro_continuity(pyro_channel channel);
  */
 void pyro_fire(pyro_channel channel, uint16_t duration_ms);
 
+/* Fire the drogue or main chute, selecting the appropriate pyro channels.
+ * Fires for PYRO_FIRETIME ms.
+ * Does not block.
+ */
+void pyro_fire_drogue(void);
+void pyro_fire_main(void);
+
 #endif /* PYRO_H */
