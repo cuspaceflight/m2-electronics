@@ -20,20 +20,28 @@
 #include "state_estimation.h"
 
 
-static WORKING_AREA(waMS5611, 256);
+static WORKING_AREA(waMS5611, 512);
 static WORKING_AREA(waADXL345, 512);
 static WORKING_AREA(waADXL375, 512);
-static WORKING_AREA(waMission, 256);
+static WORKING_AREA(waMission, 1024);
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waMicroSD, 512);
 
 static msg_t ThreadHeartbeat(void *arg) {
     (void)arg;
     chRegSetThreadName("heartbeat");
+
     while (TRUE) {
         palSetPad(GPIOA, GPIOA_LED_STATUS);
+        palSetPad(GPIOC, GPIOC_LED_C);
+        palClearPad(GPIOC, GPIOC_LED_A);
+        IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
+
         palClearPad(GPIOA, GPIOA_LED_STATUS);
+        palClearPad(GPIOC, GPIOC_LED_C);
+        palClearPad(GPIOC, GPIOC_LED_A);
+        IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
     }
 
@@ -50,6 +58,9 @@ int main(void) {
     chThdCreateStatic(waMicroSD, sizeof(waMicroSD), HIGHPRIO,
                       microsd_thread, NULL);
 
+    chThdCreateStatic(waMission, sizeof(waMission), NORMALPRIO,
+                      mission_thread, NULL);
+
     chThdCreateStatic(waMS5611, sizeof(waMS5611), NORMALPRIO,
                       ms5611_thread, NULL);
 
@@ -59,11 +70,13 @@ int main(void) {
     chThdCreateStatic(waADXL375, sizeof(waADXL375), NORMALPRIO,
                       adxl375_thread, NULL);
 
-    chThdCreateStatic(waMission, sizeof(waMission), NORMALPRIO,
-                      mission_thread, NULL);
-
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), NORMALPRIO,
                       ThreadHeartbeat, NULL);
+
+    /* Configure and enable the watchdog timer */
+    IWDG->KR = 0x5555;
+    IWDG->PR = 3;
+    IWDG->KR = 0xCCCC;
 
     m2fc_shell_run();
 

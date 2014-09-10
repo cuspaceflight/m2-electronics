@@ -79,7 +79,7 @@ void pyro_off_3(void* arg)
     palClearPad(GPIOE, GPIOE_PYRO_3_F);
 }
 
-void pyro_fire_drogue(uint16_t duration_ms)
+void pyro_fire_drogue()
 {
     /* TODO: Check this is the nosecone m2fc */
     pyro_fire(PYRO_1, PYRO_FIRETIME);
@@ -87,7 +87,7 @@ void pyro_fire_drogue(uint16_t duration_ms)
     pyro_fire(PYRO_3, PYRO_FIRETIME);
 }
 
-void pyro_fire_main(uint16_t duration_ms)
+void pyro_fire_main()
 {
     /* TODO: Check this is the body tube m2fc */
     pyro_fire(PYRO_1, PYRO_FIRETIME);
