@@ -243,6 +243,7 @@ msg_t adxl345_thread(void *arg)
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
         microsd_log_s16(0x10, &accels[0], &accels[1], &accels[2], 0);
+        /* TODO: autodetect up-axis, sensitivity, subtract g-rating */
         axis_accel = (float)accels[1] * 0.0039f;
         state_estimation_new_lg_accel(axis_accel);
         chThdSleepMilliseconds(1);
@@ -275,6 +276,7 @@ msg_t adxl375_thread(void *arg)
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);
         microsd_log_s16(0x20, &accels[0], &accels[1], &accels[2], 0);
+        /* TODO: autodetect up-axis, sensitivity, subtract g-rating */
         axis_accel = (float)accels[1] * -0.049f;
         state_estimation_new_hg_accel(axis_accel);
         chThdSleepMilliseconds(1);

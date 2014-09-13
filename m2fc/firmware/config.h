@@ -19,9 +19,6 @@
 /* Time (ms) since launch beyond which the motor has ceased burning */
 #define BURNOUT_TIMER 5000
 
-/* Acceleration (m/s/s) below which apogee has been reached */
-#define APOGEE_ACCELERATION 0.3f
-
 /* Time (ms) since launch beyond which apogee has been reached */
 #define APOGEE_TIMER 15000
 
@@ -29,12 +26,9 @@
 #define MAIN_DEPLOY_ALTITUDE 250.0f
 
 /* Time (ms) since apogee beyond which to deploy the main chute */
-#define MAIN_DEPLOY_TIMER 20000
-
-/* Velocity (m/s) below which the rocket has landed */
-#define LANDED_VELOCITY 3.0f
+#define MAIN_DEPLOY_TIMER 30000
 
 /* Time (ms) since apogee after which the rocket has landed */
-#define LANDED_TIMER 180000
+#define LANDED_TIMER 300000
 
 #endif /* CONFIG_H */

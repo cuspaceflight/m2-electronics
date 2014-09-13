@@ -132,7 +132,7 @@ state_estimate_t state_estimation_get_state()
     state_estimate_t x_out;
 
     /* TODO Determine this q-value */
-    q = 0.1;
+    q = 5.0;
 
     /* Acquire lock */
     chBSemWait(&kalman_lock);
@@ -247,7 +247,8 @@ void state_estimation_init()
 void state_estimation_new_pressure(float pressure)
 {
     /* `errbar` is 250 after the 2.5 bar error band on the MS5611. */
-    float errbar = 250.0f;
+    //float errbar = 250.0f;
+    float errbar = 6.5f;
 
     float y, r, s_inv, k[3];
     float h, hd;
@@ -382,7 +383,8 @@ void state_estimation_new_lg_accel(float lg_accel)
         return;
     }
 
-    state_estimation_update_accel(lg_accel, 0.0559f);
+    //state_estimation_update_accel(lg_accel, 0.0559f);
+    state_estimation_update_accel(lg_accel, 0.559f);
 }
 
 /* Update the state estimate with a new high-g accel reading.
