@@ -246,9 +246,8 @@ void state_estimation_init()
  */
 void state_estimation_new_pressure(float pressure)
 {
-    /* `errbar` is 250 after the 2.5 bar error band on the MS5611. */
-    //float errbar = 250.0f;
-    float errbar = 6.5f;
+    /* Around 6.5Pa resolution on the barometer. */
+    float baro_res = 6.5f;
 
     float y, r, s_inv, k[3];
     float h, hd;
@@ -262,7 +261,7 @@ void state_estimation_new_pressure(float pressure)
      * of the current noise variance in altitude terms for the filter.
      */
     h = state_estimation_pressure_to_altitude(pressure);
-    hd = state_estimation_pressure_to_altitude(pressure + errbar);
+    hd = state_estimation_pressure_to_altitude(pressure + baro_res);
 
     /* If there was an error (couldn't find suitable altitude band) for this
      * pressure, just don't use it. It's probably wrong. */
@@ -371,7 +370,7 @@ float state_estimation_p2a_zero_lapse(float pressure, int b)
  * 12.09mg and 24.12mg noise, which is 0.1186 m/s/s and 0.2365 m/s/s
  * acceleration rms respectively.
  *
- * Square the RMS value to find the variance, 0.0141 and 0.0559 respectively.
+ * In theory these should be squared to find a variance, but in practice...
  *
  */
 void state_estimation_new_lg_accel(float lg_accel)
@@ -383,8 +382,7 @@ void state_estimation_new_lg_accel(float lg_accel)
         return;
     }
 
-    //state_estimation_update_accel(lg_accel, 0.0559f);
-    state_estimation_update_accel(lg_accel, 0.559f);
+    state_estimation_update_accel(lg_accel, 0.2365f);
 }
 
 /* Update the state estimate with a new high-g accel reading.
