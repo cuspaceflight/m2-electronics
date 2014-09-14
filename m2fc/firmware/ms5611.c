@@ -23,14 +23,14 @@ static void ms5611_read(MS5611CalData* cal_data,
                         int32_t* temperature, int32_t* pressure);
 
 /*
- * Resets the MS5611. Sends 0x1E, waits 3ms.
+ * Resets the MS5611. Sends 0x1E, waits 5ms.
  */
 static void ms5611_reset()
 {
     uint8_t adr = 0x1E;
     spiSelect(&MS5611_SPID);
     spiSend(&MS5611_SPID, 1, (void*)&adr);
-    chThdSleepMilliseconds(3);
+    chThdSleepMilliseconds(5);
     spiUnselect(&MS5611_SPID);
 }
 
@@ -54,13 +54,30 @@ static void ms5611_read_u16(uint8_t adr, uint16_t* c)
 static void ms5611_read_s24(uint8_t adr, int32_t* d)
 {
     uint8_t adc_adr = 0x00, rx[3];
+    int32_t t0;
 
+    /* Start conversion */
     spiSelect(&MS5611_SPID);
     spiSend(&MS5611_SPID, 1, (void*)&adr);
+    
+    /*
+     * Wait for conversion to complete. There doesn't appear to be any way
+     * to do this without timing it, unfortunately.
+     *
+     * If we just watch the clock we'll consume enormous CPU time for little
+     * gain. Instead we'll sleep for "roughly" 1ms and then wait until at least
+     * the desired 0.6ms have passed.
+     */
+    t0 = halGetCounterValue();
+    chThdSleepMilliseconds(1);
+    while(halGetCounterValue() - t0 < US2RTT(600)) {
+        chThdYield();
+    }
+
+    /* Deassert CS */
     spiUnselect(&MS5611_SPID);
 
-    chThdSleepMilliseconds(1);
-
+    /* Read ADC result */
     spiSelect(&MS5611_SPID);
     spiSend(&MS5611_SPID, 1, (void*)&adc_adr);
     spiReceive(&MS5611_SPID, 3, (void*)rx);
@@ -84,8 +101,10 @@ static void ms5611_read_cal(MS5611CalData* cal_data)
     ms5611_read_u16(0xAC, &(cal_data->c6));
     ms5611_read_u16(0xAE, &d7);
 
-    microsd_log_u16(0x31, &d0, &cal_data->c1, &cal_data->c2, &cal_data->c3);
-    microsd_log_u16(0x32, &cal_data->c4, &cal_data->c5, &cal_data->c6, &d7);
+    microsd_log_u16(CHAN_CAL_BARO1,
+                    d0, cal_data->c1, cal_data->c2, cal_data->c3);
+    microsd_log_u16(CHAN_CAL_BARO2,
+                    cal_data->c4, cal_data->c5, cal_data->c6, d7);
 }
 
 /*
@@ -130,7 +149,7 @@ static void ms5611_read(MS5611CalData* cal_data,
 
     *pressure = ((d1 * sens) / (1<<21) - off) / (1<<15);
 
-    microsd_log_s32(0x30, pressure, temperature);
+    microsd_log_s32(CHAN_IMU_BARO, *pressure, *temperature);
 }
 
 /*

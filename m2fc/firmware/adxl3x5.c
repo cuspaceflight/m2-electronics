@@ -4,11 +4,11 @@
  * 2014 Adam Greig, Cambridge University Spaceflight
  */
 
+#include <stdlib.h>
 #include "adxl3x5.h"
 #include "microsd.h"
 #include "state_estimation.h"
 
-#include "hal.h"
 #include "chprintf.h"
 
 #define ADXL345_SPID         SPID2
@@ -22,8 +22,28 @@
 static uint8_t adxl3x5_read_u8(SPIDriver* SPID, uint8_t adr);
 static void adxl3x5_write_u8(SPIDriver* SPID, uint8_t adr, uint8_t val);
 static void adxl3x5_read_accel(SPIDriver* SPID, int16_t* accels);
-static void adxl3x5_init(SPIDriver* SPID, uint8_t x);
+static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g);
+static void adxl3x5_sad(const uint8_t n);
+static float adxl3x5_accels_to_axis(int16_t *accels, int16_t axis, int16_t g);
 
+static Thread *tp345 = NULL;
+static Thread *tp375 = NULL;
+
+/* Helper for sad moments */
+static void adxl3x5_sad(const uint8_t n)
+{
+    /* TODO: report sadness up the chain */
+    uint8_t i;
+    while(1) {
+        for(i=0; i<n; i++) {
+            palSetPad(GPIOA, GPIOA_LED_SENSORS);
+            chThdSleepMilliseconds(100);
+            palClearPad(GPIOA, GPIOA_LED_SENSORS);
+            chThdSleepMilliseconds(200);
+        }
+        chThdSleepMilliseconds(800);
+    }
+}
 
 /*
  * Read a register at address `adr` on the ADXL3x5 on SPI driver `SPID`.
@@ -75,73 +95,76 @@ static void adxl3x5_read_accel(SPIDriver* SPID, int16_t* accels)
  * Initialise the ADXL3x5 device. `x` is a parameter, 4 or 7.
  * Sets registers for 800Hz operation in high power mode,
  * enables measurement, and runs a self test to verify device performance.
- * TODO: Consider going back to 3200Hz ODR.
  */
-static void adxl3x5_init(SPIDriver* SPID, uint8_t x)
+static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g)
 {
     uint8_t devid;
     uint16_t i, j;
-    int16_t accels_cur[3], accels_delta[3];
-    int16_t accels_test_avg[3], accels_notest_avg[3];
+    int32_t accels_sum[3], accels_delta[3];
+    int16_t accels_cur[3], accels_test_avg[3], accels_notest_avg[3];
+    const uint16_t n_discard_samples = 30;
+    const uint16_t n_test_samples = 100;
 
     devid = adxl3x5_read_u8(SPID, 0x00);
     if(devid != 0xE5) {
-        /* TODO: be sad */
-        while(1);
+        adxl3x5_sad(2);
     }
 
     /* BW_RATE: Set high power mode and 800Hz ODR */
     adxl3x5_write_u8(SPID, 0x2C, 0x0D);
 
-    /* POWER_CTL: Enter MEASURE mode */
-    adxl3x5_write_u8(SPID, 0x2D, (1<<3));
-
     /* DATA_FORMAT: Full resolution, maximum range */
     adxl3x5_write_u8(SPID, 0x31, (1<<3) | (1<<1) | (1<<0));
 
+    /* POWER_CTL: Enter MEASURE mode */
+    adxl3x5_write_u8(SPID, 0x2D, (1<<3));
+
     /* Read current accelerations */
-    /* First discard ten samples to allow settling to new settings */
-    for(i=0; i<10; i++) {
+    /* First discard some samples to allow settling to new settings */
+    for(i=0; i<n_discard_samples; i++) {
         adxl3x5_read_accel(SPID, accels_cur);
+        chThdSleepMilliseconds(1);
     }
-    /* Zero the no-test averages */
-    for(j=0; j<3; j++) {
-        accels_notest_avg[j] = 0;
-    }
-    /* Now read and online-update an average of 320 samples */
-    for(i=0; i<320; i++) {
+    /* Zero the sums */
+    for(j=0; j<3; j++)
+        accels_sum[j] = 0;
+    /* Now read and sum 0.1s worth of samples */
+    for(i=0; i<n_test_samples; i++) {
         adxl3x5_read_accel(SPID, accels_cur);
-        for(j=0; j<3; j++) {
-            accels_delta[j] = accels_cur[j] - accels_notest_avg[j];
-            accels_notest_avg[j] += accels_delta[j] / (i+1);
-        }
+        for(j=0; j<3; j++)
+            accels_sum[j] += accels_cur[j];
+        chThdSleepMilliseconds(1);
     }
+    /* Average the summed values */
+    for(j=0; j<3; j++)
+        accels_notest_avg[j] = (int16_t)(accels_sum[j] / n_test_samples);
 
     /* DATA_FORMAT: Self test, full resolution, maximum range */
     adxl3x5_write_u8(SPID, 0x31, (1<<7) | (1<<3) | (1<<1) | (1<<0));
 
     /* Read current accelerations, should have self-test values */
-    /* First discard ten samples to allow settling to new settings */
-    for(i=0; i<10; i++) {
+    /* First discard some samples to allow settling to new settings */
+    for(i=0; i<n_discard_samples; i++) {
         adxl3x5_read_accel(SPID, accels_cur);
+        chThdSleepMilliseconds(1);
     }
-    /* Zero the with-test averages */
-    for(j=0; j<3; j++) {
-        accels_test_avg[j] = 0;
-    }
-    /* Now read and online-update an average of 320 samples */
-    for(i=0; i<320; i++) {
+    /* Zero the sums */
+    for(j=0; j<3; j++)
+        accels_sum[j] = 0;
+    /* Now read and sum 0.1s worth of samples */
+    for(i=0; i<n_test_samples; i++) {
         adxl3x5_read_accel(SPID, accels_cur);
-        for(j=0; j<3; j++) {
-            accels_delta[j] = accels_cur[j] - accels_test_avg[j];
-            accels_test_avg[j] += accels_delta[j] / (i+1);
-        }
+        for(j=0; j<3; j++)
+            accels_sum[j] += accels_cur[j];
+        chThdSleepMilliseconds(1);
     }
+    /* Average the summed values */
+    for(j=0; j<3; j++)
+        accels_test_avg[j] = (int16_t)(accels_sum[j] / n_test_samples);
 
     /* Compute the delta between self-test and no-self-test averages */
-    for(j=0; j<3; j++) {
+    for(j=0; j<3; j++)
         accels_delta[j] = accels_test_avg[j] - accels_notest_avg[j];
-    }
 
     if(x == 4) {
         /* ADXL345 self test parameters at 3.3V operation:
@@ -151,10 +174,9 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x)
          * (Using 265LSB/g for X and Y and 256LSB/g for Z)
          */
         if(accels_delta[0] < 93  ||
-           accels_delta[1] < -93 ||
+           accels_delta[1] > -93 ||
            accels_delta[2] < 112) {
-            /* TODO: be sad */
-            while(1);
+            adxl3x5_sad(3);
         }
     } else if(x == 7) {
         /* ADXL375 self test parameters:
@@ -164,89 +186,133 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x)
          * Let's be OK with anything above 100LSB.
          */
         if(accels_delta[2] < 100) {
-            /* TODO: be sad */
-            while(1);
+            adxl3x5_sad(4);
         }
     }
 
-    /* DATA_FORMAT: Full resolution, maximum range */
+    /* Determine which axis is most aligned with gravity,
+     * and which way around it is.
+     *
+     * Set *axis to the corresponding axis (with a minus sign if it's upside
+     * down) and set *g to the average value of that axis, both for later use
+     * in converting accelerometer readings into a linear acceleration
+     * 'upwards'.
+     */
+    if(abs(accels_notest_avg[0]) > abs(accels_notest_avg[1]) &&
+       abs(accels_notest_avg[0]) > abs(accels_notest_avg[2])) {
+        if(accels_notest_avg[0] > 0)
+            *axis = 1;
+        else
+            *axis = -1;
+        *g = accels_notest_avg[0];
+    } else if(abs(accels_notest_avg[1]) > abs(accels_notest_avg[0]) &&
+              abs(accels_notest_avg[1]) > abs(accels_notest_avg[2])) {
+        if(accels_notest_avg[1] > 0)
+            *axis = 2;
+        else
+            *axis = -2;
+        *g = accels_notest_avg[1];
+    } else if(abs(accels_notest_avg[2]) > abs(accels_notest_avg[0]) &&
+              abs(accels_notest_avg[2]) > abs(accels_notest_avg[1])) {
+        if(accels_notest_avg[2] > 0)
+            *axis = 3;
+        else
+            *axis = -3;
+        *g = accels_notest_avg[2];
+    }
+
+    /* DATA_FORMAT: Full resolution, maximum range (no self test) */
     adxl3x5_write_u8(SPID, 0x31, (1<<3) | (1<<1) | (1<<0));
+
+    /* BW_RATE: Set high power mode and 3200Hz ODR */
+    /* DISABLED for now, seems to cause trouble */
+    /*adxl3x5_write_u8(SPID, 0x2C, 0x0F);*/
 
     /* INT_ENABLE: Enable DATA READY interrupt on INT1 */
     adxl3x5_write_u8(SPID, 0x2E, (1<<7));
 
-    /* Discard ten samples to allow it to settle after turning off test */
-    for(i=0; i<10; i++) {
+    /* Discard some samples to allow it to settle after turning off test */
+    for(i=0; i<n_discard_samples; i++) {
         adxl3x5_read_accel(SPID, accels_cur);
+        chThdSleepMilliseconds(1);
     }
 }
 
-/*
-static const EXTConfig extcfg = {
-  {
-    {EXT_CH_MODE_RISING_EDGE | EXT_CH_MODE_AUTOSTART | EXT_MODE_GPIOC, extcb1},
-    {EXT_CH_MODE_RISING_EDGE | EXT_CH_MODE_AUTOSTART | EXT_MODE_GPIOD, extcb1},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL},
-    {EXT_CH_MODE_DISABLED, NULL}
-  }
-};
-*/
-
-/*
-static void extcb(EXTDriver *extp, expchannel_t channel)
+/* ISR triggered by the EXTI peripheral when DRDY gets asserted on one
+ * of the accelerometers.
+ */
+void adxl345_wakeup(EXTDriver *extp, expchannel_t channel)
 {
     (void)extp;
     (void)channel;
+
+    chSysLockFromIsr();
+    if(tp345 != NULL) {
+        chSchReadyI(tp345);
+        tp345 = NULL;
+    }
+    chSysUnlockFromIsr();
 }
-*/
+
+void adxl375_wakeup(EXTDriver *extp, expchannel_t channel)
+{
+    (void)extp;
+    (void)channel;
+
+    chSysLockFromIsr();
+    if(tp375 != NULL) {
+        chSchReadyI(tp375);
+        tp375 = NULL;
+    }
+    chSysUnlockFromIsr();
+}
+
+/* Helper to convert from the three-axis accelerometer readings to a single
+ * float in the 'up' direction, compensating for gravity vector and intitial
+ * orientation (so long as it is axis-aligned).
+ */
+static float adxl3x5_accels_to_axis(int16_t *accels, int16_t axis, int16_t g)
+{
+    float v = (float)(accels[abs(axis) - 1] - g);
+    v = (v / (float)g) * 9.80665f;
+    if(axis < 1)
+        v *= -1.0f;
+    return v;
+}
 
 /*
  * ADXL345 (low-g accelerometer) main thread.
  */
 msg_t adxl345_thread(void *arg)
 {
-    float axis_accel;
     (void)arg;
 
-    static const SPIConfig spi_cfg = {
+    const SPIConfig spi_cfg = {
         NULL,
         ADXL345_SPI_CS_PORT,
         ADXL345_SPI_CS_PIN,
         SPI_CR1_BR_1 | SPI_CR1_BR_0 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
-    static int16_t accels[3];
+    int16_t accels[3], axis, g;
+
 
     chRegSetThreadName("ADXL345");
 
     spiStart(&ADXL345_SPID, &spi_cfg);
-    adxl3x5_init(&ADXL345_SPID, 3);
+    adxl3x5_init(&ADXL345_SPID, 4, &axis, &g);
+    microsd_log_s16(CHAN_CAL_LGA, axis, g, 0, 0);
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
-        microsd_log_s16(0x10, &accels[0], &accels[1], &accels[2], 0);
-        /* TODO: autodetect up-axis, sensitivity, subtract g-rating */
-        axis_accel = (float)accels[1] * 0.0039f;
-        state_estimation_new_lg_accel(axis_accel);
-        chThdSleepMilliseconds(1);
+        microsd_log_s16(CHAN_IMU_LGA, accels[0], accels[1], accels[2], 0);
+        state_estimation_new_lg_accel(
+            adxl3x5_accels_to_axis(accels, axis, g));
+
+        /* Sleep until DRDY */
+        chSysLock();
+        tp345 = chThdSelf();
+        chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
+        chSysUnlock();
     }
 
     return (msg_t)NULL;
@@ -257,29 +323,33 @@ msg_t adxl345_thread(void *arg)
  */
 msg_t adxl375_thread(void *arg)
 {
-    float axis_accel;
     (void)arg;
 
-    static const SPIConfig spi_cfg = {
+    const SPIConfig spi_cfg = {
         NULL,
         ADXL375_SPI_CS_PORT,
         ADXL375_SPI_CS_PIN,
         SPI_CR1_BR_2 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
-    int16_t accels[3];
+    int16_t accels[3], axis, g;
 
     chRegSetThreadName("ADXL375");
 
     spiStart(&ADXL375_SPID, &spi_cfg);
-    adxl3x5_init(&ADXL375_SPID, 7);
+    adxl3x5_init(&ADXL375_SPID, 7, &axis, &g);
+    microsd_log_s16(CHAN_CAL_HGA, axis, g, 0, 0);
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);
-        microsd_log_s16(0x20, &accels[0], &accels[1], &accels[2], 0);
-        /* TODO: autodetect up-axis, sensitivity, subtract g-rating */
-        axis_accel = (float)accels[1] * -0.049f;
-        state_estimation_new_hg_accel(axis_accel);
-        chThdSleepMilliseconds(1);
+        microsd_log_s16(CHAN_IMU_HGA, accels[0], accels[1], accels[2], 0);
+        state_estimation_new_hg_accel(
+            adxl3x5_accels_to_axis(accels, axis, g));
+
+        /* Sleep until DRDY */
+        chSysLock();
+        tp375 = chThdSelf();
+        chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
+        chSysUnlock();
     }
 
     return (msg_t)NULL;

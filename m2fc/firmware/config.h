@@ -7,9 +7,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-/* Duration (ms) to fire pyros for */
-#define PYRO_FIRETIME 3000
-
 /* Velocity (m/s) beyond which the rocket has left the pad */
 #define IGNITION_VELOCITY 10.0f
 
@@ -30,5 +27,30 @@
 
 /* Time (ms) since apogee after which the rocket has landed */
 #define LANDED_TIMER 300000
+
+/* Duration (ms) to fire pyros for */
+#define PYRO_FIRETIME 5000
+
+/* Which flight computer should fire which pyros when? */
+/* TODO: Set back to correct-for-m2 after JIT L2 at Midland */
+#define PYRO_DROGUE_BODY_1 TRUE
+#define PYRO_DROGUE_BODY_2 FALSE
+#define PYRO_DROGUE_BODY_3 FALSE
+#define PYRO_DROGUE_NOSE_1 FALSE
+#define PYRO_DROGUE_NOSE_2 FALSE
+#define PYRO_DROGUE_NOSE_3 FALSE
+#define PYRO_MAIN_BODY_1   FALSE
+#define PYRO_MAIN_BODY_2   FALSE
+#define PYRO_MAIN_BODY_3   TRUE
+#define PYRO_MAIN_NOSE_1   FALSE
+#define PYRO_MAIN_NOSE_2   FALSE
+#define PYRO_MAIN_NOSE_3   FALSE
+
+
+/* END OF CONFIGURATION OPTIONS */
+
+typedef enum { M2FC_BODY=1, M2FC_NOSE=2, M2R=3 } config_avionics_t;
+extern config_avionics_t m2fc_location;
+void config_read_location(void);
 
 #endif /* CONFIG_H */

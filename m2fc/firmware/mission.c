@@ -39,7 +39,9 @@ state_t run_state(state_t cur_state, instance_data_t *data) {
 static state_t do_state_pad(instance_data_t *data)
 {
     state_estimation_trust_barometer = 1;
-    if(data->state.v > IGNITION_VELOCITY)
+    if(chTimeNow() < 10000)
+        return STATE_PAD;
+    else if(data->state.v > IGNITION_VELOCITY)
         return STATE_IGNITION;
     else
         return STATE_PAD;
@@ -57,7 +59,7 @@ static state_t do_state_powered_ascent(instance_data_t *data)
     state_estimation_trust_barometer = 0;
     if(data->state.a < BURNOUT_ACCELERATION)
         return STATE_FREE_ASCENT;
-    else if(chTimeNow() - data->t_launch > BURNOUT_TIMER)
+    else if(chTimeElapsedSince(data->t_launch) > BURNOUT_TIMER)
         return STATE_FREE_ASCENT;
     else
         return STATE_POWERED_ASCENT;
@@ -68,7 +70,7 @@ static state_t do_state_free_ascent(instance_data_t *data)
     state_estimation_trust_barometer = 1;
     if(data->state.v < 0.0f)
         return STATE_APOGEE;
-    else if(chTimeNow() - data->t_launch > APOGEE_TIMER)
+    else if(chTimeElapsedSince(data->t_launch) > APOGEE_TIMER)
         return STATE_APOGEE;
     else
         return STATE_FREE_ASCENT;
@@ -87,7 +89,7 @@ static state_t do_state_drogue_descent(instance_data_t *data)
     state_estimation_trust_barometer = 1;
     if(data->state.h < MAIN_DEPLOY_ALTITUDE)
         return STATE_RELEASE_MAIN;
-    else if(chTimeNow() - data->t_apogee > MAIN_DEPLOY_TIMER)
+    else if(chTimeElapsedSince(data->t_apogee) > MAIN_DEPLOY_TIMER)
         return STATE_RELEASE_MAIN;
     else
         return STATE_DROGUE_DESCENT;
@@ -104,9 +106,7 @@ static state_t do_state_release_main(instance_data_t *data)
 static state_t do_state_main_descent(instance_data_t *data)
 {
     state_estimation_trust_barometer = 1;
-    printf("MISSION t_apogee=%d diff=%d\n", data->t_apogee,
-           chTimeNow() - data->t_apogee);
-    if(chTimeNow() - data->t_apogee > LANDED_TIMER)
+    if(chTimeElapsedSince(data->t_apogee) > LANDED_TIMER)
         return STATE_LAND;
     else
         return STATE_MAIN_DESCENT;
@@ -128,13 +128,14 @@ static state_t do_state_landed(instance_data_t *data)
 
 msg_t mission_thread(void* arg)
 {
-    int32_t csi, nsi;
     (void)arg;
     state_t cur_state = STATE_PAD;
     state_t new_state;
     instance_data_t data;
     data.t_launch = -1;
     data.t_apogee = -1;
+
+    chRegSetThreadName("Mission");
 
     while(1) {
         /* Run Kalman prediction step */
@@ -145,9 +146,8 @@ msg_t mission_thread(void* arg)
 
         /* Log changes in state */
         if(new_state != cur_state) {
-            csi = (int32_t)cur_state;
-            nsi = (int32_t)new_state;
-            microsd_log_s32(0xC0, &csi, &nsi);
+            microsd_log_s32(CHAN_SM_MISSION,
+                            (int32_t)cur_state, (int32_t)new_state);
             cur_state = new_state;
         }
 

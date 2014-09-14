@@ -10,8 +10,9 @@
 #include "hal.h"
 #include "chprintf.h"
 #include "ff.h"
+#include "config.h"
 
-#define MICROSD_MEMPOOL_ITEMS 2048
+#define MICROSD_MEMPOOL_ITEMS 1024
 #define MICROSD_CACHE_SIZE    16384
 
 static MemoryPool microsd_mp;
@@ -36,75 +37,75 @@ void microsd_log_c(uint8_t channel, const char* data)
 {
     volatile char *msg;
     msg = (char*)chPoolAlloc(&microsd_mp);
-    msg[6] = (char)0;
-    msg[7] = (char)channel;
+    msg[4] = (char)(0 | m2fc_location << 4);
+    msg[5] = (char)channel;
     memcpy((void*)msg, (void*)&halGetCounterValue(), 4);
     memcpy((void*)&msg[8], data, 8);
     chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
 }
 
-void microsd_log_s64(uint8_t channel, int64_t *data)
+void microsd_log_s64(uint8_t channel, int64_t data)
 {
     char *msg;
     msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[6] = (char)1;
-    msg[7] = (char)channel;
+    msg[4] = (char)(1 | m2fc_location << 4);
+    msg[5] = (char)channel;
     memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8], data, 8);
+    memcpy(&msg[8], &data, 8);
     chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
 }
 
-void microsd_log_s32(uint8_t channel, int32_t *data_a, int32_t *data_b)
+void microsd_log_s32(uint8_t channel, int32_t data_a, int32_t data_b)
 {
     char *msg;
     msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[6] = (char)2;
-    msg[7] = (char)channel;
+    msg[4] = (char)(3 | m2fc_location << 4);
+    msg[5] = (char)channel;
     memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8],  data_a, 4);
-    memcpy(&msg[12], data_b, 4);
+    memcpy(&msg[8],  &data_a, 4);
+    memcpy(&msg[12], &data_b, 4);
     chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
 }
 
-void microsd_log_s16(uint8_t channel, int16_t *data_a, int16_t *data_b,
-                                  int16_t *data_c, int16_t *data_d)
+void microsd_log_s16(uint8_t channel, int16_t data_a, int16_t data_b,
+                                      int16_t data_c, int16_t data_d)
 {
     char *msg;
     msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[6] = (char)3;
-    msg[7] = (char)channel;
+    msg[4] = (char)(5 | m2fc_location << 4);
+    msg[5] = (char)channel;
     memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8],  data_a, 2);
-    memcpy(&msg[10], data_b, 2);
-    memcpy(&msg[12], data_c, 2);
-    memcpy(&msg[14], data_d, 2);
+    memcpy(&msg[8],  &data_a, 2);
+    memcpy(&msg[10], &data_b, 2);
+    memcpy(&msg[12], &data_c, 2);
+    memcpy(&msg[14], &data_d, 2);
     chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
 }
 
-void microsd_log_u16(uint8_t channel, uint16_t *data_a, uint16_t *data_b,
-                                      uint16_t *data_c, uint16_t *data_d)
+void microsd_log_u16(uint8_t channel, uint16_t data_a, uint16_t data_b,
+                                      uint16_t data_c, uint16_t data_d)
 {
     char *msg;
     msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[6] = (char)4;
-    msg[7] = (char)channel;
+    msg[4] = (char)(6 | m2fc_location << 4);
+    msg[5] = (char)channel;
     memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8],  data_a, 2);
-    memcpy(&msg[10], data_b, 2);
-    memcpy(&msg[12], data_c, 2);
-    memcpy(&msg[14], data_d, 2);
+    memcpy(&msg[8],  &data_a, 2);
+    memcpy(&msg[10], &data_b, 2);
+    memcpy(&msg[12], &data_c, 2);
+    memcpy(&msg[14], &data_d, 2);
     chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
 }
 
-void microsd_log_f(uint8_t channel, float *data_a, float *data_b)
+void microsd_log_f(uint8_t channel, float data_a, float data_b)
 {
     char *msg;
     msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[6] = (char)5;
-    msg[7] = (char)channel;
+    msg[4] = (char)(9 | m2fc_location << 4);
+    msg[5] = (char)channel;
     memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8], data_a, 4);
-    memcpy(&msg[12], data_b, 4);
+    memcpy(&msg[8],  &data_a, 4);
+    memcpy(&msg[12], &data_b, 4);
     chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
 }
 
@@ -225,6 +226,7 @@ static void microsd_card_deinit(FIL* fp)
 static void microsd_card_try_init(FATFS* fs, FIL* fp)
 {
     while(!microsd_card_init(fs, fp)) {
+        /* TODO: report sadness up the chain */
         microsd_card_deinit(fp);
         palSetPad(GPIOA, GPIOA_LED_SDCARD);
         chThdSleepMilliseconds(100);
@@ -244,10 +246,14 @@ msg_t microsd_thread(void* arg)
 
     (void)arg;
 
-    microsd_mem_init();
-    microsd_log_c(0x00, "CUSFM2FC");
-
     chRegSetThreadName("MicroSD");
+
+    microsd_mem_init();
+
+    if(m2fc_location == M2FC_BODY)
+        microsd_log_c(0x00, "M2FCBODY");
+    else if(m2fc_location == M2FC_NOSE)
+        microsd_log_c(0x00, "M2FCNOSE");
 
     microsd_card_try_init(&fs, &fp);
 

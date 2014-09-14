@@ -33,3 +33,8 @@ void chThdSleepMilliseconds(int ms)
 {
     (void)ms;
 }
+
+void chRegSetThreadName(const char* name)
+{
+    (void)name;
+}

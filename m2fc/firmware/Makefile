@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 \
+  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 \
 			-fsingle-precision-constant
 endif
 
@@ -95,7 +95,8 @@ CSRC = $(PORTSRC) \
 	   $(CHIBIOS)/os/various/shell.c \
 	   $(CHIBIOS)/os/various/memstreams.c \
        main.c ms5611.c adxl3x5.c pyro.c microsd.c m2fc_shell.c \
-	   state_estimation.c mission.c time_utils.c fault_handlers.c
+	   state_estimation.c mission.c time_utils.c fault_handlers.c \
+	   config.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
