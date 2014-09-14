@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "adxl3x5.h"
 #include "microsd.h"
+#include "config.h"
 #include "state_estimation.h"
 
 #include "chprintf.h"
@@ -190,36 +191,12 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g)
         }
     }
 
-    /* Determine which axis is most aligned with gravity,
-     * and which way around it is.
-     *
-     * Set *axis to the corresponding axis (with a minus sign if it's upside
-     * down) and set *g to the average value of that axis, both for later use
-     * in converting accelerometer readings into a linear acceleration
-     * 'upwards'.
+    /* The thrust axis comes from the config file now,
+     * because 1g on the high-g accel was not very
+     * distinguished from the other axes.
      */
-    if(abs(accels_notest_avg[0]) > abs(accels_notest_avg[1]) &&
-       abs(accels_notest_avg[0]) > abs(accels_notest_avg[2])) {
-        if(accels_notest_avg[0] > 0)
-            *axis = 1;
-        else
-            *axis = -1;
-        *g = accels_notest_avg[0];
-    } else if(abs(accels_notest_avg[1]) > abs(accels_notest_avg[0]) &&
-              abs(accels_notest_avg[1]) > abs(accels_notest_avg[2])) {
-        if(accels_notest_avg[1] > 0)
-            *axis = 2;
-        else
-            *axis = -2;
-        *g = accels_notest_avg[1];
-    } else if(abs(accels_notest_avg[2]) > abs(accels_notest_avg[0]) &&
-              abs(accels_notest_avg[2]) > abs(accels_notest_avg[1])) {
-        if(accels_notest_avg[2] > 0)
-            *axis = 3;
-        else
-            *axis = -3;
-        *g = accels_notest_avg[2];
-    }
+    *axis = ACCEL_THRUST_AXIS;
+    *g = accels_notest_avg[ACCEL_THRUST_AXIS];
 
     /* DATA_FORMAT: Full resolution, maximum range (no self test) */
     adxl3x5_write_u8(SPID, 0x31, (1<<3) | (1<<1) | (1<<0));
@@ -273,11 +250,8 @@ void adxl375_wakeup(EXTDriver *extp, expchannel_t channel)
  */
 static float adxl3x5_accels_to_axis(int16_t *accels, int16_t axis, int16_t g)
 {
-    float v = (float)(accels[abs(axis) - 1] - g);
-    v = (v / (float)g) * 9.80665f;
-    if(axis < 1)
-        v *= -1.0f;
-    return v;
+    float v = (float)(accels[axis] - g);
+    return (v / (float)g) * 9.80665f;
 }
 
 /*

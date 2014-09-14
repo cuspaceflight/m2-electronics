@@ -14,10 +14,10 @@
 #define BURNOUT_ACCELERATION 2.0f
 
 /* Time (ms) since launch beyond which the motor has ceased burning */
-#define BURNOUT_TIMER 5000
+#define BURNOUT_TIMER 5200
 
 /* Time (ms) since launch beyond which apogee has been reached */
-#define APOGEE_TIMER 15000
+#define APOGEE_TIMER 45000
 
 /* Altitude (m ASL) below which to deploy main chute */
 #define MAIN_DEPLOY_ALTITUDE 250.0f
@@ -32,19 +32,25 @@
 #define PYRO_FIRETIME 5000
 
 /* Which flight computer should fire which pyros when? */
-/* TODO: Set back to correct-for-m2 after JIT L2 at Midland */
-#define PYRO_DROGUE_BODY_1 TRUE
+#define PYRO_DROGUE_BODY_1 FALSE
 #define PYRO_DROGUE_BODY_2 FALSE
 #define PYRO_DROGUE_BODY_3 FALSE
-#define PYRO_DROGUE_NOSE_1 FALSE
-#define PYRO_DROGUE_NOSE_2 FALSE
-#define PYRO_DROGUE_NOSE_3 FALSE
-#define PYRO_MAIN_BODY_1   FALSE
+#define PYRO_DROGUE_NOSE_1 TRUE
+#define PYRO_DROGUE_NOSE_2 TRUE
+#define PYRO_DROGUE_NOSE_3 TRUE
+#define PYRO_MAIN_BODY_1   TRUE
 #define PYRO_MAIN_BODY_2   FALSE
-#define PYRO_MAIN_BODY_3   TRUE
+#define PYRO_MAIN_BODY_3   FALSE
 #define PYRO_MAIN_NOSE_1   FALSE
 #define PYRO_MAIN_NOSE_2   FALSE
 #define PYRO_MAIN_NOSE_3   FALSE
+
+/* Thrust axis for the two accelerometers.
+ * 0 - X
+ * 1 - Y
+ * 2 - Z
+ */
+#define ACCEL_THRUST_AXIS 2
 
 
 /* END OF CONFIGURATION OPTIONS */
