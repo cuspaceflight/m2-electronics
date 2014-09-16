@@ -91,7 +91,7 @@ CSRC = $(PORTSRC) \
 	   $(CHIBIOS)/os/various/evtimer.c \
 	   $(CHIBIOS)/os/various/shell.c \
 	   $(CHIBIOS)/os/various/memstreams.c \
-       main.c
+       main.c radio.c dispatch.c ublox.c rockblock.c serial_link.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

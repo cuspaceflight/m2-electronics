@@ -1,0 +1,37 @@
+M2R Plans
+=========
+
+
+RockBLOCK Module
+    rb_queue_message(char* msg)
+        Queues a message for transmission.
+    In thread loop, continually queries RockBLOCK to determine possibility to
+    transmit, sends messages from queue, ensures at most one message per 20
+    seconds.
+
+
+uBlox Module
+    Configures ublox
+    Continually fetches position data from the ublox
+    Makes position data available via a struct-returning function with lock
+
+
+Radio Module
+    radio_queue_message(char* msg)
+    In thread loop, takes messages off stack and transmits.
+    Modulates bitstream to AFSK RTTY or something.
+    error correction??? huffman coding (7, 4) perhaps? or just cross fingers...
+    queue size: really don't accept more than one pending message during tx or
+    we'll never catch up.
+
+
+Serial Module
+    must send and receive messages
+    serial_tx(char*)
+    serial_rx_register_cb(char*)
+    
+
+Dispatch Module
+    route messages between rockblock, ubloc, radio and serial
+    GPS updates over rockblock quite regularly
+    peak altitude updates over rockblock too (maybe send raw pressure)
