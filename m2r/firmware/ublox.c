@@ -13,7 +13,7 @@
  * * * Either ACK/NAK, PVT, or perhaps also CFG-NAV5
  * * Should poll the device's NAV5 at least once to ensure flight mode
  * * PVT updates get sent to central dispatch
- * * How should setting config find out about an ACK/NAK?
+ * * ACKs are OK but receiving a NAK is cause for sadness and logs
  */
 
 #include "ublox.h"
@@ -180,6 +180,24 @@ typedef struct {
     uint8_t ck_a, ck_b;
 } ubx_nav_pvt_t;
 
+static void ublox_warn(const uint8_t n)
+{
+    uint8_t i;
+    for(i=0; i<n; i++) {
+        palSetPad(GPIOB, GPIOB_LED_GPS);
+        chThdSleepMilliseconds(100);
+        palClearPad(GPIOB, GPIOB_LED_GPS);
+        chThdSleepMilliseconds(200);
+    }
+}
+
+static void ublox_error(const uint8_t n)
+{
+    while(1) {
+        ublox_warn(n);
+    }
+}
+
 /* Computes the Fletcher-8 checksum over buf, using its length fields
  * to determine how much to read and where to insert the new checksum.
  */
@@ -227,21 +245,6 @@ static bool_t ublox_transmit(uint8_t *buf)
     rv = i2cMasterTransmitTimeout(&I2CD1, UBLOX_I2C_ADDR, data, n,
                                   NULL, 0, timeout);
     return rv == RDY_OK;
-}
-
-/* As ublox_transmit, but checks for an ACK afterwards, returns false if NAK.
- */
-static bool_t ublox_transmit_cfg(uint8_t *buf)
-{
-    bool_t rv = ublox_transmit(buf);
-    /* TODO: Look for ACK/NAK message */
-    /* Can't just look at latest message. We'll have to keep discarding
-     * messages from the buffer until we find one that we want. And then hope
-     * it's not NMEA or some rubbish.
-     * Perhaps clear the buffer _before_ transmitting, then transmit and maybe
-     * that will help.
-     */
-    return rv; 
 }
 
 /* Attempt to read one or more messages from the uBlox.
@@ -356,8 +359,10 @@ static void ubox_state_machine(uint8_t *buf, size_t num_new_bytes)
                     case UBX_ACK:
                         if(id == 0x00) {
                             /* NAK */
+                            /* TODO be very sad */
                         } else if(id == 0x01) {
                             /* ACK */
+                            /* No need to do anything */
                         } else {
                             /* TODO SAD */
                         }
@@ -410,7 +415,7 @@ static bool_t ublox_init(uint8_t *buf, size_t bufsize)
     nav5.reserved3 = 0;
     nav5.reserved4 = 0;
 
-    success &= ublox_transmit_cfg(&nav5.data);
+    success &= ublox_transmit(&nav5.data);
 
     /* Disable NMEA messages to I2C */
     msg.sync1 = UBX_SYNC1;
@@ -422,37 +427,37 @@ static bool_t ublox_init(uint8_t *buf, size_t bufsize)
     msg.msg_class = NMEA_CLASS;
     msg.msg_id    = NMEA_GGA;
     msg.rate      = 0;
-    success &= ublox_transmit_cfg(&msg.data);
+    success &= ublox_transmit(&msg.data);
 
     msg.msg_class = NMEA_CLASS;
     msg.msg_id    = NMEA_GLL;
     msg.rate      = 0;
-    success &= ublox_transmit_cfg(&msg.data);
+    success &= ublox_transmit(&msg.data);
 
     msg.msg_class = NMEA_CLASS;
     msg.msg_id    = NMEA_GSA;
     msg.rate      = 0;
-    success &= ublox_transmit_cfg(&msg.data);
+    success &= ublox_transmit(&msg.data);
 
     msg.msg_class = NMEA_CLASS;
     msg.msg_id    = NMEA_GSV;
     msg.rate      = 0;
-    success &= ublox_transmit_cfg(&msg.data);
+    success &= ublox_transmit(&msg.data);
 
     msg.msg_class = NMEA_CLASS;
     msg.msg_id    = NMEA_RMC;
     msg.rate      = 0;
-    success &= ublox_transmit_cfg(&msg.data);
+    success &= ublox_transmit(&msg.data);
 
     msg.msg_class = NMEA_CLASS;
     msg.msg_id    = NMEA_VTG;
     msg.rate      = 0;
-    success &= ublox_transmit_cfg(&msg.data);
+    success &= ublox_transmit(&msg.data);
 
     msg.msg_class = UBX_NAV;
     msg.msg_id    = UBX_NAV_PVT;
     msg.rate      = 1;
-    success &= ublox_transmit_cfg(&msg.data);
+    success &= ublox_transmit(&msg.data);
 
     /* Clear the current I2C buffer */
     while(ublox_try_receive_raw(buf, bufsize));
