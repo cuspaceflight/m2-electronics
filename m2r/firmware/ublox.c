@@ -4,6 +4,18 @@
  * 2014 Adam Greig, Cambridge University Spaceflight
  */
 
+/*
+ * TODO
+ *
+ * * Read large buffers up to the number of bytes available from the ublox
+ * * Run each new byte through a decoding state machine
+ * * SM calls various functions to deal with each type of received message
+ * * * Either ACK/NAK, PVT, or perhaps also CFG-NAV5
+ * * Should poll the device's NAV5 at least once to ensure flight mode
+ * * PVT updates get sent to central dispatch
+ * * How should setting config find out about an ACK/NAK?
+ */
+
 #include "ublox.h"
 
 /* uBlox I2C addresses */
@@ -40,7 +52,20 @@
 #define NMEA_RMC 0x04
 #define NMEA_VTG 0x05
 
+/* UBX Decoding State Machine States */
+typedef enum {
+    STATE_IDLE = 0, STATE_SYNC1, STATE_SYNC2,
+    STATE_CLASS, STATE_ID, STATE_L1, STATE_L2,
+    STATE_PAYLOAD, STATE_PAYLOAD_DONE, STATE_CK_A,
+    NUM_STATES
+} ubx_state;
+
 /* Structs for various UBX messages */
+
+/* UBX-CFG-NAV5
+ * Set navigation fix settings.
+ * Notably includes changing dynamic mode to "Airborne 4G".
+ */
 typedef struct {
     union {
         uint8_t data;
@@ -72,6 +97,10 @@ typedef struct {
     uint8_t ck_a, ck_b;
 } ubx_cfg_nav5_t;
 
+/* UBX-CFG-MSG
+ * Change rate (or disable) automatic delivery of messages
+ * to the current port.
+ */
 typedef struct {
     union {
         uint8_t data;
@@ -90,6 +119,9 @@ typedef struct {
     uint8_t ck_a, ck_b;
 } ubx_cfg_msg_t;
 
+/* UBX-ACK
+ * ACK/NAK messages after trying to set a config.
+ */
 typedef struct {
     union {
         uint8_t data;
@@ -107,6 +139,10 @@ typedef struct {
     uint8_t ck_a, ck_b;
 } ubx_ack_t;
 
+/* UBX-NAV-PVT
+ * Contains fix quality, position and time information.
+ * Everything you want in one message.
+ */
 typedef struct {
     union {
         uint8_t data;
@@ -177,7 +213,7 @@ static void ublox_checksum(uint8_t *buf)
 static bool_t ublox_transmit(uint8_t *buf)
 {
     size_t n;
-    systime_t to;
+    systime_t timeout;
     msg_t rv;
 
     /* Add checksum to outgoing message */
@@ -185,11 +221,11 @@ static bool_t ublox_transmit(uint8_t *buf)
 
     /* Determine length and thus suitable timeout in systicks (ms) */
     n = 8 + *((uint16_t*)buf)[2];
-    to = n / 100 + 10;
+    timeout = n / 100 + 10;
 
     /* Transmit message */
     rv = i2cMasterTransmitTimeout(&I2CD1, UBLOX_I2C_ADDR, data, n,
-                                  NULL, 0, to);
+                                  NULL, 0, timeout);
     return rv == RDY_OK;
 }
 
@@ -209,14 +245,14 @@ static bool_t ublox_transmit_cfg(uint8_t *buf)
 }
 
 /* Attempt to read one or more messages from the uBlox.
- * Returns FALSE if no messages were read, else returns the number of bytes
- * read.
+ * Returns 0 if no messages were read, else returns the number of bytes
+ * read. Will read at most bufsize bytes into buf.
  */
-static size_t ublox_try_receive_raw(uint8_t *buf, size_t bufsize)
+static size_t ublox_receive(uint8_t *buf, size_t bufsize)
 {
     uint16_t bytes_available;
     uint8_t bytes_available_addr = UBLOX_I2C_BYTES_AVAIL;
-    systime_t to;
+    systime_t timeout;
     msg_t rv;
 
     /* Set the read address to 0xFD, the start of "bytes available",
@@ -225,7 +261,7 @@ static size_t ublox_try_receive_raw(uint8_t *buf, size_t bufsize)
     rv = i2cMasterTransmitTimeout(&I2CD1, UBLOX_I2C_ADDR,
                                   &bytes_available_addr, 1, buf, 2, 2);
     if(rv != RDY_OK)
-        return FALSE;
+        return 0;
 
     bytes_available = ((uint16_t)buf)[0];
     
@@ -233,28 +269,126 @@ static size_t ublox_try_receive_raw(uint8_t *buf, size_t bufsize)
      * After the last two reads, the read register will already be 0xFF.
      */
     if(bytes_available > 0) {
-        /* Don't overflow our read buffer. We'll just read some more later. */
+        /* Don't overflow the read buffer. We'll just read some more later. */
         if(bytes_available > bufsize)
             bytes_available = bufsize;
-        to = bytes_available / 100 + 10;
+        timeout = bytes_available / 100 + 10;
         rv = i2cMasterReceiveTimeout(&I2CD1, UBLOX_I2C_ADDR,
-                                     buf, bytes_available, to);
-        return rv == RDY_OK;
+                                     buf, bytes_available, timeout);
+        if(rv == RDY_OK)
+            return bytes_available;
+        else
+            return 0;
     }
 
     /* No data to read. */
-    return FALSE;
+    return 0;
 }
 
-/* TODO
- * Read messages from the uBlox.
- * Ideally we would read at most one message at a time, return the type of
- * message, and ensure that buf pointed to the start. Might need two buffers -
- * one for the single-message and one longer-lived one that we copy i2c data
- * into.
+/* Run the first `num_new_bytes` bytes in `buf` through the UBX decoding state
+ * machine. Note that this function preserves static state and dispatches new
+ * messages as appropriate once received.
  */
-static void ublox_try_read(uint8_t *buf, size_t bufsize)
+static void ubox_state_machine(uint8_t *buf, size_t num_new_bytes)
 {
+    size_t i;
+    static ubx_state state = STATE_IDLE;
+
+    static uint8_t class, id;
+    static uint16_t length;
+    static uint16_t length_remaining;
+    static char payload[128];
+    static uint8_t ck_a, ck_b;
+    
+    for(i = 0; i < num_new_bytes; i++) {
+        uint8_t b = buf[i];
+
+        switch(state) {
+            case STATE_IDLE:
+                if(b == UBX_SYNC1)
+                    state = STATE_SYNC1;
+                break;
+
+            case STATE_SYNC1:
+                if(b == UBX_SYNC2)
+                    state = STATE_SYNC2;
+                else
+                    state = STATE_IDLE;
+                break;
+
+            case STATE_SYNC2:
+                class = b;
+                state = STATE_CLASS;
+                break;
+
+            case STATE_CLASS:
+                id = b;
+                state = STATE_ID;
+                break;
+
+            case STATE_ID:
+                length = (uint16_t)b << 8;
+                state = STATE_L1;
+                break;
+
+            case STATE_L1:
+                length |= (uint16_t)b;
+                length_remaining = length;
+                state = STATE_L2;
+                break;
+
+            case STATE_PAYLOAD:
+                if(length_remaining)
+                    payload[length - length_remaining--] = b;
+                else
+                    state = STATE_PAYLOAD_DONE;
+                break;
+            
+            case STATE_PAYLOAD_DONE:
+                ck_a = b;
+                state = STATE_CK_A;
+                break;
+
+            case STATE_CK_A:
+                cb_b = b;
+                state = STATE_IDLE;
+                switch(class) {
+                    case UBX_ACK:
+                        if(id == 0x00) {
+                            /* NAK */
+                        } else if(id == 0x01) {
+                            /* ACK */
+                        } else {
+                            /* TODO SAD */
+                        }
+                        break;
+                    case UBX_NAV:
+                        if(id == 0x07) {
+                            /* PVT */
+                        } else {
+                            /* TODO SAD */
+                        }
+                        break;
+                    case UBX_CFG:
+                        if(id == 0x24) {
+                            /* NAV5 */
+                        } else {
+                            /* TODO SAD */
+                        }
+                        break;
+                    default:
+                        /* TODO sad */
+                        break;
+                }
+                break;
+
+            default:
+                state = STATE_IDLE;
+                /* TODO sad */
+                break;
+
+        }
+    }
 }
 
 static bool_t ublox_init(uint8_t *buf, size_t bufsize)
