@@ -186,7 +186,7 @@
                                      PIN_MODE_ALTERNATE(GPIOA_SER_OUT)      |\
                                      PIN_MODE_ALTERNATE(GPIOA_SER_IN)       |\
                                      PIN_MODE_OUTPUT(GPIOA_LED_EXT)         |\
-                                     PIN_MODE_ANALOG(GPIOA_MTX2_TXD)        |\
+                                     PIN_MODE_OUTPUT(GPIOA_MTX2_TXD)        |\
                                      PIN_MODE_ANALOG(GPIOA_BAT_MON)         |\
                                      PIN_MODE_INPUT(GPIOA_PIN7)             |\
                                      PIN_MODE_INPUT(GPIOA_PIN8)             |\
@@ -372,12 +372,12 @@
                                      PIN_ODR_HIGH(GPIOB_GPS_SDA)             |\
                                      PIN_ODR_HIGH(GPIOB_PIN8)                |\
                                      PIN_ODR_HIGH(GPIOB_PIN9)                |\
-                                     PIN_ODR_LOW(GPIOB_MTX2_EN)              |\
+                                     PIN_ODR_HIGH(GPIOB_MTX2_EN)             |\
                                      PIN_ODR_HIGH(GPIOB_MTX2_TXD_ALT)        |\
-                                     PIN_ODR_HIGH(GPIOB_LED_RB)              |\
-                                     PIN_ODR_HIGH(GPIOB_LED_RADIO)           |\
-                                     PIN_ODR_HIGH(GPIOB_LED_GPS)             |\
-                                     PIN_ODR_HIGH(GPIOB_LED_STATUS))
+                                     PIN_ODR_LOW(GPIOB_LED_RB)               |\
+                                     PIN_ODR_LOW(GPIOB_LED_RADIO)            |\
+                                     PIN_ODR_LOW(GPIOB_LED_GPS)              |\
+                                     PIN_ODR_LOW(GPIOB_LED_STATUS))
 #define VAL_GPIOB_AFRL              (PIN_AFIO_AF(GPIOB_PIN0, 0)              |\
                                      PIN_AFIO_AF(GPIOB_MTX2_P0, 0)           |\
                                      PIN_AFIO_AF(GPIOB_MTX2_P1, 0)           |\
