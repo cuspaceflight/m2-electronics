@@ -16,8 +16,10 @@
  * * ACKs are OK but receiving a NAK is cause for sadness and logs
  */
 
+#include <stdlib.h>
 #include "ublox.h"
 #include "hal.h"
+#include "dispatch.h"
 
 /* uBlox I2C addresses */
 #define UBLOX_I2C_ADDR        0x42
@@ -409,7 +411,7 @@ static void ublox_state_machine(uint8_t *buf, size_t num_new_bytes)
                         if(id == 0x07) {
                             /* PVT */
                             memcpy(nav_pvt.payload, payload, length);
-                            memcpy(pvt, payload, length);
+                            memcpy(&pvt, payload, length);
                             /* Send the PVT to dispatch */
                             dispatch_pvt(pvt);
                         } else {

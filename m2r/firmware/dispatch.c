@@ -8,8 +8,6 @@
 
 void dispatch_pvt(const ublox_pvt_t pvt)
 {
-    int32_t lat = pvt.lat;
-    int32_t lng = pvt.lon;
 }
 
 msg_t dispatch_thread(void* arg)
