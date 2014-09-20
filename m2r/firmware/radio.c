@@ -20,7 +20,6 @@
 #define F_MARK  (1000.0f)
 #define F_SPACE (1350.0f)
 #define MSGLEN 128
-ANALOG
 static uint8_t mark_buf[SAMPLES_PER_BIT];
 static uint8_t space_buf[SAMPLES_PER_BIT];
 
@@ -31,8 +30,8 @@ static void radio_generate_buffers()
         float t = ((float)i / (float)SAMPLES_PER_BIT) * T_BIT;
         float mark  = sinf(2.0f * PI * F_MARK * t);
         float space = sinf(2.0f * PI * F_SPACE * t);
-        mark_buf[i]  = (uint8_t)((mark  * 32.0f) + 32.0f);
-        space_buf[i] = (uint8_t)((space * 32.0f) + 32.0f);
+        mark_buf[i]  = (uint8_t)((mark  * 127.0f) + 127.0f);
+        space_buf[i] = (uint8_t)((space * 127.0f) + 127.0f);
     }
 }
 
@@ -64,12 +63,14 @@ static void radio_fm_timer(GPTDriver *gptd)
     uint8_t i, byte;
     (void)gptd;
     /* Write next sample to the DAC */
-    DAC->DHR8R1 = radio_fm_sampbuf[radio_fm_sampidx];
+    DAC->DHR12R1 = (uint32_t)radio_fm_sampbuf[radio_fm_sampidx] << 1;
     radio_fm_sampidx++;
 
     /* If we just wrote the last sample... */
     if(radio_fm_sampidx == radio_fm_samplen) {
         radio_fm_sampidx = 0;
+
+        palTogglePad(GPIOB, GPIOB_LED_RADIO);
 
         /* If we're transmitting RTTY... */
         if(radio_fm_rtty) {
@@ -165,12 +166,6 @@ static const GPTConfig gptcfg1 = {
     0
 };
 
-static const GPTConfig gptcfg2 = {
-    32000,
-    radio_ssb_timer,
-    0
-};
-
 msg_t radio_thread(void* arg)
 {
     chRegSetThreadName("Radio");
@@ -186,12 +181,7 @@ msg_t radio_thread(void* arg)
     gptStart(&GPTD2, &gptcfg1);
     gptStartContinuous(&GPTD2, 4);
 
-    /* Enable 50Hz SSB Radio timer */
-    /*gptStart(&GPTD3, &gptcfg2);*/
-    /*gptStartContinuous(&GPTD3, 640);*/
-
-    /*strncpy(radio_ssb_bytebuf, "AD6AM SSB TEST ", 128);*/
-    strncpy(radio_fm_bytebuf, "AD6AM FM TEST ", 128);
+    strncpy(radio_fm_bytebuf, "AD6AM MARTLET 2 FM INITIALISE ", 128);
 
     while(TRUE) {
         chThdSleepMilliseconds(100);
