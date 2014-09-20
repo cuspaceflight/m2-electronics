@@ -10,9 +10,11 @@
 #include "hal.h"
 
 #include "ublox.h"
+#include "radio.h"
 
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waThreadUblox, 768);
+static WORKING_AREA(waThreadRadio, 1024);
 
 static msg_t ThreadHeartbeat(void *arg) {
     (void)arg;
@@ -20,10 +22,12 @@ static msg_t ThreadHeartbeat(void *arg) {
 
     while (TRUE) {
         palSetPad(GPIOB, GPIOB_LED_STATUS);
+        //palSetPad(GPIOB, GPIOB_MTX2_EN);
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
 
         palClearPad(GPIOB, GPIOB_LED_STATUS);
+        //palClearPad(GPIOB, GPIOB_MTX2_EN);
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
     }
@@ -36,11 +40,14 @@ int main(void) {
     chSysInit();
     chRegSetThreadName("main");
 
-    chThdCreateStatic(waThreadHB, sizeof(waThreadHB), NORMALPRIO,
+    chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,
                       ThreadHeartbeat, NULL);
 
     chThdCreateStatic(waThreadUblox, sizeof(waThreadUblox), NORMALPRIO,
                       ublox_thread, NULL);
+
+    chThdCreateStatic(waThreadRadio, sizeof(waThreadRadio), NORMALPRIO,
+                      radio_thread, NULL);
 
     /* Configure and enable the watchdog timer */
     /*

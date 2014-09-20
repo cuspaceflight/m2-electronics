@@ -17,6 +17,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include "ublox.h"
 #include "hal.h"
 #include "dispatch.h"
