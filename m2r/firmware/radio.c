@@ -11,12 +11,13 @@
 #include <string.h>
 #include <math.h>
 #include "dispatch.h"
+#include "audio_data.h"
 
 #define PI 3.14159f
-#define BAUD (50.0f)
+#define BAUD (100.0f)
 #define T_BIT (1.0f / BAUD)
 #define FS (8000.0f)
-#define SAMPLES_PER_BIT 160 //T_BIT * FS
+#define SAMPLES_PER_BIT 80 //T_BIT * FS
 #define F_MARK  (1000.0f)
 #define F_SPACE (1350.0f)
 #define MSGLEN 128
@@ -40,19 +41,19 @@ static void radio_generate_buffers()
 static void radio_make_telem_string(char* buf, size_t len)
 {
     chsnprintf(buf, len,
-             "$$ AD6AM %02d:%02d:%02d %d,%d (%d, %d) "
-             "%.0fm (%.0fm) %.0fm/s (%.0fm/s)\n",
+             "AD6AM AD6AM AD6AM %02d:%02d:%02d %d,%d (%d, %d) "
+             "%dm (%dm) %dm/s (%dm/s)\n",
              m2r_state.hour, m2r_state.minute, m2r_state.second,
              m2r_state.lat, m2r_state.lng, m2r_state.gps_valid,
-             m2r_state.gps_num_sats, m2r_state.imu_height,
-             m2r_state.imu_max_height, m2r_state.imu_velocity,
-             m2r_state.imu_max_velocity);
+             m2r_state.gps_num_sats, (int)m2r_state.imu_height,
+             (int)m2r_state.imu_max_height, (int)m2r_state.imu_velocity,
+             (int)m2r_state.imu_max_velocity);
 }
 
 uint8_t *radio_fm_sampbuf;
-uint8_t radio_fm_sampidx = 0;
-uint16_t radio_fm_samplen = 0;
-bool_t radio_fm_rtty = true;
+uint16_t radio_fm_sampidx = 0;
+uint16_t radio_fm_samplen = 1;
+uint8_t radio_fm_rtty = 1;
 uint8_t radio_fm_bitidx = 0;
 uint8_t radio_fm_bitbuf[11];
 uint8_t radio_fm_byteidx = 0;
@@ -64,20 +65,16 @@ static void radio_fm_timer(GPTDriver *gptd)
 {
     uint8_t i, byte;
     (void)gptd;
-    /* Write next sample to the DAC */
-    DAC->DHR12R1 = (uint32_t)radio_fm_sampbuf[radio_fm_sampidx] << 1;
-    radio_fm_sampidx++;
-
     /* If we just wrote the last sample... */
-    if(radio_fm_sampidx == radio_fm_samplen) {
+    if(radio_fm_sampidx >= radio_fm_samplen) {
         radio_fm_sampidx = 0;
 
         palTogglePad(GPIOB, GPIOB_LED_RADIO);
 
         /* If we're transmitting RTTY... */
         if(radio_fm_rtty) {
+
             radio_fm_bitidx++;
-            
             /* If we're now also transmitted all bits... */
             if(radio_fm_bitidx == 10) {
                 radio_fm_bitidx = 0;
@@ -86,6 +83,9 @@ static void radio_fm_timer(GPTDriver *gptd)
                     /* End of message */
                     radio_fm_byteidx = 0;
                     radio_make_telem_string(radio_fm_bytebuf, 128);
+                    radio_fm_rtty = 0;
+                    radio_fm_audioidx = 0;
+
                 } else {
                     /* START */
                     radio_fm_bitbuf[0] = 0;
@@ -109,23 +109,31 @@ static void radio_fm_timer(GPTDriver *gptd)
                 radio_fm_sampbuf = space_buf;
             radio_fm_samplen = SAMPLES_PER_BIT;
 
-
         /* If we're transmitting audio... */
         } else {
             /* Need to load next audio file to play. */
-            radio_fm_audioidx++;
             if(radio_fm_audioqueue[radio_fm_audioidx] == 0x00) {
                 /* End of message */
-                radio_fm_sampidx = 0;
+                radio_fm_sampidx = 65534;
                 radio_fm_audioidx = 0;
-            } else {
-                radio_fm_sampbuf = radio_fm_audioqueue[
-                    radio_fm_audioidx];
-                radio_fm_samplen = radio_fm_audioqueuelens[
-                    radio_fm_audioidx];
+                say_altitude(m2r_state.imu_height,
+                             &radio_fm_audioqueue,
+                             &radio_fm_audioqueuelens);
+                radio_fm_rtty = 1;
             }
+
+            radio_fm_sampbuf = radio_fm_audioqueue[
+                radio_fm_audioidx];
+            radio_fm_samplen = radio_fm_audioqueuelens[
+                radio_fm_audioidx];
+            radio_fm_audioidx++;
         }
     }
+
+    /* Write next sample to the DAC */
+    DAC->DHR12R1 = (uint32_t)radio_fm_sampbuf[radio_fm_sampidx] << 4;
+    radio_fm_sampidx++;
+
 }
 
 uint8_t radio_ssb_bitidx = 0;
@@ -179,6 +187,14 @@ msg_t radio_thread(void* arg)
     /* Compute the sine waves for AFSK */
     radio_generate_buffers();
 
+    strncpy(radio_fm_bytebuf, "$$$$$\n AD6AM MARTLET 2 FM INITIALISE ", 128);
+
+    m2r_state.imu_height = 22345;
+
+    say_altitude(m2r_state.imu_height,
+                 &radio_fm_audioqueue,
+                 &radio_fm_audioqueuelens);
+
     /* Enable DAC */
     RCC->APB1ENR |= (1<<29);
     DAC->CR = DAC_CR_EN1 | DAC_CR_BOFF1;
@@ -186,8 +202,6 @@ msg_t radio_thread(void* arg)
     /* Enable 8kHz FM Radio timer */
     gptStart(&GPTD2, &gptcfg1);
     gptStartContinuous(&GPTD2, 4);
-
-    strncpy(radio_fm_bytebuf, "$$$$$ AD6AM MARTLET 2 FM INITIALISE ", 128);
 
     while(TRUE) {
         chThdSleepMilliseconds(100);

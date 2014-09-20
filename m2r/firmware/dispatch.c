@@ -24,17 +24,23 @@ void dispatch_pvt(const ublox_pvt_t pvt)
   }
 }
 
+#define LEN(x) (sizeof(x)/sizeof(x[0]))
 uint8_t * const number[10] = {
   zero, one, two, three, four, five, six, seven, eight, nine
 };
+uint16_t const number_lens[10] = {
+  LEN(zero), LEN(one), LEN(two), LEN(three), LEN(four),
+  LEN(five), LEN(six), LEN(seven), LEN(eight), LEN(nine)
+};
 
 /* alt is in meters AMSL */
-void say_altitude(float alt, uint8_t **samples)
+void say_altitude(float alt, uint8_t **samples, uint16_t *lens)
 {
-    uint32_t kft_agl = lroundf((3.2808399f * alt - 4000.0f) / 1000.0f);
+    int32_t kft_agl = lroundf((3.2808399f * alt - 4000.0f) / 1000.0f);
 
-    if (kft_agl == 0) {
+    if (kft_agl <= 0) {
         /* below 1000 ft, don't report altitude */
+        samples[0] = 0;
         return;
     }
 
@@ -44,10 +50,13 @@ void say_altitude(float alt, uint8_t **samples)
     uint8_t i = 0;
     while (buff[i] && buff[i] != ' ') {
         samples[i] = number[buff[i] - '0'];
+        lens[i] = number_lens[buff[i] - '0'];
         i++;
     }
-    samples[i++] = kft;
+    samples[i] = kft;
+    lens[i++] = LEN(kft);
     samples[i] = 0;
+    lens[i] = 0;
 }
 
 msg_t dispatch_thread(void* arg)

@@ -24,4 +24,6 @@ extern volatile m2r_state_t m2r_state;
 void dispatch_pvt(const ublox_pvt_t pvt);
 msg_t dispatch_thread(void* arg);
 
+void say_altitude(float alt, uint8_t **samples, uint16_t *lens);
+
 #endif /* DISPATCH_H */

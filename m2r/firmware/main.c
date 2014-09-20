@@ -13,7 +13,7 @@
 #include "radio.h"
 
 static WORKING_AREA(waThreadHB, 128);
-static WORKING_AREA(waThreadUblox, 768);
+static WORKING_AREA(waThreadUblox, 2048);
 static WORKING_AREA(waThreadRadio, 1024);
 
 static msg_t ThreadHeartbeat(void *arg) {

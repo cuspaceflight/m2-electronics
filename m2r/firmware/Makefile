@@ -88,10 +88,10 @@ CSRC = $(PORTSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
        $(CHIBIOS)/os/various/chprintf.c \
-       main.c radio.c dispatch.c ublox.c rockblock.c serial_link.c
        $(CHIBIOS)/os/various/evtimer.c \
        $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/memstreams.c \
+       main.c radio.c dispatch.c ublox.c rockblock.c serial_link.c \
        audio_data.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
@@ -228,7 +228,7 @@ flash: build/$(PROJECT).elf
 					  -ex 'monitor version' \
 					  -ex 'monitor swdp_scan' \
 					  -ex 'attach 1' \
-					  -ex 'load' build/$(PROJECT).elf
+					  -ex 'load' build/$(PROJECT).elf \
 
 debug: build/$(PROJECT).elf
 	arm-none-eabi-gdb -ex 'target extended-remote /dev/ttyACM0' \
