@@ -6,7 +6,7 @@
 # Compiler options here.
 ifeq ($(USE_OPT),)
   USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 \
-			-fsingle-precision-constant
+			-fsingle-precision-constant -std=gnu99
 endif
 
 # C specific options here (added to USE_OPT).
@@ -94,9 +94,10 @@ CSRC = $(PORTSRC) \
 	   $(CHIBIOS)/os/various/evtimer.c \
 	   $(CHIBIOS)/os/various/shell.c \
 	   $(CHIBIOS)/os/various/memstreams.c \
+		 ../../sbp/sbp.c ../../edc.c \
        main.c ms5611.c adxl3x5.c pyro.c microsd.c m2fc_shell.c \
 	   state_estimation.c mission.c time_utils.c fault_handlers.c \
-	   config.c
+	   config.c sbp_io.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -207,7 +208,7 @@ UDEFS =
 UADEFS =
 
 # List all user directories here
-UINCDIR =
+UINCDIR = ../../sbp/
 
 # List the user directory to look for the libraries here
 ULIBDIR =

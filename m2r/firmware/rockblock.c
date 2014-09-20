@@ -13,7 +13,6 @@ void rockblock_init()
     .speed = 19200
   };
 
-  sdInit();
   sdStart(&ROCKBLOCK_PORT, &iridium_port_config);
 }
 

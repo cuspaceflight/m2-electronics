@@ -19,6 +19,7 @@
 #include "m2fc_shell.h"
 #include "mission.h"
 #include "state_estimation.h"
+#include "sbp_io.h"
 
 /* Create working areas for all threads */
 static WORKING_AREA(waMS5611, 512);
@@ -28,6 +29,7 @@ static WORKING_AREA(waMission, 1024);
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waMicroSD, 512);
 static WORKING_AREA(waPyros, 128);
+static WORKING_AREA(waThreadSBP, 1024);
 
 /*
  * Heatbeat thread.
@@ -194,6 +196,9 @@ int main(void) {
 
     chThdCreateStatic(waPyros, sizeof(waPyros), NORMALPRIO,
                       pyro_continuity_thread, NULL);
+
+    chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
+                      sbp_thread, NULL);
 
     /* Start the command shell on the slave serial port */
     m2fc_shell_run();

@@ -8,6 +8,7 @@
 #include "state_estimation.h"
 #include "microsd.h"
 #include "time_utils.h"
+#include "sbp_io.h"
 
 /* Kalman filter state and covariance storage */
 static float x[3]    = {   0.0f, 0.0f, 0.0f};
@@ -202,7 +203,9 @@ state_estimate_t state_estimation_get_state()
     /* Log the newly predicted state */
     microsd_log_f(CHAN_SE_P1, dt, x_out.h);
     microsd_log_f(CHAN_SE_P2, x_out.v, x_out.a);
-    
+
+    SBP_SEND(0x22, x_out);
+
     return x_out;
 }
 

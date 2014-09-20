@@ -5,6 +5,7 @@
  */
 
 #include <math.h>
+#include <string.h>
 #include "ch.h"
 #include "chprintf.h"
 
@@ -13,6 +14,9 @@
 
 volatile m2r_state_t m2r_state;
 #include "rockblock.h"
+#include "sbp_io.h"
+
+#include "../../m2fc/firmware/state_estimation.h"
 
 void dispatch_pvt(const ublox_pvt_t pvt)
 {
@@ -59,9 +63,35 @@ void say_altitude(float alt, uint8_t **samples, uint16_t *lens)
     lens[i] = 0;
 }
 
+void est_state_callback(u16 sender_id, u8 len, u8 msg[], void *context)
+{
+  (void)sender_id; (void)context;
+
+  state_estimate_t est;
+  memcpy(&est, msg, len);
+
+  m2r_state.imu_height = est.h;
+  m2r_state.imu_velocity = est.v;
+
+  if (m2r_state.imu_height > m2r_state.imu_max_height) {
+    m2r_state.imu_max_height = m2r_state.imu_height;
+  }
+  if (m2r_state.imu_velocity > m2r_state.imu_max_velocity) {
+    m2r_state.imu_max_velocity = m2r_state.imu_velocity;
+  }
+}
+
+void dispatch_init()
+{
+  static sbp_msg_callback_t est_state_cb;
+  sbp_register_callback(&sbp_state, 0x22, &est_state_callback, 0, &est_state_cb);
+}
+
 msg_t dispatch_thread(void* arg)
 {
     (void)arg;
     while(TRUE)
         chThdSleepMilliseconds(1000);
 }
+
+
