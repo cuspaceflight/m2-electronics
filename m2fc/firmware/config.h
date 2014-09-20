@@ -20,7 +20,7 @@
 #define APOGEE_TIMER 45000
 
 /* Altitude (m ASL) below which to deploy main chute */
-#define MAIN_DEPLOY_ALTITUDE 250.0f
+#define MAIN_DEPLOY_ALTITUDE 1450.0f
 
 /* Time (ms) since apogee beyond which to deploy the main chute */
 #define MAIN_DEPLOY_TIMER 30000

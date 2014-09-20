@@ -108,6 +108,9 @@ void pyro_fire_drogue()
                       PYRO_DROGUE_NOSE_2,
                       PYRO_DROGUE_NOSE_3, 9);
         }
+
+        if(!pyro_continuities())
+            break;
     }
 }
 
@@ -125,6 +128,9 @@ void pyro_fire_main()
                       PYRO_MAIN_NOSE_2,
                       PYRO_MAIN_NOSE_3, 9);
         }
+
+        if(!pyro_continuities())
+            break;
     }
 }
 
