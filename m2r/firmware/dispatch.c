@@ -17,7 +17,7 @@ volatile m2r_state_t m2r_state;
 void dispatch_pvt(const ublox_pvt_t pvt)
 {
   static systime_t last_sbd = 0;
-  if (chTimeElapsedSince(last_sbd) > S2ST(30)) {
+  if (chTimeNow() - last_sbd > 30000) {
     /* Only send an Iridium SBD message every 30s */
     send_sbd_posn(&pvt);
     last_sbd = chTimeNow();

@@ -40,6 +40,8 @@ int main(void) {
     chSysInit();
     chRegSetThreadName("main");
 
+    rockblock_init();
+
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,
                       ThreadHeartbeat, NULL);
 
