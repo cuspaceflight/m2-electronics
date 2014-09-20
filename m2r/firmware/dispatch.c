@@ -15,6 +15,7 @@ void dispatch_pvt(const ublox_pvt_t pvt)
   if (chTimeElapsedSince(last_sbd) > S2ST(30)) {
     /* Only send an Iridium SBD message every 30s */
     send_sbd_posn(&pvt);
+    last_sbd = chTimeNow();
   }
 }
 

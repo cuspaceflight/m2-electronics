@@ -22,6 +22,7 @@
 #define MSGLEN 128
 static uint8_t mark_buf[SAMPLES_PER_BIT];
 static uint8_t space_buf[SAMPLES_PER_BIT];
+static uint8_t zero_buf[SAMPLES_PER_BIT];
 
 static void radio_generate_buffers()
 {
@@ -32,13 +33,14 @@ static void radio_generate_buffers()
         float space = sinf(2.0f * PI * F_SPACE * t);
         mark_buf[i]  = (uint8_t)((mark  * 127.0f) + 127.0f);
         space_buf[i] = (uint8_t)((space * 127.0f) + 127.0f);
+        zero_buf[i] = 0;
     }
 }
 
 static void radio_make_telem_string(char* buf, size_t len)
 {
     chsnprintf(buf, len,
-             "AD6AM %02d:%02d:%02d %d,%d (%d, %d) "
+             "$$ AD6AM %02d:%02d:%02d %d,%d (%d, %d) "
              "%.0fm (%.0fm) %.0fm/s (%.0fm/s)\n",
              m2r_state.hour, m2r_state.minute, m2r_state.second,
              m2r_state.lat, m2r_state.lng, m2r_state.gps_valid,
@@ -52,7 +54,7 @@ uint8_t radio_fm_sampidx = 0;
 uint16_t radio_fm_samplen = 0;
 bool_t radio_fm_rtty = true;
 uint8_t radio_fm_bitidx = 0;
-uint8_t radio_fm_bitbuf[10];
+uint8_t radio_fm_bitbuf[11];
 uint8_t radio_fm_byteidx = 0;
 uint8_t radio_fm_bytebuf[MSGLEN];
 uint8_t radio_fm_audioidx = 0;
@@ -86,22 +88,26 @@ static void radio_fm_timer(GPTDriver *gptd)
                     radio_make_telem_string(radio_fm_bytebuf, 128);
                 } else {
                     /* START */
-                    radio_fm_bitbuf[0] = 1;
+                    radio_fm_bitbuf[0] = 0;
                     /* Data ASCII7 */
                     byte = radio_fm_bytebuf[radio_fm_byteidx];
                     for(i=0; i<7; i++)
-                        radio_fm_bitbuf[i + 1] = byte & (1 << i);
+                        radio_fm_bitbuf[i + 1] = (byte & (1 << i)) >> i;
                     /* STOPs */
                     radio_fm_bitbuf[8] = 1;
                     radio_fm_bitbuf[9] = 1;
+                    radio_fm_bitbuf[10] = 2;
                 }
             }
 
             /* Set new bit buffer */
-            if(radio_fm_bitbuf[radio_fm_bitidx])
+            if(radio_fm_bitbuf[radio_fm_bitidx] == 1)
                 radio_fm_sampbuf = mark_buf;
-            else
+            else if(radio_fm_bitbuf[radio_fm_bitidx] == 2)
+                radio_fm_sampbuf = zero_buf;
+            else if(radio_fm_bitbuf[radio_fm_bitidx] == 0)
                 radio_fm_sampbuf = space_buf;
+            radio_fm_samplen = SAMPLES_PER_BIT;
 
 
         /* If we're transmitting audio... */
@@ -181,7 +187,7 @@ msg_t radio_thread(void* arg)
     gptStart(&GPTD2, &gptcfg1);
     gptStartContinuous(&GPTD2, 4);
 
-    strncpy(radio_fm_bytebuf, "AD6AM MARTLET 2 FM INITIALISE ", 128);
+    strncpy(radio_fm_bytebuf, "$$$$$ AD6AM MARTLET 2 FM INITIALISE ", 128);
 
     while(TRUE) {
         chThdSleepMilliseconds(100);
