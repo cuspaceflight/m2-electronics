@@ -92,6 +92,64 @@ static const EXTConfig extcfg = {{
     {EXT_CH_MODE_DISABLED, NULL}  /* 22 - RTC Wakeup */
 }};
 
+void test_deployment(void)
+{
+    int i;
+
+    bool_t cont = true;
+    cont &= pyro_continuity(PYRO_1);
+    cont &= pyro_continuity(PYRO_2);
+    cont &= pyro_continuity(PYRO_3);
+
+    if(!cont) {
+        while(1) {
+            palClearPad(GPIOC, GPIOC_LED_A);
+            palSetPad(GPIOC, GPIOC_LED_C);
+            palSetPad(GPIOA, GPIOA_LED_STATUS);
+            chThdSleepMilliseconds(100);
+            
+            palClearPad(GPIOC, GPIOC_LED_A);
+            palClearPad(GPIOC, GPIOC_LED_C);
+            palClearPad(GPIOA, GPIOA_LED_STATUS);
+            chThdSleepMilliseconds(100);
+        }
+    }
+
+    for(i = 0; i < 10; i++) {
+        palClearPad(GPIOC, GPIOC_LED_C);
+        palSetPad(GPIOC, GPIOC_LED_A);
+        palSetPad(GPIOA, GPIOA_LED_STATUS);
+        chThdSleepMilliseconds(1000);
+        
+        palClearPad(GPIOC, GPIOC_LED_C);
+        palClearPad(GPIOC, GPIOC_LED_A);
+        palClearPad(GPIOA, GPIOA_LED_STATUS);
+        chThdSleepMilliseconds(1000);
+    }
+
+    for(i=0; i<5; i++) {
+        palClearPad(GPIOC, GPIOC_LED_A);
+        palSetPad(GPIOC, GPIOC_LED_C);
+        palSetPad(GPIOA, GPIOA_LED_STATUS);
+        chThdSleepMilliseconds(200);
+        
+        palClearPad(GPIOC, GPIOC_LED_A);
+        palClearPad(GPIOC, GPIOC_LED_C);
+        palClearPad(GPIOA, GPIOA_LED_STATUS);
+        chThdSleepMilliseconds(200);
+    }
+
+    for(i=0; i<50; i++) {
+        pyro_fire(1, 1, 1, 9);
+    }
+
+    palClearPad(GPIOC, GPIOC_LED_C);
+    palSetPad(GPIOC, GPIOC_LED_A);
+
+    while(1);
+
+}
+
 /*
  * M2FC Main Thread.
  * Starts all the other threads then puts itself to sleep.
@@ -100,9 +158,9 @@ int main(void) {
     halInit();
     chSysInit();
     chRegSetThreadName("Main");
-    
+
     /* Start the heartbeat thread so it will be resetting the watchdog. */
-    chThdCreateStatic(waThreadHB, sizeof(waThreadHB), NORMALPRIO,
+    chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,
                       ThreadHeartbeat, NULL);
 
 

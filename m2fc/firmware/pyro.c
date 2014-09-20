@@ -67,92 +67,64 @@ bool_t pyro_continuities()
     return ok;
 }
 
-/* Fire the pyro channel `channel` for `duration_ms` milliseconds.
- * Non-blocking.
- */
-static VirtualTimer vt1, vt2, vt3;
-void pyro_fire(uint8_t channel, uint16_t duration_ms)
-{
-    uint8_t pad;
-
-    if(channel == PYRO_1) {
-        pad = GPIOE_PYRO_1_F;
-        chVTReset(&vt1);
-        chVTSet(&vt1, MS2ST(duration_ms), pyro_off_1, NULL);
-        microsd_log_s16(CHAN_PYRO_F, 1, 0, 0, 0);
-    } else if(channel == PYRO_2) {
-        pad = GPIOE_PYRO_2_F;
-        chVTReset(&vt2);
-        chVTSet(&vt2, MS2ST(duration_ms), pyro_off_2, NULL);
-        microsd_log_s16(CHAN_PYRO_F, 0, 1, 0, 0);
-    } else if(channel == PYRO_3) {
-        pad = GPIOE_PYRO_3_F;
-        chVTReset(&vt3);
-        chVTSet(&vt3, MS2ST(duration_ms), pyro_off_3, NULL);
-        microsd_log_s16(CHAN_PYRO_F, 0, 0, 1, 0);
-    } else {
-        return;
-    }
-
-    palSetPad(GPIOE, pad);
-}
-
 /*
- * Turn off a pyro channel. Called by the virtual timer.
+ * Fire the pyro channels ch1/ch2/ch3 for duration_ms milliseconds.
  */
-void pyro_off_1(void* arg)
+void pyro_fire(uint8_t ch1, uint8_t ch2, uint8_t ch3,
+               uint16_t duration_ms)
 {
-    (void)arg;
-    palClearPad(GPIOE, GPIOE_PYRO_1_F);
+    if(ch1)
+        palSetPad(GPIOE, GPIOE_PYRO_1_F);
+    if(ch2)
+        palSetPad(GPIOE, GPIOE_PYRO_2_F);
+    if(ch3)
+        palSetPad(GPIOE, GPIOE_PYRO_3_F);
+
+    microsd_log_s16(CHAN_PYRO_F, ch1, ch2, ch3, 0);
+    chThdSleepMilliseconds(duration_ms);
+
+    if(ch1)
+        palClearPad(GPIOE, GPIOE_PYRO_1_F);
+    if(ch2)
+        palClearPad(GPIOE, GPIOE_PYRO_2_F);
+    if(ch3)
+        palClearPad(GPIOE, GPIOE_PYRO_3_F);
+
+    chThdSleepMilliseconds(duration_ms);
 }
-void pyro_off_2(void* arg)
-{
-    (void)arg;
-    palClearPad(GPIOE, GPIOE_PYRO_2_F);
-}
-void pyro_off_3(void* arg)
-{
-    (void)arg;
-    palClearPad(GPIOE, GPIOE_PYRO_3_F);
-}
+
 
 /* Fire all the right drogue deployment pyros */
 void pyro_fire_drogue()
 {
-    if(m2fc_location == M2FC_BODY) {
-        if(PYRO_DROGUE_BODY_1)
-            pyro_fire(PYRO_1, PYRO_FIRETIME);
-        if(PYRO_DROGUE_BODY_2)
-            pyro_fire(PYRO_2, PYRO_FIRETIME);
-        if(PYRO_DROGUE_BODY_3)
-            pyro_fire(PYRO_3, PYRO_FIRETIME);
-    } else if(m2fc_location == M2FC_NOSE) {
-        if(PYRO_DROGUE_NOSE_1)
-            pyro_fire(PYRO_1, PYRO_FIRETIME);
-        if(PYRO_DROGUE_NOSE_2)
-            pyro_fire(PYRO_2, PYRO_FIRETIME);
-        if(PYRO_DROGUE_NOSE_3)
-            pyro_fire(PYRO_3, PYRO_FIRETIME);
+    int i;
+    for(i=0; i<50; i++) {
+        if(m2fc_location == M2FC_BODY) {
+            pyro_fire(PYRO_DROGUE_BODY_1,
+                      PYRO_DROGUE_BODY_2,
+                      PYRO_DROGUE_BODY_3, 9);
+        } else if(m2fc_location == M2FC_NOSE) {
+            pyro_fire(PYRO_DROGUE_NOSE_1,
+                      PYRO_DROGUE_NOSE_2,
+                      PYRO_DROGUE_NOSE_3, 9);
+        }
     }
 }
 
 /* Fire all the right main chute deployment pyros */
 void pyro_fire_main()
 {
-    if(m2fc_location == M2FC_BODY) {
-        if(PYRO_MAIN_BODY_1)
-            pyro_fire(PYRO_1, PYRO_FIRETIME);
-        if(PYRO_MAIN_BODY_2)
-            pyro_fire(PYRO_2, PYRO_FIRETIME);
-        if(PYRO_MAIN_BODY_3)
-            pyro_fire(PYRO_3, PYRO_FIRETIME);
-    } else if(m2fc_location == M2FC_NOSE) {
-        if(PYRO_MAIN_NOSE_1)
-            pyro_fire(PYRO_1, PYRO_FIRETIME);
-        if(PYRO_MAIN_NOSE_2)
-            pyro_fire(PYRO_2, PYRO_FIRETIME);
-        if(PYRO_MAIN_NOSE_3)
-            pyro_fire(PYRO_3, PYRO_FIRETIME);
+    int i;
+    for(i=0; i<50; i++) {
+        if(m2fc_location == M2FC_BODY) {
+            pyro_fire(PYRO_MAIN_BODY_1,
+                      PYRO_MAIN_BODY_2,
+                      PYRO_MAIN_BODY_3, 9);
+        } else if(m2fc_location == M2FC_NOSE) {
+            pyro_fire(PYRO_MAIN_NOSE_1,
+                      PYRO_MAIN_NOSE_2,
+                      PYRO_MAIN_NOSE_3, 9);
+        }
     }
 }
 

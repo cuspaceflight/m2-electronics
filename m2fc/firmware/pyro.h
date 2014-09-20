@@ -20,7 +20,8 @@ bool_t pyro_continuities(void);
 /* Fire the pyro channel `channel` for `duration_ms` milliseconds.
  * Non-blocking.
  */
-void pyro_fire(pyro_channel channel, uint16_t duration_ms);
+void pyro_fire(uint8_t ch1, uint8_t ch2, uint8_t ch3,
+               uint16_t duration_ms);
 
 /* Fire the drogue or main chute, selecting the appropriate pyro channels from
  * the configuration.
