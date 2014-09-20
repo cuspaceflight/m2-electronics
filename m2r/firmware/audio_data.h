@@ -7,6 +7,7 @@
 #ifndef AUDIO_DATA_H
 #define AUDIO_DATA_H
 
+extern const uint8_t zero[4452];
 extern const uint8_t one[2968];
 extern const uint8_t two[2968];
 extern const uint8_t three[3710];
