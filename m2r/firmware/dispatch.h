@@ -21,6 +21,7 @@ typedef struct {
 
 extern volatile m2r_state_t m2r_state;
 
+void dispatch_init(void);
 void dispatch_pvt(const ublox_pvt_t pvt);
 msg_t dispatch_thread(void* arg);
 

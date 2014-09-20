@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16
+  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 -std=gnu99
 endif
 
 # C specific options here (added to USE_OPT).
@@ -91,8 +91,9 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/evtimer.c \
        $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/memstreams.c \
+			 ../../sbp/sbp.c ../../sbp/edc.c \
        main.c radio.c dispatch.c ublox.c rockblock.c serial_link.c \
-       audio_data.c
+       audio_data.c sbp_io.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -203,7 +204,7 @@ UDEFS =
 UADEFS =
 
 # List all user directories here
-UINCDIR =
+UINCDIR = ../../sbp
 
 # List the user directory to look for the libraries here
 ULIBDIR =

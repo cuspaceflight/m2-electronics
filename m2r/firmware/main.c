@@ -9,12 +9,14 @@
 #include "ch.h"
 #include "hal.h"
 
+#include "sbp_io.h"
 #include "ublox.h"
 #include "radio.h"
 
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waThreadUblox, 2048);
 static WORKING_AREA(waThreadRadio, 1024);
+static WORKING_AREA(waThreadSBP, 1024);
 
 static msg_t ThreadHeartbeat(void *arg) {
     (void)arg;
@@ -39,6 +41,10 @@ int main(void) {
     halInit();
     chSysInit();
     chRegSetThreadName("main");
+    sdInit();
+
+    rockblock_init();
+    dispatch_init();
 
     rockblock_init();
 
@@ -50,6 +56,9 @@ int main(void) {
 
     chThdCreateStatic(waThreadRadio, sizeof(waThreadRadio), NORMALPRIO,
                       radio_thread, NULL);
+
+    chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
+                      sbp_thread, NULL);
 
     /* Configure and enable the watchdog timer */
     /*
