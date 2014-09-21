@@ -11,12 +11,14 @@
 #include "ublox.h"
 
 typedef struct {
+    bool_t armed;
     uint8_t hour, minute, second;
     uint8_t gps_valid, gps_num_sats;
     int32_t lat, lng;
     int32_t gps_height;
     float imu_height, imu_max_height;
     float imu_velocity, imu_max_velocity;
+    uint8_t fc_state;
 } m2r_state_t;
 
 extern volatile m2r_state_t m2r_state;

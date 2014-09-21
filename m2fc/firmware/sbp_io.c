@@ -13,12 +13,16 @@ sbp_state_t sbp_state;
 u32 m2r_read(u8 *buff, u32 n, void* context)
 {
   (void)context;
+  if(n == 0)
+      return 0;
   return sdRead(&M2R_PORT, buff, n);
 }
 
 u32 m2r_write(u8 *buff, u32 n, void* context)
 {
   (void)context;
+  if(n == 0)
+      return 0;
   return sdWrite(&M2R_PORT, buff, n);
 }
 

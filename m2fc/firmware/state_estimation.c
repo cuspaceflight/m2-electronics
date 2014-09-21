@@ -11,7 +11,7 @@
 #include "sbp_io.h"
 
 /* Kalman filter state and covariance storage */
-static float x[3]    = {   0.0f, 0.0f, 0.0f};
+static float x[3]    = {1180.0f, 0.0f, 0.0f};
 static float p[3][3] = {{250.0f, 0.0f, 0.0f},
                         {  0.0f, 0.1f, 0.0f},
                         {  0.0f, 0.0f, 0.1f}};
@@ -130,6 +130,7 @@ void state_estimation_update_accel(float accel, float r);
 state_estimate_t state_estimation_get_state()
 {
     float q, dt, dt2, dt3, dt4, dt5, dt6, dt2_2;
+    static uint8_t sbp_counter = 0;
     state_estimate_t x_out;
 
     /* TODO Determine this q-value */
@@ -204,7 +205,11 @@ state_estimate_t state_estimation_get_state()
     microsd_log_f(CHAN_SE_P1, dt, x_out.h);
     microsd_log_f(CHAN_SE_P2, x_out.v, x_out.a);
 
-    SBP_SEND(0x22, x_out);
+    sbp_counter++;
+    if(sbp_counter == 100) {
+        SBP_SEND(0x22, x_out);
+        sbp_counter = 0;
+    }
 
     return x_out;
 }

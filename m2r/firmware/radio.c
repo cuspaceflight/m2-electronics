@@ -41,13 +41,14 @@ static void radio_generate_buffers()
 static void radio_make_telem_string(char* buf, size_t len)
 {
     chsnprintf(buf, len,
-             "AD6AM AD6AM AD6AM %02d:%02d:%02d %d,%d (%d, %d) "
-             "%dm (%dm) %dm/s (%dm/s)\n",
+             "AD6AM AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%d, %d) "
+             "%dm (%dm) %dm/s (%dm/s) %u\n",
              m2r_state.hour, m2r_state.minute, m2r_state.second,
-             m2r_state.lat, m2r_state.lng, m2r_state.gps_valid,
+             (float)m2r_state.lat*1e-7f, (float)m2r_state.lng*1e-7f,
+             m2r_state.gps_valid,
              m2r_state.gps_num_sats, (int)m2r_state.imu_height,
              (int)m2r_state.imu_max_height, (int)m2r_state.imu_velocity,
-             (int)m2r_state.imu_max_velocity);
+             (int)m2r_state.imu_max_velocity, m2r_state.fc_state);
 }
 
 uint8_t *radio_fm_sampbuf;
@@ -174,6 +175,14 @@ static void radio_ssb_timer(GPTDriver *gptd)
     }
 }
 
+void radio_say(u8* buf, u16 len)
+{
+    radio_fm_audioqueue[0] = buf;
+    radio_fm_audioqueue[1] = 0;
+    radio_fm_audioqueuelens[0] = len;
+    radio_fm_rtty = 0;
+}
+
 static const GPTConfig gptcfg1 = {
     32000,
     radio_fm_timer,
@@ -187,9 +196,10 @@ msg_t radio_thread(void* arg)
     /* Compute the sine waves for AFSK */
     radio_generate_buffers();
 
-    strncpy(radio_fm_bytebuf, "$$$$$\n AD6AM MARTLET 2 FM INITIALISE ", 128);
+    strncpy(radio_fm_bytebuf, "AD6AM AD6AM MARTLET 2 FM INITIALISE ", 128);
 
-    m2r_state.imu_height = 22345;
+    while(!m2r_state.armed)
+        chThdSleepMilliseconds(100);
 
     say_altitude(m2r_state.imu_height,
                  &radio_fm_audioqueue,

@@ -10,6 +10,7 @@
 #include "pyro.h"
 #include "microsd.h"
 #include "config.h"
+#include "sbp_io.h"
 
 typedef state_t state_func_t(instance_data_t *data);
 
@@ -149,6 +150,7 @@ msg_t mission_thread(void* arg)
             microsd_log_s32(CHAN_SM_MISSION,
                             (int32_t)cur_state, (int32_t)new_state);
             cur_state = new_state;
+            SBP_SEND(0x30, new_state);
         }
 
         /* Tick the state machine about every millisecond */

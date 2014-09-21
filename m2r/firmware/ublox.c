@@ -376,6 +376,9 @@ static void ublox_state_machine(uint8_t *buf, size_t num_new_bytes)
 
             case STATE_L1:
                 length |= (uint16_t)b << 8;
+                if(length >= 128) {
+                    state = STATE_IDLE;
+                }
                 length_remaining = length;
                 state = STATE_PAYLOAD;
                 break;

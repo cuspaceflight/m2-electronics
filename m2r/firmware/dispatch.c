@@ -8,10 +8,8 @@
 #include <string.h>
 #include "ch.h"
 #include "chprintf.h"
-
 #include "dispatch.h"
 #include "audio_data.h"
-
 volatile m2r_state_t m2r_state;
 #include "rockblock.h"
 #include "sbp_io.h"
@@ -21,8 +19,18 @@ volatile m2r_state_t m2r_state;
 void dispatch_pvt(const ublox_pvt_t pvt)
 {
   static systime_t last_sbd = 0;
-  if (chTimeNow() - last_sbd > 30000) {
-    /* Only send an Iridium SBD message every 30s */
+
+    m2r_state.hour = pvt.hour;
+    m2r_state.minute = pvt.minute;
+    m2r_state.second = pvt.second;
+    m2r_state.gps_valid = pvt.fix_type;
+    m2r_state.gps_num_sats = pvt.num_sv;
+    m2r_state.lat = pvt.lat;
+    m2r_state.lng = pvt.lon;
+    m2r_state.gps_height = pvt.height;
+
+  if (chTimeNow() - last_sbd > 60000) {
+    /* Only send an Iridium SBD message every 60s */
     send_sbd_posn(&pvt);
     last_sbd = chTimeNow();
   }
@@ -67,6 +75,8 @@ void est_state_callback(u16 sender_id, u8 len, u8 msg[], void *context)
 {
   (void)sender_id; (void)context;
 
+  m2r_state.armed = true;
+
   state_estimate_t est;
   memcpy(&est, msg, len);
 
@@ -81,10 +91,37 @@ void est_state_callback(u16 sender_id, u8 len, u8 msg[], void *context)
   }
 }
 
+void m2fc_mission_callback(u16 sender_id, u8 len, u8 msg[], void *ctx)
+{
+    (void)sender_id; (void)ctx;
+    m2r_state.fc_state = msg[0];
+    if(msg[0] == 4) {
+        radio_say(drogue, sizeof(drogue));
+    } else if(msg[0] == 6) {
+        radio_say(main_chute, sizeof(main_chute));
+    }
+}
+
 void dispatch_init()
 {
-  static sbp_msg_callback_t est_state_cb;
+  static sbp_msg_callbacks_node_t est_state_cb;
+  static sbp_msg_callbacks_node_t m2fc_mission_cb;
+  m2r_state.armed = false;
+  m2r_state.hour = 0;
+  m2r_state.minute = 0;
+  m2r_state.second = 0;
+  m2r_state.gps_valid = 0;
+  m2r_state.gps_num_sats = 0;
+  m2r_state.lat = 0;
+  m2r_state.lng = 0;
+  m2r_state.gps_height = 0;
+  m2r_state.imu_height = 0.0f;
+  m2r_state.imu_max_height = 0.0f;
+  m2r_state.imu_velocity = 0.0f;
+  m2r_state.imu_max_velocity = 0.0f;
+  m2r_state.fc_state = 0;
   sbp_register_callback(&sbp_state, 0x22, &est_state_callback, 0, &est_state_cb);
+  sbp_register_callback(&sbp_state, 0x30, &m2fc_mission_callback, 0, &m2fc_mission_cb);
 }
 
 msg_t dispatch_thread(void* arg)

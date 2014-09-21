@@ -17,7 +17,7 @@
 #define BURNOUT_TIMER 5200
 
 /* Time (ms) since launch beyond which apogee has been reached */
-#define APOGEE_TIMER 45000
+#define APOGEE_TIMER 55000
 
 /* Altitude (m ASL) below which to deploy main chute */
 #define MAIN_DEPLOY_ALTITUDE 1450.0f
@@ -38,9 +38,9 @@
 #define PYRO_DROGUE_NOSE_1 TRUE
 #define PYRO_DROGUE_NOSE_2 TRUE
 #define PYRO_DROGUE_NOSE_3 TRUE
-#define PYRO_MAIN_BODY_1   TRUE
+#define PYRO_MAIN_BODY_1   FALSE
 #define PYRO_MAIN_BODY_2   FALSE
-#define PYRO_MAIN_BODY_3   FALSE
+#define PYRO_MAIN_BODY_3   TRUE
 #define PYRO_MAIN_NOSE_1   FALSE
 #define PYRO_MAIN_NOSE_2   FALSE
 #define PYRO_MAIN_NOSE_3   FALSE

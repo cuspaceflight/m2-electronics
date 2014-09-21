@@ -12,11 +12,13 @@
 #include "sbp_io.h"
 #include "ublox.h"
 #include "radio.h"
+#include "dispatch.h"
+#include "rockblock.h"
 
 static WORKING_AREA(waThreadHB, 128);
-static WORKING_AREA(waThreadUblox, 2048);
-static WORKING_AREA(waThreadRadio, 1024);
-static WORKING_AREA(waThreadSBP, 1024);
+static WORKING_AREA(waThreadUblox, 4096);
+static WORKING_AREA(waThreadRadio, 2048);
+static WORKING_AREA(waThreadSBP, 2048);
 
 static msg_t ThreadHeartbeat(void *arg) {
     (void)arg;
@@ -41,12 +43,10 @@ int main(void) {
     halInit();
     chSysInit();
     chRegSetThreadName("main");
-    sdInit();
 
+    sbp_state_init(&sbp_state);
     rockblock_init();
     dispatch_init();
-
-    rockblock_init();
 
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,
                       ThreadHeartbeat, NULL);
