@@ -97,7 +97,7 @@ CSRC = $(PORTSRC) \
 		 ../../sbp/sbp.c ../../edc.c \
        main.c ms5611.c adxl3x5.c pyro.c microsd.c m2fc_shell.c \
 	   state_estimation.c mission.c time_utils.c fault_handlers.c \
-	   config.c sbp_io.c
+	   config.c sbp_io.c hmc5883l.c l3g4200d.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -231,12 +231,14 @@ flash: build/$(PROJECT).elf
 	arm-none-eabi-gdb --batch \
 		              -ex 'target extended-remote /dev/ttyACM0' \
 					  -ex 'monitor version' \
+					  -ex 'monitor tpwr enable' \
 					  -ex 'monitor swdp_scan' \
 					  -ex 'attach 1' \
 					  -ex 'load' build/$(PROJECT).elf
 
 debug: build/$(PROJECT).elf
 	arm-none-eabi-gdb -ex 'target extended-remote /dev/ttyACM0' \
+					  -ex 'monitor tpwr enable' \
 		              -ex 'monitor swdp_scan' \
 					  -ex 'attach 1' \
 					  -ex "file build/$(PROJECT).elf"

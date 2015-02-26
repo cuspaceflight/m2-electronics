@@ -54,9 +54,9 @@ static msg_t ThreadHeartbeat(void *arg) {
         palClearPad(GPIOC, GPIOC_LED_C);
         palClearPad(GPIOC, GPIOC_LED_A);
         /* Clear watchdog timer */
-        IWDG->KR = 0xAAAA;
+        /*IWDG->KR = 0xAAAA;*/
         chThdSleepMilliseconds(490);
-        IWDG->KR = 0xAAAA;
+        /*IWDG->KR = 0xAAAA;*/
         chThdSleepMilliseconds(500);
     }
 
@@ -167,9 +167,9 @@ int main(void) {
 
 
     /* Configure and enable the watchdog timer */
-    IWDG->KR = 0x5555;
-    IWDG->PR = 3;
-    IWDG->KR = 0xCCCC;
+    /*IWDG->KR = 0x5555;*/
+    /*IWDG->PR = 3;*/
+    /*IWDG->KR = 0xCCCC;*/
 
     /* Various module initialisation */
     state_estimation_init();
@@ -185,14 +185,14 @@ int main(void) {
     chThdCreateStatic(waMission, sizeof(waMission), NORMALPRIO,
                       mission_thread, NULL);
 
-    chThdCreateStatic(waMS5611, sizeof(waMS5611), NORMALPRIO,
-                      ms5611_thread, NULL);
+    /*chThdCreateStatic(waMS5611, sizeof(waMS5611), NORMALPRIO,*/
+                      /*ms5611_thread, NULL);*/
 
-    chThdCreateStatic(waADXL345, sizeof(waADXL345), NORMALPRIO,
-                      adxl345_thread, NULL);
+    /*chThdCreateStatic(waADXL345, sizeof(waADXL345), NORMALPRIO,*/
+                      /*adxl345_thread, NULL);*/
 
-    chThdCreateStatic(waADXL375, sizeof(waADXL375), NORMALPRIO,
-                      adxl375_thread, NULL);
+    /*chThdCreateStatic(waADXL375, sizeof(waADXL375), NORMALPRIO,*/
+                      /*adxl375_thread, NULL);*/
 
     chThdCreateStatic(waPyros, sizeof(waPyros), NORMALPRIO,
                       pyro_continuity_thread, NULL);
