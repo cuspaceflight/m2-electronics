@@ -28,12 +28,6 @@
 static Thread *tpL3G4200D = NULL;
 static float counts_to_units = 1 ; /* needs to be determined */
 
-/* TODO: Validate timings against AN4235 */
-/* Magic I2C timing numbers. Computed via reference manual. */
-static const I2CConfig i2cconfig = {
-	OPMODE_I2C, 10000, STD_DUTY_CYCLE
-};
-
 /* Transmit data to sensor */
 static bool_t l3g4200d_transmit(uint8_t *buf)
 {
