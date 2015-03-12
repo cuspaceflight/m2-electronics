@@ -20,6 +20,8 @@
 #include "mission.h"
 #include "state_estimation.h"
 #include "sbp_io.h"
+#include "hmc5883l.h"
+#include "l3g4200d.h"
 
 /* Create working areas for all threads */
 static WORKING_AREA(waMS5611, 512);
@@ -29,6 +31,8 @@ static WORKING_AREA(waMission, 1024);
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waMicroSD, 512);
 static WORKING_AREA(waPyros, 128);
+static WORKING_AREA(waHMC5883L, 512);
+static WORKING_AREA(waL3G4200D, 512);
 static WORKING_AREA(waThreadSBP, 1024);
 
 /*
@@ -67,7 +71,8 @@ static msg_t ThreadHeartbeat(void *arg) {
  * Set up pin change interrupts for the various sensors that react to them.
  */
 static const EXTConfig extcfg = {{
-    {EXT_CH_MODE_DISABLED, NULL}, /* Pin 0 - PE0 is the magnetometer DRDY */
+    {EXT_CH_MODE_AUTOSTART | EXT_CH_MODE_RISING_EDGE | EXT_MODE_GPIOE,
+        hmc5883l_wakeup}, /* Pin 0 - PE0 is the magnetometer DRDY */
     {EXT_CH_MODE_DISABLED, NULL}, /* Pin 1 */
     {EXT_CH_MODE_DISABLED, NULL}, /* Pin 2 */
     {EXT_CH_MODE_DISABLED, NULL}, /* Pin 3 */
@@ -83,7 +88,8 @@ static const EXTConfig extcfg = {{
     {EXT_CH_MODE_DISABLED, NULL}, /* Pin 11 */
     {EXT_CH_MODE_DISABLED, NULL}, /* Pin 12 */
     {EXT_CH_MODE_DISABLED, NULL}, /* Pin 13 */
-    {EXT_CH_MODE_DISABLED, NULL}, /* Pin 14 */
+    {EXT_CH_MODE_AUTOSTART | EXT_CH_MODE_RISING_EDGE | EXT_MODE_GPIOE,
+        l3g4200d_wakeup}, /* Pin 14 - PE14 is the gyro DRDY */
     {EXT_CH_MODE_DISABLED, NULL}, /* Pin 15 */
     {EXT_CH_MODE_DISABLED, NULL}, /* 16 - PVD */
     {EXT_CH_MODE_DISABLED, NULL}, /* 17 - RTC Alarm */
@@ -193,6 +199,12 @@ int main(void) {
 
     /*chThdCreateStatic(waADXL375, sizeof(waADXL375), NORMALPRIO,*/
                       /*adxl375_thread, NULL);*/
+
+    chThdCreateStatic(waHMC5883L, sizeof(waHMC5883L), NORMALPRIO,
+                      hmc5883l_thread, NULL);
+                      
+    chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
+                      l3g4200d_thread,NULL);
 
     chThdCreateStatic(waPyros, sizeof(waPyros), NORMALPRIO,
                       pyro_continuity_thread, NULL);

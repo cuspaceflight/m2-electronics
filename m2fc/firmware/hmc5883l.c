@@ -11,11 +11,11 @@
 
 #include "hmc5883l.h"  
 
-#define HMC5883L_I2C_WRITE_ADDR    0x3C 
-#define HMC5883L_I2C_READ_ADDR     0x3D
+#define HMC5883L_I2C_WRITE_ADDR    0x1E 
+#define HMC5883L_I2C_READ_ADDR     0x1E
 
 static Thread *tpHMC5883L = NULL;
-static float counts_to_Tesla = 0.000000092 ;
+static float counts_to_Tesla = 9.2E-8;
 
 /* TODO: Validate timings against AN4235 */
 /* Magic I2C timing numbers. Computed via reference manual. */
@@ -68,25 +68,27 @@ static bool_t hmc5883l_receive(uint8_t *buf, uint8_t *buf_data)
 
 static bool_t hmc5883l_init(uint8_t *buf, uint8_t *buf_data)
 {
-    bool_t success;
+    bool_t success = TRUE;
   
-    /* Configure Reg A - Highest Data Rate- 75 Hz */
-    buf[0] = 0x00;
-    buf[1] = 0x18;
-    success = hmc5883l_transmit(buf) ; 
-								  
-    /* Configure Mode Register: High Speed, Continuous Measurement */
+      /* Configure Mode Register: High Speed, Continuous Measurement */
     buf[0] = 0x02;
     buf[1] = 0x00;
     success &= hmc5883l_transmit(buf) ;
-	
+    
+    /* Configure Reg A - Highest Data Rate- 75 Hz */
+    buf[0] = 0x00;
+    buf[1] = 0x18;
+    success &= hmc5883l_transmit(buf) ;
+    
+								  
+  	
     /* Wait for 20 ms whilst measurements are taken, then read them */
     chThdSleepMilliseconds(20) ;
     
     success &= hmc5883l_receive(buf, buf_data) ;
 
     return success;
-  
+    
 }
 
 /* 
@@ -154,14 +156,14 @@ msg_t hmc5883l_thread(void *arg)
      */
 
     i2cStart(&I2CD1, &i2cconfig);
+    
 
     if(!hmc5883l_init(buf, buf_data)) 
     {
         while(1) chThdSleepMilliseconds(5);
     }
     
-    i2cStart(&I2CD1, &i2cconfig);
-	
+    
     while(TRUE)
     {   
         if (hmc5883l_receive(buf, buf_data))
