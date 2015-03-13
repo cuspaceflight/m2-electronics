@@ -19,19 +19,16 @@
  * The 7 bit address of the sensor is 110100x.
  * x is determined by whether the SDO pin is
  * connected to ground or the supply.
- * Here the assumption is made that the connection
- * is to ground.
  */
-#define L3G4200D_I2C_WRITE_ADDR    0xD0 
-#define L3G4200D_I2C_READ_ADDR     0xD1
+#define L3G4200D_I2C_WRITE_ADDR    0x69 
+#define L3G4200D_I2C_READ_ADDR     0x69
 
 static Thread *tpL3G4200D = NULL;
-static float counts_to_units = 1 ; /* needs to be determined */
+static float counts_to_units = 1.0f ; /* needs to be determined */
 
-/* TODO: Validate timings against AN4235 */
-/* Magic I2C timing numbers. Computed via reference manual. */
+/* 10000 Hz might need to be changed to 100000 Hz */
 static const I2CConfig i2cconfig = {
-	OPMODE_I2C, 10000, STD_DUTY_CYCLE
+	OPMODE_I2C, 100000, STD_DUTY_CYCLE
 };
 
 /* Transmit data to sensor */
@@ -91,9 +88,14 @@ static bool_t l3g4200d_init(uint8_t *buf)
   
     /* Configure CTRL_REG1: Highest Data Rate- 800 Hz, Bandwidth- 50 (UNSURE) */
     buf[0] = 0x20;
-    buf[1] = 0xE7;
+    buf[1] = 0xFF;
     success = l3g4200d_transmit(buf) ; 
 								  
+    /* Configure CTRL_REG2: Normal mode for filter, 1 Hz for high pass filter */
+    buf[0] = 0x21;
+    buf[1] = 0x26;
+    success &= l3g4200d_transmit(buf) ; 
+    
     /* 
      * Configure CTRL_REG3:
      * This allows interrupts on DRDY/INT2
@@ -152,7 +154,7 @@ static void l3g4200d_rotation_convert(uint8_t *buf_data, float *rotation)
  	    }
 		
         temp = 0.25 * ((float)accumulator) * counts_to_units ;
- 	    rotation[i] = temp;
+ 	    rotation[(i/2)] = temp;
     }
 }
 
@@ -204,7 +206,6 @@ msg_t l3g4200d_thread(void *arg)
         while(1) chThdSleepMilliseconds(5);
     }
     
-	i2cStart(&I2CD2, &i2cconfig); /* left as I2CD2 for now. */
 	
 	while(TRUE)
 	{   
