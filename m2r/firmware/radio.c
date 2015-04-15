@@ -41,7 +41,7 @@ static void radio_generate_buffers()
 static void radio_make_telem_string(char* buf, size_t len)
 {
     chsnprintf(buf, len,
-             "AD6AM AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%d, %d) "
+             " AD6AM AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%d, %d) "
              "%dm (%dm) %dm/s (%dm/s) %u\n",
              m2r_state.hour, m2r_state.minute, m2r_state.second,
              (float)m2r_state.lat*1e-7f, (float)m2r_state.lng*1e-7f,
@@ -77,7 +77,7 @@ static void radio_fm_timer(GPTDriver *gptd)
 
             radio_fm_bitidx++;
             /* If we're now also transmitted all bits... */
-            if(radio_fm_bitidx == 10) {
+            if(radio_fm_bitidx == 11) {
                 radio_fm_bitidx = 0;
                 radio_fm_byteidx++;
                 if(radio_fm_bytebuf[radio_fm_byteidx] == 0x00) {
@@ -97,7 +97,7 @@ static void radio_fm_timer(GPTDriver *gptd)
                     /* STOPs */
                     radio_fm_bitbuf[8] = 1;
                     radio_fm_bitbuf[9] = 1;
-                    radio_fm_bitbuf[10] = 2;
+                    radio_fm_bitbuf[10] = 1;
                 }
             }
 
@@ -132,7 +132,7 @@ static void radio_fm_timer(GPTDriver *gptd)
     }
 
     /* Write next sample to the DAC */
-    DAC->DHR12R1 = (uint32_t)radio_fm_sampbuf[radio_fm_sampidx] << 4;
+    DAC->DHR8R2 = radio_fm_sampbuf[radio_fm_sampidx];
     radio_fm_sampidx++;
 
 }
@@ -193,21 +193,24 @@ msg_t radio_thread(void* arg)
 {
     chRegSetThreadName("Radio");
 
+    palSetPad(GPIOB, GPIOB_MTX2_EN);
+
     /* Compute the sine waves for AFSK */
     radio_generate_buffers();
 
-    strncpy(radio_fm_bytebuf, "AD6AM AD6AM MARTLET 2 FM INITIALISE ", 128);
+    chsnprintf(radio_fm_bytebuf, MSGLEN, "AD6AM AD6AM MARTLET 2 FM INITIALISE ");
 
-    while(!m2r_state.armed)
-        chThdSleepMilliseconds(100);
+    /* Enable DAC */
+    RCC->APB1ENR |= (1<<29);
+    DAC->CR = DAC_CR_EN2 | DAC_CR_BOFF2;
+
+    /*while(!m2r_state.armed)*/
+        /*chThdSleepMilliseconds(100);*/
 
     say_altitude(m2r_state.imu_height,
                  &radio_fm_audioqueue,
                  &radio_fm_audioqueuelens);
 
-    /* Enable DAC */
-    RCC->APB1ENR |= (1<<29);
-    DAC->CR = DAC_CR_EN1 | DAC_CR_BOFF1;
 
     /* Enable 8kHz FM Radio timer */
     gptStart(&GPTD2, &gptcfg1);

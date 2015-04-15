@@ -26,12 +26,10 @@ static msg_t ThreadHeartbeat(void *arg) {
 
     while (TRUE) {
         palSetPad(GPIOB, GPIOB_LED_STATUS);
-        //palSetPad(GPIOB, GPIOB_MTX2_EN);
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
 
         palClearPad(GPIOB, GPIOB_LED_STATUS);
-        //palClearPad(GPIOB, GPIOB_MTX2_EN);
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
     }

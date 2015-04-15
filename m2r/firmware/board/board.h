@@ -186,7 +186,7 @@
                                      PIN_MODE_ALTERNATE(GPIOA_SER_OUT)      |\
                                      PIN_MODE_ALTERNATE(GPIOA_SER_IN)       |\
                                      PIN_MODE_ANALOG(GPIOA_RADIO_EXT)       |\
-                                     PIN_MODE_INPUT(GPIOA_MTX2_TXD )        |\
+                                     PIN_MODE_OUTPUT(GPIOA_MTX2_TXD )       |\
                                      PIN_MODE_ANALOG(GPIOA_BAT_MON)         |\
                                      PIN_MODE_INPUT(GPIOA_PIN7)             |\
                                      PIN_MODE_INPUT(GPIOA_PIN8)             |\
@@ -308,7 +308,7 @@
                                      PIN_MODE_ALTERNATE(GPIOB_GPS_SDA)       |\
                                      PIN_MODE_INPUT(GPIOB_PIN8)              |\
                                      PIN_MODE_INPUT(GPIOB_PIN9)              |\
-                                     PIN_MODE_INPUT(GPIOB_MTX2_EN)           |\
+                                     PIN_MODE_OUTPUT(GPIOB_MTX2_EN)          |\
                                      PIN_MODE_INPUT(GPIOB_MTX2_TXD_ALT)      |\
                                      PIN_MODE_OUTPUT(GPIOB_LED_RB)           |\
                                      PIN_MODE_OUTPUT(GPIOB_LED_RADIO)        |\
@@ -372,7 +372,7 @@
                                      PIN_ODR_HIGH(GPIOB_GPS_SDA)             |\
                                      PIN_ODR_HIGH(GPIOB_PIN8)                |\
                                      PIN_ODR_HIGH(GPIOB_PIN9)                |\
-                                     PIN_ODR_HIGH(GPIOB_MTX2_EN)             |\
+                                     PIN_ODR_LOW(GPIOB_MTX2_EN)              |\
                                      PIN_ODR_HIGH(GPIOB_MTX2_TXD_ALT)        |\
                                      PIN_ODR_LOW(GPIOB_LED_RB)               |\
                                      PIN_ODR_LOW(GPIOB_LED_RADIO)            |\
