@@ -1,4 +1,4 @@
-update=Thu 21 May 2015 00:28:49 BST
+update=Thu 21 May 2015 00:48:46 BST
 version=1
 last_client=kicad
 [cvpcb]
@@ -8,26 +8,6 @@ NetIExt=net
 EquName1=devcms
 [general]
 version=1
-[pcbnew]
-version=1
-PageLayoutDescrFile=
-LastNetListRead=
-UseCmpFile=1
-PadDrill=1
-PadDrillOvalY=1
-PadSizeH=1.7
-PadSizeV=1.7
-PcbTextSizeV=1.5
-PcbTextSizeH=1.5
-PcbTextThickness=0.3
-ModuleTextSizeV=1
-ModuleTextSizeH=1
-ModuleTextSizeThickness=0.15
-SolderMaskClearance=0
-SolderMaskMinWidth=0
-DrawSegmentWidth=0.2
-BoardOutlineThickness=0.09999999999999999
-ModuleOutlineThickness=0.15
 [eeschema]
 version=1
 LibDir=
@@ -74,3 +54,24 @@ LibName39=mtx2
 LibName40=ms5611-01ba03
 LibName41=adp3335
 LibName42=cga0402mlc-12g
+LibName43=mosfet_passive
+[pcbnew]
+version=1
+PageLayoutDescrFile=
+LastNetListRead=m2r.net
+UseCmpFile=0
+PadDrill=1
+PadDrillOvalY=1
+PadSizeH=1.7
+PadSizeV=1.7
+PcbTextSizeV=1.5
+PcbTextSizeH=1.5
+PcbTextThickness=0.3
+ModuleTextSizeV=1
+ModuleTextSizeH=1
+ModuleTextSizeThickness=0.15
+SolderMaskClearance=0
+SolderMaskMinWidth=0
+DrawSegmentWidth=0.2
+BoardOutlineThickness=0.09999999999999999
+ModuleOutlineThickness=0.15
