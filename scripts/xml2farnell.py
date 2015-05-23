@@ -20,6 +20,8 @@ for comp in root.iter('comp'):
     ref = comp.get('ref')
     val = comp.findtext('value')
     footprint = comp.findtext('footprint')
+    if footprint:
+        footprint = footprint.split(":")[-1]
     fields = comp.find('fields')
     found_farnell = False
     if not fields:
@@ -44,11 +46,18 @@ for comp in root.iter('comp'):
             nofarnell.append(ref)
 
 with open(sys.argv[2], 'w') as f:
+    f.write("Farnell quickpaste format:\n\n")
     for part in part_qtys:
-        f.write("{}, {}, {} {}{}\n".format(part, part_qtys[part],
-                                           part_desc[part][0],
-                                           part_desc[part][1],
-                                           part_refs[part]))
-    f.write("\n\n\nNo Farnell codes:\n")
-    f.write(', '.join(nofarnell))
-    f.write("\n")
+        line_note = "{}x {} {}".format(part_qtys[part], part_desc[part][0],
+                                       part_desc[part][1])[:30]
+        f.write("{},{},{}\n".format(part, part_qtys[part], line_note))
+    f.write("\n\n\nWith component refs:\n\n")
+    for part in part_qtys:
+        f.write("{}, {}, {} {} {}\n".format(part, part_qtys[part],
+                                            part_desc[part][0],
+                                            part_desc[part][1],
+                                            part_refs[part]))
+    if nofarnell:
+        f.write("\n\n\nNo Farnell codes:\n")
+        f.write(', '.join(nofarnell))
+        f.write("\n")
