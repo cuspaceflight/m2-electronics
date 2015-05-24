@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name m2pa)(type KiCad)(uri "$(KIPRJMOD)/m2pa.pretty")(options "")(descr ""))
+)

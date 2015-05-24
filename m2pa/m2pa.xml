@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>/home/adam/Projects/m2-electronics/m2pa/m2pa.sch</source>
+    <date>Sat 23 May 2015 14:16:08 BST</date>
+    <tool>Eeschema 0.201505031001+5637~23~ubuntu14.04.1-product</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Martlet 2 RF PA</title>
+        <company>Cambridge University Spaceflight</company>
+        <rev>1</rev>
+        <date>Wed 20 May 2015</date>
+        <source>m2pa.sch</source>
+        <comment number="1" value="Drawn By: Adam Greig"/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="IC1">
+      <value>ADL5324</value>
+      <footprint>m2pa:SOT89-3</footprint>
+      <fields>
+        <field name="Farnell">2099794</field>
+      </fields>
+      <libsource lib="adl5324" part="ADL5324"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>53792B5C</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>10p</value>
+      <footprint>m2pa:C0402</footprint>
+      <fields>
+        <field name="Farnell">1327593</field>
+        <field name="Alt Farnell">1885332</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537B564F</tstamp>
+    </comp>
+    <comp ref="C2">
+      <value>20p</value>
+      <footprint>m2pa:C0402</footprint>
+      <fields>
+        <field name="Farnell">1885343</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537B56E0</tstamp>
+    </comp>
+    <comp ref="C5">
+      <value>6p2</value>
+      <footprint>m2pa:C0402</footprint>
+      <fields>
+        <field name="Farnell">1885324</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537B5A1A</tstamp>
+    </comp>
+    <comp ref="C7">
+      <value>20p</value>
+      <footprint>m2pa:C0402</footprint>
+      <fields>
+        <field name="Farnell">1885343</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537B5AA3</tstamp>
+    </comp>
+    <comp ref="C3">
+      <value>100p</value>
+      <footprint>m2pa:C0402</footprint>
+      <fields>
+        <field name="Farnell">1327627</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537B5BFF</tstamp>
+    </comp>
+    <comp ref="C4">
+      <value>10n</value>
+      <footprint>m2pa:C0603</footprint>
+      <fields>
+        <field name="Farnell">2112704</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537B5C80</tstamp>
+    </comp>
+    <comp ref="P3">
+      <value>SMA</value>
+      <footprint>m2pa:SMA-142-0701-801</footprint>
+      <fields>
+        <field name="Farnell">1608592</field>
+      </fields>
+      <libsource lib="sma" part="SMA"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537B7B92</tstamp>
+    </comp>
+    <comp ref="C6">
+      <value>10µ</value>
+      <footprint>m2pa:C1206</footprint>
+      <fields>
+        <field name="Farnell">2211068</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537BBE5B</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>2</value>
+      <footprint>m2pa:R0402</footprint>
+      <fields>
+        <field name="Farnell">2141424</field>
+      </fields>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537BE047</tstamp>
+    </comp>
+    <comp ref="L1">
+      <value>1n6</value>
+      <footprint>m2pa:L0603</footprint>
+      <fields>
+        <field name="Farnell">2285968</field>
+      </fields>
+      <libsource lib="device" part="INDUCTOR_SMALL"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537BE636</tstamp>
+    </comp>
+    <comp ref="L2">
+      <value>120n</value>
+      <footprint>m2pa:L0603</footprint>
+      <fields>
+        <field name="Farnell">2285957</field>
+      </fields>
+      <libsource lib="device" part="INDUCTOR_SMALL"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537BE815</tstamp>
+    </comp>
+    <comp ref="L3">
+      <value>5n6</value>
+      <footprint>m2pa:L0402</footprint>
+      <fields>
+        <field name="Farnell">2285660</field>
+      </fields>
+      <libsource lib="device" part="INDUCTOR_SMALL"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>537BEED9</tstamp>
+    </comp>
+    <comp ref="D2">
+      <value>CGA0402MLC-12G</value>
+      <footprint>m2pa:R0402</footprint>
+      <fields>
+        <field name="Farnell">2368169</field>
+      </fields>
+      <libsource lib="cga0402mlc-12g" part="CGA0402MLC-12G"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>53D02CEB</tstamp>
+    </comp>
+    <comp ref="P2">
+      <value>SMA</value>
+      <footprint>m2pa:SMA-142-0701-801</footprint>
+      <fields>
+        <field name="Farnell">1608592</field>
+      </fields>
+      <libsource lib="sma" part="SMA"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>555D1B9C</tstamp>
+    </comp>
+    <comp ref="D1">
+      <value>CGA0402MLC-12G</value>
+      <footprint>m2pa:R0402</footprint>
+      <fields>
+        <field name="Farnell">2368169</field>
+      </fields>
+      <libsource lib="cga0402mlc-12g" part="CGA0402MLC-12G"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55607F4A</tstamp>
+    </comp>
+    <comp ref="P1">
+      <value>CONN_01X02</value>
+      <footprint>m2pa:S02B-PASK-2</footprint>
+      <fields>
+        <field name="Farnell">1830747</field>
+      </fields>
+      <libsource lib="conn" part="CONN_01X02"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55608520</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="device" part="C">
+      <description>Unpolarized capacitor</description>
+      <footprints>
+        <fp>C?</fp>
+        <fp>C_????_*</fp>
+        <fp>C_????</fp>
+        <fp>SMD*_c</fp>
+        <fp>Capacitor*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="cga0402mlc-12g" part="CGA0402MLC-12G">
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">CGA0402MLC-12G</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="sma" part="SMA">
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">SMA</field>
+      </fields>
+      <pins>
+        <pin num="1" name="RF" type="BiDi"/>
+        <pin num="2" name="GND" type="power_in"/>
+        <pin num="3" name="GND" type="power_in"/>
+        <pin num="4" name="GND" type="power_in"/>
+        <pin num="5" name="GND" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="adl5324" part="ADL5324">
+      <fields>
+        <field name="Reference">IC</field>
+        <field name="Value">ADL5324</field>
+      </fields>
+      <pins>
+        <pin num="1" name="RFIN" type="input"/>
+        <pin num="2" name="GND" type="power_in"/>
+        <pin num="3" name="RFOUT" type="output"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_01X02">
+      <footprints>
+        <fp>Pin_Header_Straight_1X02</fp>
+        <fp>Pin_Header_Angled_1X02</fp>
+        <fp>Socket_Strip_Straight_1X02</fp>
+        <fp>Socket_Strip_Angled_1X02</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">CONN_01X02</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="INDUCTOR_SMALL">
+      <fields>
+        <field name="Reference">L</field>
+        <field name="Value">INDUCTOR_SMALL</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="input"/>
+        <pin num="2" name="2" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+        <fp>Resistor_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="sma">
+      <uri>/home/adam/Projects/m2-electronics/m2pa/sma.lib</uri>
+    </library>
+    <library logical="cga0402mlc-12g">
+      <uri>/home/adam/Projects/m2-electronics/m2pa/cga0402mlc-12g.lib</uri>
+    </library>
+    <library logical="adl5324">
+      <uri>/home/adam/Projects/m2-electronics/m2pa/adl5324.lib</uri>
+    </library>
+    <library logical="device">
+      <uri>/usr/share/kicad/library/device.lib</uri>
+    </library>
+    <library logical="conn">
+      <uri>/usr/share/kicad/library/conn.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(C7-Pad2)">
+      <node ref="D2" pin="1"/>
+      <node ref="P3" pin="1"/>
+      <node ref="C7" pin="2"/>
+    </net>
+    <net code="2" name="Net-(C5-Pad2)">
+      <node ref="L3" pin="1"/>
+      <node ref="C5" pin="2"/>
+      <node ref="C7" pin="1"/>
+    </net>
+    <net code="3" name="Net-(IC1-Pad3)">
+      <node ref="IC1" pin="3"/>
+      <node ref="L3" pin="2"/>
+      <node ref="L2" pin="1"/>
+    </net>
+    <net code="4" name="+5V">
+      <node ref="C3" pin="1"/>
+      <node ref="C4" pin="1"/>
+      <node ref="C6" pin="1"/>
+      <node ref="P1" pin="2"/>
+      <node ref="L2" pin="2"/>
+    </net>
+    <net code="5" name="GND">
+      <node ref="C4" pin="2"/>
+      <node ref="C3" pin="2"/>
+      <node ref="P3" pin="4"/>
+      <node ref="P3" pin="2"/>
+      <node ref="P3" pin="3"/>
+      <node ref="C5" pin="1"/>
+      <node ref="C2" pin="1"/>
+      <node ref="IC1" pin="2"/>
+      <node ref="C6" pin="2"/>
+      <node ref="P1" pin="1"/>
+      <node ref="D1" pin="2"/>
+      <node ref="P2" pin="5"/>
+      <node ref="P2" pin="4"/>
+      <node ref="P2" pin="3"/>
+      <node ref="P2" pin="2"/>
+      <node ref="D2" pin="2"/>
+      <node ref="P3" pin="5"/>
+    </net>
+    <net code="6" name="Net-(IC1-Pad1)">
+      <node ref="R1" pin="1"/>
+      <node ref="IC1" pin="1"/>
+    </net>
+    <net code="7" name="Net-(C1-Pad2)">
+      <node ref="P2" pin="1"/>
+      <node ref="D1" pin="1"/>
+      <node ref="C1" pin="2"/>
+    </net>
+    <net code="8" name="Net-(L1-Pad1)">
+      <node ref="L1" pin="1"/>
+      <node ref="R1" pin="2"/>
+    </net>
+    <net code="9" name="Net-(C1-Pad1)">
+      <node ref="C2" pin="2"/>
+      <node ref="L1" pin="2"/>
+      <node ref="C1" pin="1"/>
+    </net>
+  </nets>
+</export>
