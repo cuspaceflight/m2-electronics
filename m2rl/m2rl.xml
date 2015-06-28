@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>/home/adam/Projects/m2-electronics/m2rl/m2rl.sch</source>
+    <date>Sun 28 Jun 2015 20:49:31 BST</date>
+    <tool>Eeschema 0.201505031001+5637~23~ubuntu14.04.1-product</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Martlet 2 Radio Link</title>
+        <company>CU Spaceflight</company>
+        <rev>1</rev>
+        <date>Sun 28 Jun 2015</date>
+        <source>m2rl.sch</source>
+        <comment number="1" value="Drawn By: Adam Greig"/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="U1">
+      <value>XBEE</value>
+      <fields>
+        <field name="Farnell">1109732</field>
+      </fields>
+      <libsource lib="xbee" part="XBEE"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55901854</tstamp>
+    </comp>
+    <comp ref="P2">
+      <value>CONN_01X04</value>
+      <footprint>m2rl:S04B-PASK-2</footprint>
+      <fields>
+        <field name="Farnell">1830749</field>
+      </fields>
+      <libsource lib="conn" part="CONN_01X04"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>559018B4</tstamp>
+    </comp>
+    <comp ref="P1">
+      <value>CONN_01X02</value>
+      <footprint>m2rl:S02B-PASK-2</footprint>
+      <fields>
+        <field name="Farnell">1830747</field>
+      </fields>
+      <libsource lib="conn" part="CONN_01X02"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55901AFC</tstamp>
+    </comp>
+    <comp ref="IC1">
+      <value>ADuM5201</value>
+      <footprint>m2rl:SOIC16W</footprint>
+      <fields>
+        <field name="Farnell">2067773</field>
+      </fields>
+      <libsource lib="adum5201" part="ADuM5201"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55901B4B</tstamp>
+    </comp>
+    <comp ref="D4">
+      <value>GRN</value>
+      <footprint>m2rl:LED0603</footprint>
+      <fields>
+        <field name="Farnell">2290328</field>
+      </fields>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55901CDA</tstamp>
+    </comp>
+    <comp ref="IC2">
+      <value>ADP3335</value>
+      <footprint>m2rl:MSOP8</footprint>
+      <fields>
+        <field name="Farnell">2067775</field>
+      </fields>
+      <libsource lib="adp3335" part="ADP3335"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55901D0C</tstamp>
+    </comp>
+    <comp ref="C4">
+      <value>2µ2</value>
+      <footprint>m2rl:C0603</footprint>
+      <fields>
+        <field name="Farnell">2320817</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55901D7D</tstamp>
+    </comp>
+    <comp ref="R3">
+      <value>100</value>
+      <footprint>m2rl:R0603</footprint>
+      <fields>
+        <field name="Farnell">2331989</field>
+      </fields>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55901F4E</tstamp>
+    </comp>
+    <comp ref="D2">
+      <value>CGA0402MLC-12G</value>
+      <footprint>m2rl:R0402</footprint>
+      <fields>
+        <field name="Farnell">2368169</field>
+      </fields>
+      <libsource lib="cga0402mlc-12g" part="CGA0402MLC-12G"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55902323</tstamp>
+    </comp>
+    <comp ref="C3">
+      <value>100n</value>
+      <footprint>m2rl:C0603</footprint>
+      <fields>
+        <field name="Farnell">1759037</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55902587</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>10µ</value>
+      <footprint>m2rl:C0603</footprint>
+      <fields>
+        <field name="Farnell">2211164</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>559026E1</tstamp>
+    </comp>
+    <comp ref="C5">
+      <value>100n</value>
+      <footprint>m2rl:C0603</footprint>
+      <fields>
+        <field name="Farnell">1759037</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5590281A</tstamp>
+    </comp>
+    <comp ref="C7">
+      <value>10µ</value>
+      <footprint>m2rl:C0603</footprint>
+      <fields>
+        <field name="Farnell">2211164</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55902B88</tstamp>
+    </comp>
+    <comp ref="C2">
+      <value>100n</value>
+      <footprint>m2rl:C0603</footprint>
+      <fields>
+        <field name="Farnell">1759037</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55902C3F</tstamp>
+    </comp>
+    <comp ref="C6">
+      <value>1n</value>
+      <footprint>m2rl:C0603</footprint>
+      <fields>
+        <field name="Farnell">1414605</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55902D12</tstamp>
+    </comp>
+    <comp ref="C8">
+      <value>2µ2</value>
+      <footprint>m2rl:C0603</footprint>
+      <fields>
+        <field name="Farnell">2320817</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55902DC8</tstamp>
+    </comp>
+    <comp ref="C9">
+      <value>10µ</value>
+      <footprint>m2rl:C0603</footprint>
+      <fields>
+        <field name="Farnell">2211164</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55902E56</tstamp>
+    </comp>
+    <comp ref="TP2">
+      <value>TESTPAD</value>
+      <libsource lib="testpad" part="TESTPAD"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>559034E3</tstamp>
+    </comp>
+    <comp ref="TP1">
+      <value>TESTPAD</value>
+      <libsource lib="testpad" part="TESTPAD"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>559035C9</tstamp>
+    </comp>
+    <comp ref="D1">
+      <value>YELLOW</value>
+      <footprint>m2rl:LED0603</footprint>
+      <fields>
+        <field name="Farnell">2290330</field>
+      </fields>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55908791</tstamp>
+    </comp>
+    <comp ref="D3">
+      <value>GRN</value>
+      <footprint>m2rl:LED0603</footprint>
+      <fields>
+        <field name="Farnell">2290328</field>
+      </fields>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55908E09</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>100</value>
+      <footprint>m2rl:R0603</footprint>
+      <fields>
+        <field name="Farnell">2331989</field>
+      </fields>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55908FB8</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>100</value>
+      <footprint>m2rl:R0603</footprint>
+      <fields>
+        <field name="Farnell">2331989</field>
+      </fields>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>559090BD</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="adum5201" part="ADuM5201">
+      <fields>
+        <field name="Reference">IC</field>
+        <field name="Value">ADuM5201</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VDD1" type="power_in"/>
+        <pin num="2" name="GND1" type="power_in"/>
+        <pin num="3" name="IN_A" type="input"/>
+        <pin num="4" name="OUT_B" type="output"/>
+        <pin num="5" name="RCIN" type="input"/>
+        <pin num="6" name="RCSEL" type="input"/>
+        <pin num="7" name="VE1" type="input"/>
+        <pin num="8" name="GND1" type="power_in"/>
+        <pin num="9" name="GNDISO" type="passive"/>
+        <pin num="10" name="VE2" type="input"/>
+        <pin num="11" name="VSEL" type="input"/>
+        <pin num="12" name="NC" type="NotConnected"/>
+        <pin num="13" name="IN_B" type="input"/>
+        <pin num="14" name="OUT_A" type="output"/>
+        <pin num="15" name="GNDISO" type="power_out"/>
+        <pin num="16" name="VISO" type="power_out"/>
+      </pins>
+    </libpart>
+    <libpart lib="xbee" part="XBEE">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">XBEE</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VCC" type="power_in"/>
+        <pin num="2" name="DOUT" type="output"/>
+        <pin num="3" name="DIN" type="input"/>
+        <pin num="4" name="DIO12" type="BiDi"/>
+        <pin num="5" name="~RESET" type="input"/>
+        <pin num="6" name="RSSI" type="output"/>
+        <pin num="7" name="DIO11" type="BiDi"/>
+        <pin num="8" name="NC" type="NotConnected"/>
+        <pin num="9" name="~DTR" type="input"/>
+        <pin num="10" name="GND" type="power_in"/>
+        <pin num="11" name="DIO4" type="BiDi"/>
+        <pin num="12" name="~CTS" type="output"/>
+        <pin num="13" name="ON" type="output"/>
+        <pin num="14" name="VREF" type="input"/>
+        <pin num="15" name="ASSC/DIO5" type="output"/>
+        <pin num="16" name="~RTS" type="input"/>
+        <pin num="17" name="AD3/DIO3" type="BiDi"/>
+        <pin num="18" name="AD2/DIO2" type="BiDi"/>
+        <pin num="19" name="AD1/DIO1" type="BiDi"/>
+        <pin num="20" name="AD0/DIO0" type="BiDi"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="C">
+      <description>Unpolarized capacitor</description>
+      <footprints>
+        <fp>C?</fp>
+        <fp>C_????_*</fp>
+        <fp>C_????</fp>
+        <fp>SMD*_c</fp>
+        <fp>Capacitor*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+        <fp>Resistor_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="LED">
+      <footprints>
+        <fp>LED-3MM</fp>
+        <fp>LED-5MM</fp>
+        <fp>LED-10MM</fp>
+        <fp>LED-0603</fp>
+        <fp>LED-0805</fp>
+        <fp>LED-1206</fp>
+        <fp>LEDV</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">LED</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_01X02">
+      <footprints>
+        <fp>Pin_Header_Straight_1X02</fp>
+        <fp>Pin_Header_Angled_1X02</fp>
+        <fp>Socket_Strip_Straight_1X02</fp>
+        <fp>Socket_Strip_Angled_1X02</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">CONN_01X02</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_01X04">
+      <footprints>
+        <fp>Pin_Header_Straight_1X04</fp>
+        <fp>Pin_Header_Angled_1X04</fp>
+        <fp>Socket_Strip_Straight_1X04</fp>
+        <fp>Socket_Strip_Angled_1X04</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">CONN_01X04</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+        <pin num="3" name="P3" type="passive"/>
+        <pin num="4" name="P4" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="adp3335" part="ADP3335">
+      <fields>
+        <field name="Reference">IC</field>
+        <field name="Value">ADP3335</field>
+      </fields>
+      <pins>
+        <pin num="1" name="OUT" type="power_out"/>
+        <pin num="2" name="OUT" type="passive"/>
+        <pin num="3" name="OUT" type="passive"/>
+        <pin num="4" name="GND" type="power_in"/>
+        <pin num="5" name="NR" type="power_out"/>
+        <pin num="6" name="SD" type="input"/>
+        <pin num="7" name="IN" type="power_in"/>
+        <pin num="8" name="IN" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="cga0402mlc-12g" part="CGA0402MLC-12G">
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">CGA0402MLC-12G</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="testpad" part="TESTPAD">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">TESTPAD</field>
+      </fields>
+      <pins>
+        <pin num="1" name="TP" type="input"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="adp3335">
+      <uri>/home/adam/Projects/m2-electronics/m2rl/adp3335.lib</uri>
+    </library>
+    <library logical="adum5201">
+      <uri>/home/adam/Projects/m2-electronics/m2rl/adum5201.lib</uri>
+    </library>
+    <library logical="xbee">
+      <uri>/home/adam/Projects/m2-electronics/m2rl/xbee.lib</uri>
+    </library>
+    <library logical="conn">
+      <uri>/usr/share/kicad/library/conn.lib</uri>
+    </library>
+    <library logical="device">
+      <uri>/usr/share/kicad/library/device.lib</uri>
+    </library>
+    <library logical="cga0402mlc-12g">
+      <uri>/home/adam/Projects/m2-electronics/m2rl/cga0402mlc-12g.lib</uri>
+    </library>
+    <library logical="testpad">
+      <uri>/home/adam/Projects/m2-electronics/m2rl/testpad.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(C6-Pad2)">
+      <node ref="IC2" pin="5"/>
+      <node ref="C6" pin="2"/>
+    </net>
+    <net code="2" name="Net-(D4-Pad2)">
+      <node ref="D4" pin="2"/>
+      <node ref="R3" pin="2"/>
+    </net>
+    <net code="3" name="/DOUT">
+      <node ref="U1" pin="2"/>
+      <node ref="IC1" pin="3"/>
+    </net>
+    <net code="4" name="/DIN">
+      <node ref="U1" pin="3"/>
+      <node ref="IC1" pin="4"/>
+    </net>
+    <net code="5" name="Net-(R2-Pad2)">
+      <node ref="U1" pin="15"/>
+      <node ref="R2" pin="2"/>
+    </net>
+    <net code="6" name="Net-(D3-Pad2)">
+      <node ref="R2" pin="1"/>
+      <node ref="D3" pin="2"/>
+    </net>
+    <net code="7" name="Net-(IC1-Pad13)">
+      <node ref="IC1" pin="13"/>
+      <node ref="P2" pin="2"/>
+    </net>
+    <net code="8" name="Net-(IC1-Pad14)">
+      <node ref="P2" pin="3"/>
+      <node ref="IC1" pin="14"/>
+    </net>
+    <net code="9" name="Net-(U1-Pad16)">
+      <node ref="U1" pin="16"/>
+    </net>
+    <net code="10" name="Net-(U1-Pad9)">
+      <node ref="U1" pin="9"/>
+    </net>
+    <net code="11" name="Net-(U1-Pad12)">
+      <node ref="U1" pin="12"/>
+    </net>
+    <net code="12" name="Net-(U1-Pad13)">
+      <node ref="U1" pin="13"/>
+    </net>
+    <net code="13" name="Net-(D1-Pad2)">
+      <node ref="D1" pin="2"/>
+      <node ref="R1" pin="2"/>
+    </net>
+    <net code="14" name="Net-(R1-Pad1)">
+      <node ref="R1" pin="1"/>
+      <node ref="U1" pin="6"/>
+    </net>
+    <net code="15" name="GND">
+      <node ref="IC1" pin="8"/>
+      <node ref="IC1" pin="5"/>
+      <node ref="C1" pin="2"/>
+      <node ref="C2" pin="2"/>
+      <node ref="C8" pin="2"/>
+      <node ref="C9" pin="2"/>
+      <node ref="TP2" pin="1"/>
+      <node ref="D2" pin="2"/>
+      <node ref="IC1" pin="2"/>
+      <node ref="U1" pin="14"/>
+      <node ref="U1" pin="10"/>
+      <node ref="C3" pin="2"/>
+      <node ref="C4" pin="2"/>
+      <node ref="IC2" pin="4"/>
+      <node ref="D4" pin="1"/>
+      <node ref="P1" pin="1"/>
+      <node ref="D3" pin="1"/>
+      <node ref="D1" pin="1"/>
+    </net>
+    <net code="16" name="+3V3">
+      <node ref="C9" pin="1"/>
+      <node ref="IC1" pin="1"/>
+      <node ref="C1" pin="1"/>
+      <node ref="C3" pin="1"/>
+      <node ref="C6" pin="1"/>
+      <node ref="U1" pin="1"/>
+      <node ref="C8" pin="1"/>
+      <node ref="C2" pin="1"/>
+      <node ref="IC2" pin="3"/>
+      <node ref="IC2" pin="2"/>
+      <node ref="IC1" pin="7"/>
+      <node ref="IC1" pin="6"/>
+      <node ref="IC2" pin="1"/>
+      <node ref="R3" pin="1"/>
+    </net>
+    <net code="17" name="Net-(IC1-Pad12)">
+      <node ref="IC1" pin="12"/>
+    </net>
+    <net code="18" name="Net-(U1-Pad4)">
+      <node ref="U1" pin="4"/>
+    </net>
+    <net code="19" name="Net-(U1-Pad5)">
+      <node ref="U1" pin="5"/>
+    </net>
+    <net code="20" name="Net-(U1-Pad7)">
+      <node ref="U1" pin="7"/>
+    </net>
+    <net code="21" name="Net-(U1-Pad8)">
+      <node ref="U1" pin="8"/>
+    </net>
+    <net code="22" name="Net-(U1-Pad20)">
+      <node ref="U1" pin="20"/>
+    </net>
+    <net code="23" name="Net-(U1-Pad11)">
+      <node ref="U1" pin="11"/>
+    </net>
+    <net code="24" name="Net-(U1-Pad17)">
+      <node ref="U1" pin="17"/>
+    </net>
+    <net code="25" name="Net-(U1-Pad18)">
+      <node ref="U1" pin="18"/>
+    </net>
+    <net code="26" name="Net-(U1-Pad19)">
+      <node ref="U1" pin="19"/>
+    </net>
+    <net code="27" name="Net-(C5-Pad1)">
+      <node ref="P2" pin="4"/>
+      <node ref="C7" pin="1"/>
+      <node ref="IC1" pin="10"/>
+      <node ref="IC1" pin="16"/>
+      <node ref="C5" pin="1"/>
+    </net>
+    <net code="28" name="Net-(C5-Pad2)">
+      <node ref="IC1" pin="11"/>
+      <node ref="C5" pin="2"/>
+      <node ref="P2" pin="1"/>
+      <node ref="IC1" pin="9"/>
+      <node ref="C7" pin="2"/>
+      <node ref="IC1" pin="15"/>
+    </net>
+    <net code="29" name="Net-(C4-Pad1)">
+      <node ref="TP1" pin="1"/>
+      <node ref="D2" pin="1"/>
+      <node ref="C4" pin="1"/>
+      <node ref="IC2" pin="8"/>
+      <node ref="IC2" pin="7"/>
+      <node ref="P1" pin="2"/>
+      <node ref="IC2" pin="6"/>
+    </net>
+  </nets>
+</export>
