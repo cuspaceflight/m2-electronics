@@ -2,8 +2,8 @@
 <export version="D">
   <design>
     <source>/home/adam/Projects/m2-electronics/m2pa/m2pa.sch</source>
-    <date>Sat 23 May 2015 14:16:08 BST</date>
-    <tool>Eeschema 0.201505031001+5637~23~ubuntu14.04.1-product</tool>
+    <date>Tue 07 Jul 2015 20:35:01 BST</date>
+    <tool>Eeschema 0.201506302251+5848~23~ubuntu14.04.1-product</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
         <title>Martlet 2 RF PA</title>
@@ -190,26 +190,18 @@
       <sheetpath names="/" tstamps="/"/>
       <tstamp>55608520</tstamp>
     </comp>
+    <comp ref="D3">
+      <value>CGA0402MLC-12G</value>
+      <footprint>m2pa:R0402</footprint>
+      <fields>
+        <field name="Farnell">2368169</field>
+      </fields>
+      <libsource lib="cga0402mlc-12g" part="CGA0402MLC-12G"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55608B21</tstamp>
+    </comp>
   </components>
   <libparts>
-    <libpart lib="device" part="C">
-      <description>Unpolarized capacitor</description>
-      <footprints>
-        <fp>C?</fp>
-        <fp>C_????_*</fp>
-        <fp>C_????</fp>
-        <fp>SMD*_c</fp>
-        <fp>Capacitor*</fp>
-      </footprints>
-      <fields>
-        <field name="Reference">C</field>
-        <field name="Value">C</field>
-      </fields>
-      <pins>
-        <pin num="1" name="~" type="passive"/>
-        <pin num="2" name="~" type="passive"/>
-      </pins>
-    </libpart>
     <libpart lib="cga0402mlc-12g" part="CGA0402MLC-12G">
       <fields>
         <field name="Reference">D</field>
@@ -285,6 +277,24 @@
         <pin num="2" name="~" type="passive"/>
       </pins>
     </libpart>
+    <libpart lib="device" part="C">
+      <description>Unpolarized capacitor</description>
+      <footprints>
+        <fp>C?</fp>
+        <fp>C_????_*</fp>
+        <fp>C_????</fp>
+        <fp>SMD*_c</fp>
+        <fp>Capacitor*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
   </libparts>
   <libraries>
     <library logical="sma">
@@ -296,11 +306,11 @@
     <library logical="adl5324">
       <uri>/home/adam/Projects/m2-electronics/m2pa/adl5324.lib</uri>
     </library>
-    <library logical="device">
-      <uri>/usr/share/kicad/library/device.lib</uri>
-    </library>
     <library logical="conn">
       <uri>/usr/share/kicad/library/conn.lib</uri>
+    </library>
+    <library logical="device">
+      <uri>/usr/share/kicad/library/device.lib</uri>
     </library>
   </libraries>
   <nets>
@@ -309,59 +319,61 @@
       <node ref="P3" pin="1"/>
       <node ref="C7" pin="2"/>
     </net>
-    <net code="2" name="Net-(C5-Pad2)">
-      <node ref="L3" pin="1"/>
-      <node ref="C5" pin="2"/>
-      <node ref="C7" pin="1"/>
-    </net>
-    <net code="3" name="Net-(IC1-Pad3)">
-      <node ref="IC1" pin="3"/>
-      <node ref="L3" pin="2"/>
-      <node ref="L2" pin="1"/>
-    </net>
-    <net code="4" name="+5V">
-      <node ref="C3" pin="1"/>
-      <node ref="C4" pin="1"/>
-      <node ref="C6" pin="1"/>
-      <node ref="P1" pin="2"/>
-      <node ref="L2" pin="2"/>
-    </net>
-    <net code="5" name="GND">
-      <node ref="C4" pin="2"/>
-      <node ref="C3" pin="2"/>
-      <node ref="P3" pin="4"/>
+    <net code="2" name="GND">
       <node ref="P3" pin="2"/>
       <node ref="P3" pin="3"/>
-      <node ref="C5" pin="1"/>
-      <node ref="C2" pin="1"/>
-      <node ref="IC1" pin="2"/>
+      <node ref="P3" pin="5"/>
       <node ref="C6" pin="2"/>
+      <node ref="C5" pin="1"/>
+      <node ref="P3" pin="4"/>
+      <node ref="P2" pin="4"/>
       <node ref="P1" pin="1"/>
+      <node ref="IC1" pin="2"/>
+      <node ref="C4" pin="2"/>
+      <node ref="C3" pin="2"/>
+      <node ref="C2" pin="1"/>
       <node ref="D1" pin="2"/>
       <node ref="P2" pin="5"/>
-      <node ref="P2" pin="4"/>
       <node ref="P2" pin="3"/>
       <node ref="P2" pin="2"/>
       <node ref="D2" pin="2"/>
-      <node ref="P3" pin="5"/>
+      <node ref="D3" pin="2"/>
     </net>
-    <net code="6" name="Net-(IC1-Pad1)">
-      <node ref="R1" pin="1"/>
-      <node ref="IC1" pin="1"/>
+    <net code="3" name="Net-(C5-Pad2)">
+      <node ref="C7" pin="1"/>
+      <node ref="C5" pin="2"/>
+      <node ref="L3" pin="1"/>
     </net>
-    <net code="7" name="Net-(C1-Pad2)">
+    <net code="4" name="+5V">
+      <node ref="L2" pin="2"/>
+      <node ref="D3" pin="1"/>
+      <node ref="C6" pin="1"/>
+      <node ref="P1" pin="2"/>
+      <node ref="C4" pin="1"/>
+      <node ref="C3" pin="1"/>
+    </net>
+    <net code="5" name="Net-(IC1-Pad3)">
+      <node ref="L3" pin="2"/>
+      <node ref="IC1" pin="3"/>
+      <node ref="L2" pin="1"/>
+    </net>
+    <net code="6" name="Net-(C1-Pad2)">
+      <node ref="C1" pin="2"/>
       <node ref="P2" pin="1"/>
       <node ref="D1" pin="1"/>
-      <node ref="C1" pin="2"/>
     </net>
-    <net code="8" name="Net-(L1-Pad1)">
+    <net code="7" name="Net-(C1-Pad1)">
+      <node ref="L1" pin="2"/>
+      <node ref="C2" pin="2"/>
+      <node ref="C1" pin="1"/>
+    </net>
+    <net code="8" name="Net-(IC1-Pad1)">
+      <node ref="IC1" pin="1"/>
+      <node ref="R1" pin="1"/>
+    </net>
+    <net code="9" name="Net-(L1-Pad1)">
       <node ref="L1" pin="1"/>
       <node ref="R1" pin="2"/>
-    </net>
-    <net code="9" name="Net-(C1-Pad1)">
-      <node ref="C2" pin="2"/>
-      <node ref="L1" pin="2"/>
-      <node ref="C1" pin="1"/>
     </net>
   </nets>
 </export>
