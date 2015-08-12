@@ -1,0 +1,1396 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1488.189"
+   height="1052.3622"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r"
+   sodipodi:docname="m2-wiring.svg">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Mstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mstart"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5129"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#00ff00;stroke-width:1pt;stroke-opacity:1;fill:#00ff00;fill-opacity:1"
+         transform="scale(0.4) translate(10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="marker5681"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5683"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#00ff00;stroke-width:1pt;stroke-opacity:1;fill:#00ff00;fill-opacity:1"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+    <linearGradient
+       id="linearGradient5663"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#55ff00;stop-opacity:1;"
+         offset="0"
+         id="stop5665" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;"
+       inkscape:isstock="true">
+      <path
+         id="path5126"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#00ff00;stroke-width:1pt;stroke-opacity:1;fill:#00ff00;fill-opacity:1"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5123"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#ff0000;stroke-width:1pt;stroke-opacity:1;fill:#ff0000;fill-opacity:1"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect3893"
+       effect="spiro" />
+    <clipPath
+       id="clipPath3784"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         sodipodi:type="arc"
+         style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:4.82852888;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="path3786"
+         sodipodi:cx="325.52167"
+         sodipodi:cy="177.31754"
+         sodipodi:rx="60.356613"
+         sodipodi:ry="60.356613"
+         d="m 385.87828,177.31754 a 60.356613,60.356613 0 1 1 -120.71323,0 60.356613,60.356613 0 1 1 120.71323,0 z"
+         transform="matrix(1.4112067,0,0,1.4112066,-123.31604,-99.364654)" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="981.29382"
+     inkscape:cy="922.02165"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1918"
+     inkscape:window-height="1179"
+     inkscape:window-x="-1"
+     inkscape:window-y="18"
+     inkscape:window-maximized="1"
+     inkscape:snap-global="false" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,2.2302535e-5)">
+    <g
+       transform="matrix(1.3119408,0,0,1.3119408,721.09692,-68.593308)"
+       id="layer1-0"
+       inkscape:label="Layer 1"
+       style="opacity:0.2">
+      <circle
+         transform="matrix(1.4112067,0,0,1.4112066,-123.31604,-99.364654)"
+         id="path2985"
+         style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:4.82852888;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         cx="325.52167"
+         cy="177.31754"
+         r="60.356613" />
+      <rect
+         clip-path="url(#clipPath3784)"
+         y="191.71222"
+         x="237.89093"
+         height="48.234783"
+         width="195.96959"
+         id="rect3780"
+         style="fill:#ffffff;fill-opacity:1;stroke:none" />
+      <text
+         y="0"
+         x="143.12219"
+         sodipodi:linespacing="125%"
+         id="text3788"
+         style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><textPath
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:32px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold';text-align:start;letter-spacing:5.11999989px;text-anchor:start"
+           id="textPath3794"
+           xlink:href="#path3792">CUSF</textPath></text>
+      <path
+         inkscape:connector-curvature="0"
+         id="path3792"
+         d="m 288.30952,221.39761 c 38.95297,26.37314 91.91025,16.17518 118.28339,-22.77779 26.37314,-38.95297 16.17518,-91.91025 -22.77779,-118.283387 -38.95296,-26.37314 -91.91023,-16.17518 -118.28338,22.777797 -26.37314,38.95296 -16.17517,91.91024 22.77778,118.28338 z"
+         style="fill:none;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3799"
+         style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><textPath
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold';fill:#ffffff;fill-opacity:1"
+           id="textPath3805"
+           xlink:href="#path3803">MARTLET II</textPath></text>
+      <path
+         style="fill:none;stroke:none"
+         d="m 280.78025,126.8268 c 13.27704,-30.53143 48.79084,-44.518892 79.32229,-31.241852 30.53145,13.277042 44.51891,48.790842 31.24186,79.322272 -13.27703,30.53145 -48.79084,44.51892 -79.32228,31.24187 -30.53145,-13.27704 -44.5189,-48.79083 -31.24187,-79.32229 z"
+         id="path3803"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path3808"
+         d="m 274.63522,193.35371 19.31917,-12.50064 19.95051,6.18719 30.68339,-10.6066 15.53109,5.3033 14.14214,-6.69226 26.64277,11.86929 11.36422,-4.29315 -0.75762,5.42957 -6.69226,7.57614 -130.81475,1.51523 z"
+         style="fill:#ffffff;fill-opacity:1;stroke:none" />
+      <g
+         id="g4157">
+        <path
+           sodipodi:nodetypes="cccccccccccc"
+           inkscape:connector-curvature="0"
+           id="path4094"
+           d="m 329.95148,206.31759 -12.91871,-0.13598 0,-2.0398 12.91871,-13.73462 0,-72.20878 c 0.89181,-12.55899 2.02141,-24.602775 3.67988,-35.500694 1.50879,9.77851 2.96464,20.280674 4.09359,35.250424 l 0.33655,74.37736 9.18298,15.24087 0,2.54816 -10.52918,-3.26934 c 0.24643,-0.0334 -5.42693,0.81341 -6.76382,-0.5276 z"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path4096"
+           d="m 330.0324,189.05617 c 0,0 3.07702,1.44235 7.88486,0.33654"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           sodipodi:nodetypes="cc"
+           inkscape:connector-curvature="0"
+           id="path4098"
+           d="m 330.0324,156.50706 c 0.24884,-0.0534 5.50317,-0.36287 7.88486,0.0961"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path4100"
+           d="m 329.79201,155.93011 c 0,0 6.39443,-0.38462 7.98102,0.0481"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path4104"
+           d="m 329.84009,117.99622 c 0,0 3.1251,-1.82698 7.88486,-0.19231"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           sodipodi:nodetypes="cc"
+           inkscape:connector-curvature="0"
+           id="path4102"
+           d="m 329.93624,118.62124 c -0.12789,0.0246 2.63744,-1.9514 7.69255,-0.33655"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           sodipodi:nodetypes="cc"
+           inkscape:connector-curvature="0"
+           id="path4106"
+           d="m 336.79887,190.1163 c -0.068,0.16998 -0.18406,16.60925 -0.18406,16.60925"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path4108"
+           d="m 329.96028,190.35428 -0.0481,15.91397"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           sodipodi:nodetypes="cc"
+           inkscape:connector-curvature="0"
+           id="path4110"
+           d="m 347.22044,207.54233 -10.45706,-17.4044"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path4112"
+           d="m 329.11891,193.91209 c -0.40867,0.0481 -9.83204,10.4811 -9.73589,10.4811 0.0962,0 9.808,-0.16827 9.808,-0.16827 z"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path4114"
+           d="m 337.55667,194.60923 -0.12019,10.50514 7.78871,2.35584 z"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.38076189px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      </g>
+    </g>
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#4e9a06;stroke-width:10;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 552.11183,983.16671 0,55.05329 155.05841,0 0,-384.86809 136.87567,0 0,34.34519"
+       id="path6062"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#4e9a06;stroke-width:10;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 508.64285,983.79073 0,51.07147 -227.49999,0 0,-48.92861"
+       id="path6060"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#ef2929;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 611.20575,980.64133 0,35.35537 72.73098,0 -0.71429,-377.292 156.92422,0.45912"
+       id="path6058"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#ef2929;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 585.44686,981.65148 0,33.33502 -173.74623,0 0,-372.74627"
+       id="path6056"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#204a87;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 471.8047,562.43818 131.31983,0 0,195.46452"
+       id="path6054"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#204a87;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 281.87317,564.45849 -80.8122,0"
+       id="path6052"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#4e9a06;stroke-width:10;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 469.28571,94.505023 0,102.857147"
+       id="path6048"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#ef2929;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 433.57143,94.862166 0,42.500004 218.57142,0"
+       id="path6050"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#4e9a06;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 874.28571,593.79074 0,94.64285"
+       id="path6020"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#ef2929;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 1004.6931,759.923 75.2564,0 0,-120.71323 -242.9417,0 0,-46.46701"
+       id="path6042"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#ef2929;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 1170.3581,531.62853 0,-29.7995 -213.1422,0 0,135.86552"
+       id="path6044"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#ef2929;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 1024.3911,530.61838 0,-28.78935"
+       id="path6046"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#fcaf3e;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 1003.9286,738.43359 142.8571,0 0,-55 38.5714,0"
+       id="path6040"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#ce5c00;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 978.4292,853.10957 0,54.80078 16.6675,0"
+       id="path6034"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#ce5c00;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 957.6786,852.00502 0,107.5 38.0357,0"
+       id="path6036"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#ce5c00;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 937.14285,853.07645 0,157.50005 59.64285,0"
+       id="path6038"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:0.39215686;stroke:#a40000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 1183.9952,743.76056 -17.6777,0 0,37.37565 -163.6447,0"
+       id="path6032"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g6026"
+       style="stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="translate(90,0)">
+      <path
+         inkscape:connector-curvature="0"
+         id="path6022"
+         d="m 1106.4286,937.00502 -1.4286,0 0,-0.35714 -28.2143,0 0,-133.57143 -164.64285,0"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#a40000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path6024"
+         d="m 1105.3571,827.00502 -28.5714,0"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#a40000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+    </g>
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#75507b;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 350.52293,242.21982 -63.13453,0"
+       id="path5817"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#75507b;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 352.03816,262.92795 -63.13453,0"
+       id="path5819"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#75507b;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 352.54324,284.14115 -64.64976,0"
+       id="path5821"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#75507b;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 361.12953,362.93305 0,23.48605 -75.25636,0"
+       id="path5811"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#75507b;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 389.41381,362.42798 0,48.99239 -103.54064,0"
+       id="path5813"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#75507b;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 418.96077,363.43813 0,71.72083 -131.57237,0"
+       id="path5815"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#ce5c00;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 530.52896,360.91288 0,63.92857 21.42857,0"
+       id="path5779"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#a40000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 604.10039,288.05573 113.57143,0"
+       id="path5769"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g5025"
+       transform="translate(-107.03712,-308.19295)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/m2rl.png"
+         xlink:href="m2rl.png"
+         y="326.49905"
+         x="515.79089"
+         id="image3792"
+         height="86"
+         width="87.162163" />
+      <rect
+         transform="translate(0,308.2677)"
+         y="16.279579"
+         x="512.6524"
+         height="89.903572"
+         width="93.43911"
+         id="rect5019"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5021"
+         y="379.80817"
+         x="515.6897"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="font-size:28px"
+           y="379.80817"
+           x="515.6897"
+           id="tspan5023"
+           sodipodi:role="line">M2RL</tspan></text>
+    </g>
+    <g
+       id="g5114"
+       transform="translate(550.54492,582.29093)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/battery.jpg"
+         xlink:href="battery.jpg"
+         y="640.78571"
+         x="-414.83624"
+         id="image3617"
+         height="159.14285"
+         width="84.233818"
+         transform="matrix(0,-1,1,0,0,0)" />
+      <rect
+         transform="matrix(0,-1,1,0,0,0)"
+         y="630.71429"
+         x="-425.21933"
+         height="179.28571"
+         width="105"
+         id="rect5031"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5033"
+         y="384.35568"
+         x="638.08136"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="font-size:32px"
+           y="384.35568"
+           x="638.08136"
+           id="tspan5035"
+           sodipodi:role="line">BATTERY</tspan></text>
+    </g>
+    <g
+       id="g5642"
+       transform="translate(-0.61389123,-218.94929)">
+      <g
+         transform="matrix(0,-1,1,0,-723.6567,843.04495)"
+         id="g5051">
+        <image
+           sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/strain.jpg"
+           xlink:href="strain.jpg"
+           width="111.57143"
+           height="105.08472"
+           id="image3964"
+           x="166.71428"
+           y="803.06317" />
+        <image
+           sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/strain.jpg"
+           xlink:href="strain.jpg"
+           y="911.63458"
+           x="166.71428"
+           id="image3967"
+           height="105.08472"
+           width="111.57143" />
+      </g>
+      <rect
+         transform="matrix(0,-1,1,0,0,0)"
+         y="79.406471"
+         x="-676.33069"
+         height="213.65611"
+         width="111.5714"
+         id="rect5043"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5045"
+         y="611.10315"
+         x="186.12187"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="font-size:36px;text-align:center;text-anchor:middle"
+           y="611.10315"
+           x="186.12187"
+           id="tspan5047"
+           sodipodi:role="line">STRAIN</tspan><tspan
+           id="tspan5049"
+           style="font-size:36px;text-align:center;text-anchor:middle"
+           y="656.10315"
+           x="186.12187"
+           sodipodi:role="line">GAUGES</tspan></text>
+    </g>
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#fcaf3e;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 601.24325,245.55573 68.57143,0 0,-24.64285 48.57142,0"
+       id="path5775"
+       inkscape:connector-curvature="0" />
+    <path
+       sodipodi:nodetypes="cccc"
+       inkscape:connector-curvature="0"
+       id="path5767"
+       d="m 746.60038,384.12716 -76.42856,0 0,-72.14286 -69.64286,0"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#a40000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+    <g
+       id="g5788"
+       transform="translate(-153.39961,-192.52072)">
+      <g
+         transform="translate(-232.53112,-423.97622)"
+         id="g5074">
+        <image
+           sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/tc.jpg"
+           xlink:href="tc.jpg"
+           width="134.48848"
+           height="122.14286"
+           id="image4030"
+           x="411.14285"
+           y="803.43359" />
+        <image
+           sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/tc.jpg"
+           xlink:href="tc.jpg"
+           y="803.43353"
+           x="543.28571"
+           id="image4033"
+           height="122.14286"
+           width="134.48848" />
+      </g>
+      <rect
+         y="378.74307"
+         x="178.1774"
+         height="123.57143"
+         width="267.5"
+         id="rect5072"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5066"
+         y="449.98331"
+         x="184.72211"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="font-size:26px"
+           y="449.98331"
+           x="184.72211"
+           id="tspan5068"
+           sodipodi:role="line">THERMOCOUPLES</tspan></text>
+    </g>
+    <g
+       id="g5104"
+       transform="translate(118.37582,-385.1643)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/metron.png"
+         xlink:href="metron.png"
+         y="-590.16083"
+         x="798.7193"
+         id="image3854"
+         height="158.17886"
+         width="38"
+         transform="matrix(0,1,-1,0,0,0)" />
+      <rect
+         transform="translate(0,308.2677)"
+         y="484.80875"
+         x="432.14285"
+         height="49.285728"
+         width="157.85713"
+         id="rect5098"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5100"
+         y="827.90112"
+         x="445.94009"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           y="827.90112"
+           x="445.94009"
+           id="tspan5102"
+           sodipodi:role="line">METRON</tspan></text>
+    </g>
+    <g
+       id="g5141"
+       transform="translate(-20.572331,-500.47037)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/led.jpg"
+         xlink:href="led.jpg"
+         y="655.55084"
+         x="733.97522"
+         id="image4174"
+         height="96.86998"
+         width="104.85715" />
+      <rect
+         transform="translate(0,308.2677)"
+         y="347.35709"
+         x="733.62329"
+         height="96.722107"
+         width="105.56094"
+         id="rect5135"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5137"
+         y="717.07672"
+         x="748.61273"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           y="717.07672"
+           x="748.61273"
+           id="tspan5139"
+           sodipodi:role="line"
+           style="font-size:36px">LED</tspan></text>
+    </g>
+    <g
+       id="g6014"
+       transform="translate(187.42857,-24.285714)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/antenna.jpg"
+         xlink:href="antenna.jpg"
+         y="-661.27734"
+         x="-27.910566"
+         id="image5190"
+         height="132.46095"
+         width="203.05392"
+         transform="scale(-1,-1)" />
+      <rect
+         y="-661.55518"
+         x="-28.06892"
+         height="133.0166"
+         width="203.37064"
+         id="rect5193"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.5067299;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         transform="scale(-1,-1)" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5195"
+         y="607.02411"
+         x="-159.67073"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.73554611px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="font-size:32.93744278px"
+           y="607.02411"
+           x="-159.67073"
+           id="tspan5197"
+           sodipodi:role="line">ANTENNA</tspan></text>
+    </g>
+    <g
+       id="g6004"
+       transform="translate(-141.85715,-0.71428576)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/m2pa.png"
+         xlink:href="m2pa.png"
+         width="151.3326"
+         height="239.14285"
+         id="image5318"
+         x="-655.9054"
+         y="401.91705"
+         transform="matrix(0,-1,1,0,0,0)" />
+      <rect
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5321"
+         width="163.64474"
+         height="253.04323"
+         x="-662.06146"
+         y="394.96689"
+         transform="matrix(0,-1,1,0,0,0)" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="439.73672"
+         y="599.56866"
+         id="text5323"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5325"
+           x="439.73672"
+           y="599.56866"
+           style="font-size:52.5px">M2PA</tspan></text>
+    </g>
+    <g
+       id="g5424"
+       transform="translate(-145.49939,131.94429)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/m2r.png"
+         xlink:href="m2r.png"
+         y="572.45361"
+         x="586.45892"
+         id="image5415"
+         height="294.8172"
+         width="217.0822" />
+      <rect
+         transform="translate(0,308.2677)"
+         y="262.66592"
+         x="585.71429"
+         height="297.85715"
+         width="218.57143"
+         id="rect5418"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5420"
+         y="739.00763"
+         x="630.75488"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="font-size:52px"
+           y="739.00763"
+           x="630.75488"
+           id="tspan5422"
+           sodipodi:role="line">M2R</tspan></text>
+    </g>
+    <g
+       id="g5694"
+       transform="matrix(0,-1,1,0,-503.69231,1499.8948)">
+      <g
+         id="g5706"
+         transform="translate(-117.1777,-39.395949)">
+        <g
+           id="g5982"
+           transform="translate(-79.383632,-38.511956)">
+          <image
+             sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/rockblock.jpg"
+             xlink:href="rockblock.jpg"
+             y="-934.47424"
+             x="799.61908"
+             id="image5685"
+             height="236.22836"
+             width="155.48624"
+             transform="matrix(0,1,-1,0,0,0)" />
+          <rect
+             y="799.86218"
+             x="698.68152"
+             height="155"
+             width="235.35715"
+             id="rect5688"
+             style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+          <text
+             transform="matrix(0,1,-1,0,0,0)"
+             sodipodi:linespacing="125%"
+             id="text5690"
+             y="-825.9328"
+             x="876.08813"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+             xml:space="preserve"><tspan
+               style="font-size:36px;text-align:center;text-anchor:middle"
+               y="-825.9328"
+               x="876.08813"
+               sodipodi:role="line"
+               id="tspan5704">Rock</tspan><tspan
+               id="tspan5980"
+               style="font-size:36px;text-align:center;text-anchor:middle"
+               y="-780.9328"
+               x="876.08813"
+               sodipodi:role="line">BLOCK</tspan></text>
+        </g>
+      </g>
+    </g>
+    <g
+       transform="translate(550.54492,472.8033)"
+       id="g5713">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/battery.jpg"
+         xlink:href="battery.jpg"
+         transform="matrix(0,-1,1,0,0,0)"
+         width="84.233818"
+         height="159.14285"
+         id="image5715"
+         x="-414.83624"
+         y="640.78571" />
+      <rect
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5717"
+         width="105"
+         height="179.28571"
+         x="-425.21933"
+         y="630.71429"
+         transform="matrix(0,-1,1,0,0,0)" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="638.08136"
+         y="384.35568"
+         id="text5719"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5721"
+           x="638.08136"
+           y="384.35568"
+           style="font-size:32px">BATTERY</tspan></text>
+    </g>
+    <g
+       transform="translate(297.88994,191.38323)"
+       id="g5733">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/m2rl.png"
+         xlink:href="m2rl.png"
+         width="87.162163"
+         height="86"
+         id="image5735"
+         x="515.79089"
+         y="326.49905" />
+      <rect
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5737"
+         width="93.43911"
+         height="89.903572"
+         x="512.6524"
+         y="16.279579"
+         transform="translate(0,308.2677)" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="515.6897"
+         y="379.80817"
+         id="text5739"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5741"
+           x="515.6897"
+           y="379.80817"
+           style="font-size:28px">M2RL</tspan></text>
+    </g>
+    <g
+       transform="translate(561.2697,97.182356)"
+       id="g5743">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/metron.png"
+         xlink:href="metron.png"
+         transform="matrix(0,1,-1,0,0,0)"
+         width="38"
+         height="158.17886"
+         id="image5745"
+         x="798.7193"
+         y="-590.16083" />
+      <rect
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5747"
+         width="157.85713"
+         height="49.285728"
+         x="432.14285"
+         y="484.80875"
+         transform="translate(0,308.2677)" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="445.94009"
+         y="827.90112"
+         id="text5749"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5751"
+           x="445.94009"
+           y="827.90112">METRON</tspan></text>
+    </g>
+    <g
+       id="g5753"
+       transform="translate(561.2697,148.61093)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/metron.png"
+         xlink:href="metron.png"
+         y="-590.16083"
+         x="798.7193"
+         id="image5755"
+         height="158.17886"
+         width="38"
+         transform="matrix(0,1,-1,0,0,0)" />
+      <rect
+         transform="translate(0,308.2677)"
+         y="484.80875"
+         x="432.14285"
+         height="49.285728"
+         width="157.85713"
+         id="rect5757"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5759"
+         y="827.90112"
+         x="445.94009"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           y="827.90112"
+           x="445.94009"
+           id="tspan5761"
+           sodipodi:role="line">METRON</tspan></text>
+    </g>
+    <g
+       transform="translate(562.6983,200.0395)"
+       id="g5763">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/metron.png"
+         xlink:href="metron.png"
+         transform="matrix(0,1,-1,0,0,0)"
+         width="38"
+         height="158.17886"
+         id="image5765"
+         x="798.7193"
+         y="-590.16083" />
+      <rect
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5767"
+         width="157.85713"
+         height="49.285728"
+         x="432.14285"
+         y="484.80875"
+         transform="translate(0,308.2677)" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="445.94009"
+         y="827.90112"
+         id="text5769"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5771"
+           x="445.94009"
+           y="827.90112">METRON</tspan></text>
+    </g>
+    <g
+       transform="translate(750.52462,100.45066)"
+       id="g5773">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/switch.png"
+         xlink:href="switch.png"
+         transform="matrix(0,1,-1,0,0,0)"
+         width="58.2952"
+         height="175.57143"
+         id="image5775"
+         x="626.47711"
+         y="-605.5047" />
+      <rect
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5777"
+         width="163.64468"
+         height="64.649742"
+         x="430.84598"
+         y="623.29987" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="518.31342"
+         y="648.30658"
+         id="text5779"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5781"
+           x="518.31342"
+           y="648.30658"
+           style="text-align:center;text-anchor:middle">ARMING</tspan><tspan
+           sodipodi:role="line"
+           x="518.31342"
+           y="683.30658"
+           id="tspan5783"
+           style="text-align:center;text-anchor:middle">SWITCH</tspan></text>
+    </g>
+    <g
+       transform="translate(447.49282,-35.594579)"
+       id="g5785">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/led.jpg"
+         xlink:href="led.jpg"
+         width="104.85715"
+         height="96.86998"
+         id="image5787"
+         x="733.97522"
+         y="655.55084" />
+      <rect
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5789"
+         width="105.56094"
+         height="96.722107"
+         x="733.62329"
+         y="347.35709"
+         transform="translate(0,308.2677)" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="748.61273"
+         y="717.07672"
+         id="text5791"
+         sodipodi:linespacing="125%"><tspan
+           style="font-size:36px"
+           sodipodi:role="line"
+           id="tspan5793"
+           x="748.61273"
+           y="717.07672">LED</tspan></text>
+    </g>
+    <g
+       transform="translate(566.66616,331.48893)"
+       id="g5795">
+      <g
+         id="g5797">
+        <image
+           sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/m2fc.png"
+           xlink:href="m2fc.png"
+           y="345.25504"
+           x="182.47299"
+           id="image5799"
+           height="188.14285"
+           width="266.83972" />
+        <rect
+           transform="translate(0,308.2677)"
+           y="33.380199"
+           x="180"
+           height="195.35715"
+           width="271.78571"
+           id="rect5801"
+           style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="125%"
+           id="text5803"
+           y="426.2583"
+           x="315.28189"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+           xml:space="preserve"><tspan
+             style="font-size:50px;text-align:center;text-anchor:middle"
+             y="426.2583"
+             x="315.28189"
+             id="tspan5805"
+             sodipodi:role="line">M2FC</tspan><tspan
+             style="font-size:50px;text-align:center;text-anchor:middle"
+             y="488.7583"
+             x="315.28189"
+             sodipodi:role="line"
+             id="tspan5829">NOSE</tspan></text>
+      </g>
+    </g>
+    <g
+       transform="translate(433.881,-4.4329048)"
+       id="g5807">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/camera.png"
+         xlink:href="camera.png"
+         width="137"
+         height="89.638672"
+         id="image5809"
+         x="696.85712"
+         y="520.39996" />
+      <rect
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5811"
+         width="128.57143"
+         height="93.571426"
+         x="701.07141"
+         y="518.43359" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="699.88116"
+         y="575.40112"
+         id="text5813"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5815"
+           x="699.88116"
+           y="575.40112">CAMERA</tspan></text>
+    </g>
+    <g
+       id="g5817"
+       transform="translate(291.16671,-4.4329048)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/camera.png"
+         xlink:href="camera.png"
+         y="520.39996"
+         x="696.85712"
+         id="image5819"
+         height="89.638672"
+         width="137" />
+      <rect
+         y="518.43359"
+         x="701.07141"
+         height="93.571426"
+         width="128.57143"
+         id="rect5821"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5823"
+         y="575.40112"
+         x="699.88116"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           y="575.40112"
+           x="699.88116"
+           id="tspan5825"
+           sodipodi:role="line">CAMERA</tspan></text>
+    </g>
+    <g
+       transform="translate(81.989699,31.829233)"
+       id="g5723">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/battery.jpg"
+         xlink:href="battery.jpg"
+         transform="matrix(0,-1,1,0,0,0)"
+         width="84.233818"
+         height="159.14285"
+         id="image5725"
+         x="-414.83624"
+         y="640.78571" />
+      <rect
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5727"
+         width="105"
+         height="179.28571"
+         x="-425.21933"
+         y="630.71429"
+         transform="matrix(0,-1,1,0,0,0)" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="638.08136"
+         y="384.35568"
+         id="text5729"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5731"
+           x="638.08136"
+           y="384.35568"
+           style="font-size:32px">BATTERY</tspan></text>
+    </g>
+    <g
+       id="g5128"
+       transform="translate(282.36096,-355.53376)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/switch.png"
+         xlink:href="switch.png"
+         y="-605.5047"
+         x="626.47711"
+         id="image4112"
+         height="175.57143"
+         width="58.2952"
+         transform="matrix(0,1,-1,0,0,0)" />
+      <rect
+         y="623.29987"
+         x="430.84598"
+         height="64.649742"
+         width="163.64468"
+         id="rect5120"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5122"
+         y="648.30658"
+         x="518.31342"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="text-align:center;text-anchor:middle"
+           y="648.30658"
+           x="518.31342"
+           id="tspan5124"
+           sodipodi:role="line">ARMING</tspan><tspan
+           style="text-align:center;text-anchor:middle"
+           id="tspan5126"
+           y="683.30658"
+           x="518.31342"
+           sodipodi:role="line">SWITCH</tspan></text>
+    </g>
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#ef2929;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 604.45753,267.34145 47.5,0 0,-242.142857 75.71429,0 0,13.57143"
+       id="path5771"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g5092"
+       transform="translate(-5.6013112,-500.56966)">
+      <image
+         sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/camera.png"
+         xlink:href="camera.png"
+         y="520.39996"
+         x="696.85712"
+         id="image4236"
+         height="89.638672"
+         width="137" />
+      <rect
+         y="518.43359"
+         x="701.07141"
+         height="93.571426"
+         width="128.57143"
+         id="rect5086"
+         style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5088"
+         y="575.40112"
+         x="699.88116"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           y="575.40112"
+           x="699.88116"
+           id="tspan5090"
+           sodipodi:role="line">CAMERA</tspan></text>
+    </g>
+    <g
+       id="g5013"
+       transform="translate(160.12286,-160.5004)">
+      <g
+         id="g5333">
+        <image
+           sodipodi:absref="/home/adam/Projects/m2-electronics/docs/wiring-diagram/m2fc.png"
+           xlink:href="m2fc.png"
+           width="266.83972"
+           height="188.14285"
+           id="image3730"
+           x="182.47299"
+           y="345.25504" />
+        <rect
+           style="fill:#ffffff;fill-opacity:0.39215686;stroke:#000000;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect4239"
+           width="271.78571"
+           height="195.35715"
+           x="180"
+           y="33.380199"
+           transform="translate(0,308.2677)" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+           x="314.97363"
+           y="426.2583"
+           id="text5009"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan5011"
+             x="314.97363"
+             y="426.2583"
+             style="font-size:50px;text-align:center;text-anchor:middle">M2FC</tspan><tspan
+             sodipodi:role="line"
+             x="314.97363"
+             y="488.7583"
+             style="font-size:50px;text-align:center;text-anchor:middle"
+             id="tspan5827">BODY</tspan></text>
+      </g>
+    </g>
+    <g
+       id="g6189"
+       transform="translate(0,21.140777)">
+      <g
+         id="g6257"
+         transform="translate(17.677669,-3.5355351)">
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot5844"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15px;line-height:133.00000429%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           transform="translate(923.34577,-797.01037)"><flowRegion
+             id="flowRegion5846"><rect
+               id="rect5848"
+               width="273.92859"
+               height="186.78561"
+               x="179.64285"
+               y="819.14789"
+               style="font-size:15px;line-height:133.00000429%" /></flowRegion><flowPara
+             id="flowPara5850"
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end">2 conductors</flowPara><flowPara
+             id="flowPara5852"
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end">4 conductors</flowPara><flowPara
+             id="flowPara5854"
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end">Battery voltage</flowPara><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end"
+             id="flowPara5856">Auxiliary power bus</flowPara><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end"
+             id="flowPara5858">Analogue sensor</flowPara><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end"
+             id="flowPara5860">Serial data bus</flowPara><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end"
+             id="flowPara5866">Pyrotechnic driver</flowPara><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end"
+             id="flowPara5868">Digital output</flowPara><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end"
+             id="flowPara5916">RF coaxial connection</flowPara><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15px;line-height:132.00000525%;font-family:'Input Sans';-inkscape-font-specification:'Input Sans Medium';text-align:end;text-anchor:end"
+             id="flowPara5862" /></flowRoot>        <g
+           transform="translate(193.44421,4.0406102)"
+           id="g6246">
+          <path
+             style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#ef2929;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+             d="m 1189.5413,88.02688 68.6903,0"
+             id="path5834"
+             inkscape:connector-curvature="0" />
+          <path
+             style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+             d="m 1189.5413,48.02688 68.6903,0"
+             id="path5830"
+             inkscape:connector-curvature="0" />
+          <path
+             inkscape:connector-curvature="0"
+             id="path5832"
+             d="m 1189.5413,68.02688 68.6903,0"
+             style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#a40000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+          <path
+             inkscape:connector-curvature="0"
+             id="path5836"
+             d="m 1189.5413,108.02688 68.6903,0"
+             style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#75507b;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+          <path
+             style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#4e9a06;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+             d="m 1189.5413,128.02688 68.6903,0"
+             id="path5838"
+             inkscape:connector-curvature="0" />
+          <path
+             inkscape:connector-curvature="0"
+             id="path5840"
+             d="m 1189.5413,148.02688 68.6903,0"
+             style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#ce5c00;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+          <path
+             inkscape:connector-curvature="0"
+             id="path5842"
+             d="m 1189.5413,28.02688 68.6903,0"
+             style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+          <path
+             style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#fcaf3e;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+             d="m 1189.5413,168.02688 68.6903,0"
+             id="path5864"
+             inkscape:connector-curvature="0" />
+          <path
+             inkscape:connector-curvature="0"
+             id="path5914"
+             d="m 1189.5413,188.02688 68.6903,0"
+             style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#204a87;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+        </g>
+      </g>
+    </g>
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:10,5;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="M 5.5701886e-8,478.07645 1488.19,478.07645"
+       id="path5944"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:65px;line-height:125%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="1284"
+       y="460.93359"
+       id="text6074"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan6076"
+         x="1284"
+         y="460.93359">BODY</tspan><tspan
+         sodipodi:role="line"
+         x="1284"
+         y="542.18359"
+         id="tspan6078">NOSE</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:65px;line-height:100%;font-family:'Input Sans';-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="861.42987"
+       y="71.153473"
+       id="text6099"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         x="861.42987"
+         y="71.153473"
+         style="font-size:45px;line-height:100%;text-align:start;text-anchor:start"
+         id="tspan6109">MARTLET 2</tspan><tspan
+         sodipodi:role="line"
+         x="861.42987"
+         y="116.15347"
+         style="font-size:45px;line-height:100%;text-align:start;text-anchor:start"
+         id="tspan6287"></tspan><tspan
+         sodipodi:role="line"
+         x="861.42987"
+         y="161.15347"
+         style="font-size:45px;line-height:100%;text-align:start;text-anchor:start"
+         id="tspan6291">Wiring</tspan><tspan
+         sodipodi:role="line"
+         x="861.42987"
+         y="206.15347"
+         style="font-size:45px;line-height:100%;text-align:start;text-anchor:start"
+         id="tspan6289">Diagram</tspan></text>
+    <rect
+       ry="11.616755"
+       y="12.915212"
+       x="843.98547"
+       height="232.84016"
+       width="636.01062"
+       id="rect6171"
+       style="fill:none;fill-opacity:0.39215686;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="11.616755" />
+  </g>
+</svg>
