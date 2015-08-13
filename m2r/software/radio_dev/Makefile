@@ -1,2 +1,2 @@
 all:
-	gcc -g -Wall -Wextra -Werror main.c hamming_ecc.c -o hamming
+	gcc -O3 -Wall -Wextra -Werror main.c hamming_ecc.c -o hamming
