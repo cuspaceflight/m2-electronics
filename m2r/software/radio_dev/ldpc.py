@@ -154,3 +154,23 @@ with open("ldpc_parity_check.h", "w") as f:
     f.write("#include <stdbool.h>\n\n")
     f.write("extern const bool ldpc_parity[128][256];\n\n")
     f.write("#endif /* LDPC_PARITY_CHECK_H */\n")
+
+Hp = np.packbits(H, axis=1)
+with open("ldpc_parity_check_packed.c", "w") as f:
+    f.write("#include \"ldpc_parity_check_packed.h\"\n")
+    f.write("const uint64_t ldpc_parity_p[128][4] = {\n")
+    for row in range(128):
+        f.write("  { ")
+        for iidx in range(4):
+            f.write("0x")
+            for uidx in range(8):
+                f.write("{:02X}".format(Hp[row][iidx*8 + uidx]))
+            f.write("LL, ")
+        f.write(" },\n")
+    f.write("};\n")
+with open("ldpc_parity_check_packed.h", "w") as f:
+    f.write("#ifndef LDPC_PARITY_CHECK_PACKED_H\n")
+    f.write("#define LDPC_PARITY_CHECK_PACKED_H\n\n")
+    f.write("#include <stdint.h>\n\n")
+    f.write("extern const uint64_t ldpc_parity_p[128][4];\n\n")
+    f.write("#endif /* LDPC_PARITY_CHECK_PACKED_H */\n")

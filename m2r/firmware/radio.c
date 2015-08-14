@@ -193,7 +193,10 @@ msg_t radio_thread(void* arg)
 {
     chRegSetThreadName("Radio");
 
-    palSetPad(GPIOB, GPIOB_MTX2_EN);
+    palClearPad(GPIOB, GPIOB_MTX2_EN);
+    while(TRUE) {
+        chThdSleepMilliseconds(100);
+    }
 
     /* Compute the sine waves for AFSK */
     radio_generate_buffers();

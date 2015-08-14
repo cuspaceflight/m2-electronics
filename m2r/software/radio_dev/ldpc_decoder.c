@@ -1,10 +1,30 @@
 #include "ldpc_decoder.h"
 #include "ldpc_parity_check.h"
+#include "ldpc_parity_check_packed.h"
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+
+/* Use the compact int64_t parity check matrix? */
+#define USE_COMPACT_H 0
+
+/* Choose check node update algoritm. */
+#define USE_TANH 1
+#define USE_TANH_APPROX 0
+#define USE_MINSUM 0
+
+/* See if i and a are connected. */
+static inline bool ldpc_h(int i, int a)
+{
+#if USE_COMPACT_H
+    return (ldpc_parity_p[i][a / 64] >> (63 - (a % 64))) & 1;
+#else
+    return ldpc_parity[i][a];
+#endif
+
+}
 
 /* Check if x.H=0 implying that we have finished. */
 static bool ldpc_check_if_codeword(uint8_t* coded)
@@ -16,8 +36,8 @@ static bool ldpc_check_if_codeword(uint8_t* coded)
 
         /* For each coded bit */
         for(a=0; a<256; a++) {
-            uint8_t bit = (coded[a/8] >> (7 - (a%8))) & 1;
-            parity += bit & ldpc_parity[i][a];
+            if(!ldpc_h(i, a)) continue;
+            parity += (coded[a/8] >> (7 - (a%8))) & 1;
         }
 
         /* Return false at the first violated parity check. */
@@ -36,11 +56,14 @@ static inline double sign(double x)
 static inline double minstar(double a, double b)
 {
     return sign(a) * sign(b) * fmin(fabs(a), fabs(b))
-        /*
-            + log(1 + exp(-(fabs(a) + fabs(b))))
-            + log(1 + exp(-(fabs(a) - fabs(b))))
-        */
+            + log(1.0f + exp(-(fabs(a) + fabs(b))))
+            - log(1.0f + exp(-fabs(fabs(a) - fabs(b))))
         ;
+}
+
+static inline double phi(double x)
+{
+    return log((exp(x)+1)/(exp(x)-1));
 }
 
 /* Decode 256 LLRs into 32 bytes of codeword in `coded`. */
@@ -52,8 +75,8 @@ void ldpc_decode(double* r, uint8_t* coded)
 
     /* Check if we can return early. */
     memset(coded, 0, 32);
-    for(i=0; i<256; i++) {
-        coded[i/8] |= (r[i] < 0.0f) << (7 - (i % 8));
+    for(a=0; a<256; a++) {
+        coded[a/8] |= (r[a] < 0.0f) << (7 - (a % 8));
     }
     if(ldpc_check_if_codeword(coded)) {
         /*printf("Codeword already valid, returning.\n");*/
@@ -81,7 +104,7 @@ void ldpc_decode(double* r, uint8_t* coded)
     for(a=0; a<256; a++) {
         llrs[a] = r[a];
         for(i=0; i<128; i++) {
-            if(!ldpc_parity[i][a]) continue;
+            if(!ldpc_h(i, a)) continue;
             v[a][i] = r[a];
         }
     }
@@ -93,15 +116,33 @@ void ldpc_decode(double* r, uint8_t* coded)
         /* Check nodes to variable nodes */
         for(i=0; i<128; i++) {
             for(a=0; a<256; a++) {
-                if(!ldpc_parity[i][a]) continue;
-                /*u[i][a] = minstar(v[0][i], v[1][i]);*/
+                if(!ldpc_h(i, a)) continue;
+#if USE_TANH
                 u[i][a] = 1.0f;
-                for(b=2; b<256; b++) {
-                    if(!ldpc_parity[i][b] || b==a) continue;
-                    /*u[i][a] = minstar(u[i][a], v[b][i]);*/
+                for(b=0; b<256; b++) {
+                    if(!ldpc_h(i, b) || b==a) continue;
                     u[i][a] *= tanh(v[b][i] / 2.0f);
                 }
                 u[i][a] = 2.0f * atanh(u[i][a]);
+#endif
+#if USE_TANH_APPROX
+                u[i][a] = 0.0f;
+                double prodsign = 1.0f;
+                for(b=0; b<256; b++) {
+                    if(!ldpc_h(i, b) || b==a) continue;
+                    u[i][a] += phi(fabs(v[b][i]));
+                    prodsign *= sign(v[b][i]);
+                }
+                u[i][a] = prodsign * phi(u[i][a]);
+#endif
+#if USE_MINSUM
+                u[i][a] = 9999.9f;
+                for(b=0; b<256; b++) {
+                    if(!ldpc_h(i, b) || b==a) continue;
+                    u[i][a] = sign(u[i][a]) * sign(v[b][i]) * fmin(fabs(u[i][a]), fabs(v[b][i]));
+                    /*u[i][a] = minstar(u[i][a], v[b][i]);*/
+                }
+#endif
             }
         }
 
@@ -123,10 +164,10 @@ void ldpc_decode(double* r, uint8_t* coded)
         /* Variable nodes to check nodes */
         for(a=0; a<256; a++) {
             for(i=0; i<128; i++) {
-                if(!ldpc_parity[i][a]) continue;
+                if(!ldpc_h(i, a)) continue;
                 v[a][i] = r[a];
                 for(j=0; j<128; j++) {
-                    if(!ldpc_parity[j][a] || j==i) continue;
+                    if(!ldpc_h(j, a) || j==i) continue;
                     v[a][i] += u[j][a];
                 }
             }
