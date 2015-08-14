@@ -18,8 +18,9 @@ which carry the FSK data.
 
 While downlinking telemetry packets, the following settings apply:
 
-                                |
-------------------------------------------------
+
+-                               |- 
+--------------------------------|---------------
 Nominal Carrier Frequency       | 434.650MHz
 Modulation                      | AFSK over FM
 Peak FM Deviation               | 3kHz TBC
@@ -35,8 +36,9 @@ data mode by a CW transmission, repeated 3 times. The transmitted message is:
 
     AD6AM/AM MARTLET 2 CUSF.CO.UK/M2R
 
-                                |
-------------------------------------------------
+
+-                               |-
+--------------------------------|---------------
 Nominal Carrier Frequency       | 434.650MHz
 Modulation                      | Morse OOK
 Speed                           | 20wpm
@@ -45,7 +47,7 @@ Speed                           | 20wpm
 ## Data Link Layer
 
 16 byte application packets are first randomised by combining with an LFSR of 
-polynomial x^8 + x^6 + x^4 + x^3 + x^2 + x^1 + 1. This ensures sufficient 
+polynomial `x^8 + x^6 + x^4 + x^3 + x^2 + x^1 + 1`. This ensures sufficient 
 transitions in the transmitted data stream and aids in balancing the 
 transmitted spectrum. For further details see CCSDS 231.0-B-2 section 5.
 
@@ -55,7 +57,7 @@ left bit first, which corresponds to the most significant bit in the lowest
 byte of the application payload.
 
 Each codeword is then prefixed with the 16 bit synchronisation pattern 
-1110101110010000, transmitted left bit first.
+`1110101110010000`, transmitted left bit first.
 
 To transmit a frame including synchronisation pattern, the following sequence 
 applies.
