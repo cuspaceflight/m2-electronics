@@ -1,4 +1,4 @@
-#include "ldpc_ecc.h"
+#include "ldpc_encoder.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -59,10 +59,4 @@ void ldpc_encode(uint8_t* data, uint8_t* coded)
         /* Store the result of this parity check in the output. */
         coded[16+id8] |= (parity % 2) << (7 - im8);
     }
-}
-
-/* Decode 256 LLRs into 32 bytes of codeword in `coded`. */
-void ldpc_decode(int8_t* llrs, uint8_t* coded)
-{
-    (void)llrs; (void)coded;
 }

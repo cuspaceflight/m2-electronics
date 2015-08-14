@@ -139,3 +139,18 @@ assert np.all(G == G2)
 
 cw2 = (np.dot(x, G2) % 2).astype(np.uint8)
 assert np.all(cw1 == cw2)
+
+with open("ldpc_parity_check.c", "w") as f:
+    f.write("#include \"ldpc_parity_check.h\"\n")
+    f.write("const bool ldpc_parity[128][256] = {\n")
+    for row in range(128):
+        f.write("  { ")
+        f.write(", ".join(str(int(b)) for b in H[row]))
+        f.write(" },\n")
+    f.write("};\n")
+with open("ldpc_parity_check.h", "w") as f:
+    f.write("#ifndef LDPC_PARITY_CHECK_H\n")
+    f.write("#define LDPC_PARITY_CHECK_H\n\n")
+    f.write("#include <stdbool.h>\n\n")
+    f.write("extern const bool ldpc_parity[128][256];\n\n")
+    f.write("#endif /* LDPC_PARITY_CHECK_H */\n")
