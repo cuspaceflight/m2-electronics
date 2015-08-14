@@ -1,30 +1,38 @@
 # Martet 2 Telemetry
 
+Document version: 2.0
+
+This document describes version 2 of the Martlet 2 telemetry packet format. 
+Compared to version 1, the two halves (the data segment and the metadata 
+segment) are switched, to accommodate a trailing checksum. The packet mode 
+became _managed_, associated with a particular channel, rather than being 
+specified in the packet itself. Origins and channel constants are unchanged.
+
 ## Packet Format
 
-16 byte packets: 8 byte header, 8 byte data.
+16 byte packets: 8 byte data, 8 byte footer.
 
-    [  0  | TIMESTAMP  ]\
-    [  1  | TIMESTAMP  ] |- A 32 bit unsigned timestamp that runs at the system
-    [  2  | TIMESTAMP  ] |  clock frequency so will overflow fairly often.
-    [  3  | TIMESTAMP  ]/
-    [  4  | METADATA   ]--- Origin and format of data.
-    [  5  | CHANNEL    ]--- Data channel.
-    [  6  | CHECKSUM   ]\ 
-    [  7  | CHECKSUM   ]/-- Validates the packet, normal CRC16-CCCITT.
-    [  8  | DATA       ]\
-    [  9  | DATA       ] |
-    [ 10  | DATA       ] |
-    [ 11  | DATA       ] |- User data. Might be an 8-char string or an int64 or
-    [ 12  | DATA       ] |  two floats or four int16s or whatever else MODE
-    [ 13  | DATA       ] |  indicates.
-    [ 14  | DATA       ] |
-    [ 15  | DATA       ]/
+    [  0  | DATA       ]\
+    [  1  | DATA       ] |
+    [  2  | DATA       ] |
+    [  3  | DATA       ] |- User data. Might be an 8-char string or an int64 or
+    [  4  | DATA       ] |  two floats or four int16s or whatever else MODE
+    [  5  | DATA       ] |  indicates.
+    [  6  | DATA       ] |
+    [  7  | DATA       ]/
+    [  8  | TIMESTAMP  ]\
+    [  9  | TIMESTAMP  ] |- A 32 bit unsigned timestamp that runs at the system
+    [ 10  | TIMESTAMP  ] |  clock frequency so will overflow fairly often.
+    [ 11  | TIMESTAMP  ]/
+    [ 12  | METADATA   ]--- Origin of data and reserved bits.
+    [ 13  | CHANNEL    ]--- Data channel.
+    [ 14  | CHECKSUM U ]\
+    [ 15  | CHECKSUM L ]/-- Verify packet contents.
 
 ## Metadata
 
-The metadata byte is split into two four-bit sections, the origin (first four
-bits) and the mode (last four bits).
+The metadata byte describes the original source of a telemetry packet in the 
+lower four bits. The upper four bits are reserved.
 
 ### Packet Origins
 
@@ -33,23 +41,13 @@ bits) and the mode (last four bits).
     2   M2FC NOSE
     3   M2R
 
-### Packet Modes
-
-    Mode  Type      Format   Description
-    -------------------------------------------------------------
-     0    char*      s8       Eight byte string
-     1    int64_t    q        64 bit signed integer
-     2    uint64_t   Q        64 bit unsigned integer
-     3    int32_t    ii       Two 32bit signed integers
-     4    uint32_t   II       Two 32bit unsigned integers
-     5    int16_t    hhhh     Four 16bit signed integers
-     6    uint16_t   HHHH     Four 16bit unsigned integers
-     7    int8_t     bbbbbbbb Eight 8bit signed integers
-     8    uint8_t    BBBBBBBB Eight 8bit unsigned integers
-     9    float      ff       Two 32bit single precision floats
-     10   double     d        One 64bit double precision float
-
 ## Channel
+
+The channel byte describes what data this packet contains. The `mode`
+referenced in the channel table refers to one of the data formats described in
+the `Data` section.
+
+### Packet Channels
 
     Channel  Mode  Description
     -------------------------------------------------------------
@@ -79,7 +77,7 @@ bits) and the mode (last four bits).
        2     5      Thermocouples   [ch1 ch2 ch3 0]
 
     0x4           STATE MACHINES
-       0     3      M2FC Mission Control [old_state new_state]
+       0     3      Mission Control [old_state new_state]
 
     0x5           STATE ESTIMATION
        0     9      Prediction output  I     [dt       height]
@@ -91,13 +89,35 @@ bits) and the mode (last four bits).
        0     5      Continuity results [ch1 ch2 ch3 0]
        1     5      Fired              [ch1 ch2 ch3 0]
 
-TODO: GPS fixes, RockBLOCK messages.
+    0x7           LOCATION
+       0     8      GPS Time       [year_l year_h month day hour min sec valid]
+       1     3      GPS Position   [latitude longitude]
+       2     3      GPS Altitude   [height height_msl]
+       3     7      GPS Status     [fix_type flags num_sv 0 0 0 0 0]
 
 ## Checksum
 
-CRC16-CCITT with polynomial 0x1021 and initial value 0x0000.
+CRC16-CCITT with polynomial 0x1021 and initial value 0xFFFF, no 
+post-processing. Most significant byte transmitted first.
 
 ## Data
 
-Data in whatever format is described by the mode in the metadata field.
-Multi-byte entries are stored little-endian.
+Data formatting depends on channel, allocated in the channel table. Multi byte 
+entries are stored little-endien.
+
+### Packet Modes
+
+    Mode  Type      Format   Description
+    -------------------------------------------------------------
+     0    char*      s8       Eight byte string
+     1    int64_t    q        64 bit signed integer
+     2    uint64_t   Q        64 bit unsigned integer
+     3    int32_t    ii       Two 32bit signed integers
+     4    uint32_t   II       Two 32bit unsigned integers
+     5    int16_t    hhhh     Four 16bit signed integers
+     6    uint16_t   HHHH     Four 16bit unsigned integers
+     7    int8_t     bbbbbbbb Eight 8bit signed integers
+     8    uint8_t    BBBBBBBB Eight 8bit unsigned integers
+     9    float      ff       Two 32bit single precision floats
+     10   double     d        One 64bit double precision float
+
