@@ -1,6 +1,12 @@
+# Generate C lookup tables for systematic Hamming (7, 4) implementation.
+
 from __future__ import print_function
 import numpy as np
 
+# Hamming (7, 4) systematic generator
+# G = [I]
+#     [-]
+#     [P]
 G = np.array((
     (1, 0, 0, 0),
     (0, 1, 0, 0),
@@ -10,11 +16,15 @@ G = np.array((
     (0, 1, 1, 1),
     (1, 0, 1, 1)))
 
+# Corresponding parity check matrix
+# H = [P' | I]
 H = np.array((
     (1, 1, 1, 0, 1, 0, 0),
     (0, 1, 1, 1, 0, 1, 0),
     (1, 0, 1, 1, 0, 0, 1)))
 
+# Map syndrome to affected bit, e.g. syndrome=2 then flip bit 6 (count starting
+# at 1=MSb/leftmost, 7=LSb/rightmost)
 bitflips = (None, 7, 6, 4, 5, 1, 2, 3)
 
 codewords = []
