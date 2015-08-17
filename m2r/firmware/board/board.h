@@ -38,14 +38,14 @@
  * IO pins assignments.
  */
 #define GPIOA_PIN0                  0
-#define GPIOA_PIN1                  1
+#define GPIOA_5VOUT                 1
 #define GPIOA_SER_OUT               2
 #define GPIOA_SER_IN                3
-#define GPIOA_RADIO_EXT             4
-#define GPIOA_MTX2_TXD              5
-#define GPIOA_BAT_MON               6
-#define GPIOA_PIN7                  7
-#define GPIOA_PIN8                  8
+#define GPIOA_MTX2_TXD              4
+#define GPIOA_BAT_MON               5
+#define GPIOA_LED_A                 6
+#define GPIOA_LED_C                 7
+#define GPIOA_NRST                  8
 #define GPIOA_RB_RX                 9
 #define GPIOA_RB_TX                 10
 #define GPIOA_PIN11                 11
@@ -57,17 +57,17 @@
 #define GPIOB_PIN0                  0
 #define GPIOB_MTX2_P0               1
 #define GPIOB_MTX2_P1               2
-#define GPIOB_SWO                   3
+#define GPIOB_PIN3                  3
 #define GPIOB_PIN4                  4
-#define GPIOB_GPS_RESET             5
+#define GPIOB_PIN5                  5
 #define GPIOB_GPS_SCL               6
 #define GPIOB_GPS_SDA               7
-#define GPIOB_PIN8                  8
-#define GPIOB_PIN9                  9
+#define GPIOB_GPS_RESET             8
+#define GPIOB_BUZZER                9
 #define GPIOB_MTX2_EN               10
-#define GPIOB_MTX2_TXD_ALT          11
-#define GPIOB_LED_RB                12
-#define GPIOB_LED_RADIO             13
+#define GPIOB_PIN11                 11
+#define GPIOB_LED_RADIO             12
+#define GPIOB_LED_RB                13
 #define GPIOB_LED_GPS               14
 #define GPIOB_LED_STATUS            15
 
@@ -162,34 +162,17 @@
 #define PIN_AFIO_AF(n, v)           ((v##U) << ((n % 8) * 4))
 
 /*
- * GPIOA setup:
- *
- * PA0  - PIN0                      (input pullup).
- * PA1  - PIN1                      (input pullup).
- * PA2  - SER_OUT                   (alternate 7).
- * PA3  - SER_IN                    (alternate 7).
- * PA4  - LED_A                     (output pushpull).
- * PA5  - LED_C                     (output pushpull).
- * PA6  - BAT_MON                   (analogue input).
- * PA7  - PIN7                      (input pullup).
- * PA8  - PIN8                      (input pullup).
- * PA9  - RB_RX                     (alternate 7).
- * PA10 - RX_TX                     (alternate 7).
- * PA11 - PIN11                     (input pullup).
- * PA12 - PIN12                     (input pullup).
- * PA13 - SWDIO                     (alternate 0).
- * PA14 - SWCLK                     (alternate 0).
- * PA15 - PIN15                     (input pullup).
+ * GPIOA setup
  */
 #define VAL_GPIOA_MODER             (PIN_MODE_INPUT(GPIOA_PIN0)             |\
-                                     PIN_MODE_INPUT(GPIOA_PIN1)             |\
+                                     PIN_MODE_OUTPUT(GPIOA_5VOUT)           |\
                                      PIN_MODE_ALTERNATE(GPIOA_SER_OUT)      |\
                                      PIN_MODE_ALTERNATE(GPIOA_SER_IN)       |\
-                                     PIN_MODE_ANALOG(GPIOA_RADIO_EXT)       |\
-                                     PIN_MODE_OUTPUT(GPIOA_MTX2_TXD )       |\
+                                     PIN_MODE_ANALOG(GPIOA_MTX2_TXD)        |\
                                      PIN_MODE_ANALOG(GPIOA_BAT_MON)         |\
-                                     PIN_MODE_INPUT(GPIOA_PIN7)             |\
-                                     PIN_MODE_INPUT(GPIOA_PIN8)             |\
+                                     PIN_MODE_OUTPUT(GPIOA_LED_A)           |\
+                                     PIN_MODE_OUTPUT(GPIOA_LED_C)           |\
+                                     PIN_MODE_INPUT(GPIOA_NRST)             |\
                                      PIN_MODE_ALTERNATE(GPIOA_RB_TX)        |\
                                      PIN_MODE_ALTERNATE(GPIOA_RB_RX)        |\
                                      PIN_MODE_INPUT(GPIOA_PIN11)            |\
@@ -198,14 +181,14 @@
                                      PIN_MODE_ALTERNATE(GPIOA_SWCLK)        |\
                                      PIN_MODE_INPUT(GPIOA_PIN15))
 #define VAL_GPIOA_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOA_PIN0)         |\
-                                     PIN_OTYPE_PUSHPULL(GPIOA_PIN1)         |\
+                                     PIN_OTYPE_PUSHPULL(GPIOA_5VOUT)        |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_SER_OUT)      |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_SER_IN)       |\
-                                     PIN_OTYPE_PUSHPULL(GPIOA_RADIO_EXT)    |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_MTX2_TXD)     |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_BAT_MON)      |\
-                                     PIN_OTYPE_PUSHPULL(GPIOA_PIN7)         |\
-                                     PIN_OTYPE_PUSHPULL(GPIOA_PIN8)         |\
+                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_A)        |\
+                                     PIN_OTYPE_PUSHPULL(GPIOA_LED_C)        |\
+                                     PIN_OTYPE_PUSHPULL(GPIOA_NRST)         |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_RB_TX)        |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_RB_RX)        |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_PIN11)        |\
@@ -214,14 +197,14 @@
                                      PIN_OTYPE_PUSHPULL(GPIOA_SWCLK)        |\
                                      PIN_OTYPE_PUSHPULL(GPIOA_PIN15))
 #define VAL_GPIOA_OSPEEDR           (PIN_OSPEED_2M(GPIOA_PIN0)              |\
-                                     PIN_OSPEED_2M(GPIOA_PIN1)              |\
+                                     PIN_OSPEED_2M(GPIOA_5VOUT)             |\
                                      PIN_OSPEED_2M(GPIOA_SER_OUT)           |\
                                      PIN_OSPEED_2M(GPIOA_SER_IN)            |\
-                                     PIN_OSPEED_2M(GPIOA_RADIO_EXT)         |\
                                      PIN_OSPEED_2M(GPIOA_MTX2_TXD)          |\
                                      PIN_OSPEED_2M(GPIOA_BAT_MON)           |\
-                                     PIN_OSPEED_2M(GPIOA_PIN7)              |\
-                                     PIN_OSPEED_2M(GPIOA_PIN8)              |\
+                                     PIN_OSPEED_2M(GPIOA_LED_A)             |\
+                                     PIN_OSPEED_2M(GPIOA_LED_C)             |\
+                                     PIN_OSPEED_2M(GPIOA_NRST)              |\
                                      PIN_OSPEED_2M(GPIOA_RB_TX)             |\
                                      PIN_OSPEED_2M(GPIOA_RB_RX)             |\
                                      PIN_OSPEED_2M(GPIOA_PIN11)             |\
@@ -230,14 +213,14 @@
                                      PIN_OSPEED_100M(GPIOA_SWCLK)           |\
                                      PIN_OSPEED_2M(GPIOA_PIN15))
 #define VAL_GPIOA_PUPDR             (PIN_PUPDR_PULLUP(GPIOA_PIN0)           |\
-                                     PIN_PUPDR_PULLUP(GPIOA_PIN1)           |\
+                                     PIN_PUPDR_FLOATING(GPIOA_5VOUT)        |\
                                      PIN_PUPDR_FLOATING(GPIOA_SER_OUT)      |\
                                      PIN_PUPDR_FLOATING(GPIOA_SER_IN)       |\
-                                     PIN_PUPDR_FLOATING(GPIOA_RADIO_EXT)    |\
                                      PIN_PUPDR_FLOATING(GPIOA_MTX2_TXD)     |\
                                      PIN_PUPDR_FLOATING(GPIOA_BAT_MON)      |\
-                                     PIN_PUPDR_PULLUP(GPIOA_PIN7)           |\
-                                     PIN_PUPDR_PULLUP(GPIOA_PIN8)           |\
+                                     PIN_PUPDR_FLOATING(GPIOA_LED_A)        |\
+                                     PIN_PUPDR_FLOATING(GPIOA_LED_C)        |\
+                                     PIN_PUPDR_PULLUP(GPIOA_NRST)           |\
                                      PIN_PUPDR_FLOATING(GPIOA_RB_TX)        |\
                                      PIN_PUPDR_FLOATING(GPIOA_RB_RX)        |\
                                      PIN_PUPDR_PULLUP(GPIOA_PIN11)          |\
@@ -246,14 +229,14 @@
                                      PIN_PUPDR_FLOATING(GPIOA_SWCLK)        |\
                                      PIN_PUPDR_PULLUP(GPIOA_PIN15))
 #define VAL_GPIOA_ODR               (PIN_ODR_HIGH(GPIOA_PIN0)               |\
-                                     PIN_ODR_HIGH(GPIOA_PIN1)               |\
+                                     PIN_ODR_HIGH(GPIOA_5VOUT)              |\
                                      PIN_ODR_HIGH(GPIOA_SER_OUT)            |\
                                      PIN_ODR_HIGH(GPIOA_SER_IN)             |\
-                                     PIN_ODR_LOW(GPIOA_RADIO_EXT)           |\
                                      PIN_ODR_LOW(GPIOA_MTX2_TXD)            |\
                                      PIN_ODR_HIGH(GPIOA_BAT_MON)            |\
-                                     PIN_ODR_HIGH(GPIOA_PIN7)               |\
-                                     PIN_ODR_HIGH(GPIOA_PIN8)               |\
+                                     PIN_ODR_HIGH(GPIOA_LED_A)              |\
+                                     PIN_ODR_HIGH(GPIOA_LED_C)              |\
+                                     PIN_ODR_HIGH(GPIOA_NRST)               |\
                                      PIN_ODR_HIGH(GPIOA_RB_TX)              |\
                                      PIN_ODR_HIGH(GPIOA_RB_RX)              |\
                                      PIN_ODR_HIGH(GPIOA_PIN11)              |\
@@ -265,11 +248,11 @@
                                      PIN_AFIO_AF(GPIOA_PIN1, 0)             |\
                                      PIN_AFIO_AF(GPIOA_SER_OUT, 7)          |\
                                      PIN_AFIO_AF(GPIOA_SER_IN, 7)           |\
-                                     PIN_AFIO_AF(GPIOA_RADIO_EXT, 0)        |\
                                      PIN_AFIO_AF(GPIOA_MTX2_TXD, 0)         |\
                                      PIN_AFIO_AF(GPIOA_BAT_MON, 0)          |\
-                                     PIN_AFIO_AF(GPIOA_PIN7, 0))
-#define VAL_GPIOA_AFRH              (PIN_AFIO_AF(GPIOA_PIN8, 0)             |\
+                                     PIN_AFIO_AF(GPIOA_LED_A, 0)            |\
+                                     PIN_AFIO_AF(GPIOA_LED_C, 0))
+#define VAL_GPIOA_AFRH              (PIN_AFIO_AF(GPIOA_NRST, 0)             |\
                                      PIN_AFIO_AF(GPIOA_RB_TX, 7)            |\
                                      PIN_AFIO_AF(GPIOA_RB_RX, 7)            |\
                                      PIN_AFIO_AF(GPIOA_PIN11, 0)            |\
@@ -279,119 +262,102 @@
                                      PIN_AFIO_AF(GPIOA_PIN15, 0))
 
 /*
- * GPIOB setup:
- *
- * PB0  - PIN0                      (input pullup).
- * PB1  - NTX2B_P0                  (output pushpull).
- * PB2  - NTX2B_P1                  (output pushpull).
- * PB3  - SWO                       (alternate 0).
- * PB4  - PIN4                      (input pullup).
- * PB5  - GPS_RESET                 (output pushpull).
- * PB6  - GPS_SCL                   (alternate 4).
- * PB7  - GPS_SDA                   (alternate 4).
- * PB8  - PIN8                      (input pullup).
- * PB9  - PIN9                      (input pullup).
- * PB10 - NTX2B_EN                  (alternate 7).
- * PB11 - NTX2B_TXD                 (output pushpull).
- * PB12 - LED_RB                    (output pushpull).
- * PB13 - LED_RADIO                 (output pushpull).
- * PB14 - LED_GPS                   (output pushpull).
- * PB15 - LED_STATUS                (output pushpull).
+ * GPIOB setup
  */
 #define VAL_GPIOB_MODER             (PIN_MODE_INPUT(GPIOB_PIN0)              |\
                                      PIN_MODE_INPUT(GPIOB_MTX2_P0)           |\
                                      PIN_MODE_INPUT(GPIOB_MTX2_P1)           |\
-                                     PIN_MODE_ALTERNATE(GPIOB_SWO)           |\
+                                     PIN_MODE_INPUT(GPIOB_PIN3)              |\
                                      PIN_MODE_INPUT(GPIOB_PIN4)              |\
-                                     PIN_MODE_OUTPUT(GPIOB_GPS_RESET)        |\
+                                     PIN_MODE_INPUT(GPIOB_PIN5)              |\
                                      PIN_MODE_ALTERNATE(GPIOB_GPS_SCL)       |\
                                      PIN_MODE_ALTERNATE(GPIOB_GPS_SDA)       |\
-                                     PIN_MODE_INPUT(GPIOB_PIN8)              |\
-                                     PIN_MODE_INPUT(GPIOB_PIN9)              |\
+                                     PIN_MODE_OUTPUT(GPIOB_GPS_RESET)        |\
+                                     PIN_MODE_OUTPUT(GPIOB_BUZZER)           |\
                                      PIN_MODE_OUTPUT(GPIOB_MTX2_EN)          |\
-                                     PIN_MODE_INPUT(GPIOB_MTX2_TXD_ALT)      |\
-                                     PIN_MODE_OUTPUT(GPIOB_LED_RB)           |\
+                                     PIN_MODE_INPUT(GPIOB_PIN11)             |\
                                      PIN_MODE_OUTPUT(GPIOB_LED_RADIO)        |\
+                                     PIN_MODE_OUTPUT(GPIOB_LED_RB)           |\
                                      PIN_MODE_OUTPUT(GPIOB_LED_GPS)          |\
                                      PIN_MODE_OUTPUT(GPIOB_LED_STATUS))
 #define VAL_GPIOB_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOB_PIN0)          |\
                                      PIN_OTYPE_PUSHPULL(GPIOB_MTX2_P0)       |\
                                      PIN_OTYPE_PUSHPULL(GPIOB_MTX2_P1)       |\
-                                     PIN_OTYPE_PUSHPULL(GPIOB_SWO)           |\
+                                     PIN_OTYPE_PUSHPULL(GPIOB_PIN3)          |\
                                      PIN_OTYPE_PUSHPULL(GPIOB_PIN4)          |\
-                                     PIN_OTYPE_PUSHPULL(GPIOB_GPS_RESET)     |\
+                                     PIN_OTYPE_PUSHPULL(GPIOB_PIN5)          |\
                                      PIN_OTYPE_OPENDRAIN(GPIOB_GPS_SCL)      |\
                                      PIN_OTYPE_OPENDRAIN(GPIOB_GPS_SDA)      |\
-                                     PIN_OTYPE_PUSHPULL(GPIOB_PIN8)          |\
-                                     PIN_OTYPE_PUSHPULL(GPIOB_PIN9)          |\
+                                     PIN_OTYPE_PUSHPULL(GPIOB_GPS_RESET)     |\
+                                     PIN_OTYPE_PUSHPULL(GPIOB_BUZZER)        |\
                                      PIN_OTYPE_PUSHPULL(GPIOB_MTX2_EN)       |\
-                                     PIN_OTYPE_PUSHPULL(GPIOB_MTX2_TXD_ALT)  |\
-                                     PIN_OTYPE_PUSHPULL(GPIOB_LED_RB)        |\
+                                     PIN_OTYPE_PUSHPULL(GPIOB_PIN11)         |\
                                      PIN_OTYPE_PUSHPULL(GPIOB_LED_RADIO)     |\
+                                     PIN_OTYPE_PUSHPULL(GPIOB_LED_RB)        |\
                                      PIN_OTYPE_PUSHPULL(GPIOB_LED_GPS)       |\
                                      PIN_OTYPE_PUSHPULL(GPIOB_LED_STATUS))
 #define VAL_GPIOB_OSPEEDR           (PIN_OSPEED_2M(GPIOB_PIN0)               |\
                                      PIN_OSPEED_2M(GPIOB_MTX2_P0)            |\
                                      PIN_OSPEED_2M(GPIOB_MTX2_P1)            |\
-                                     PIN_OSPEED_100M(GPIOB_SWO)              |\
+                                     PIN_OSPEED_2M(GPIOB_PIN3)               |\
                                      PIN_OSPEED_2M(GPIOB_PIN4)               |\
-                                     PIN_OSPEED_2M(GPIOB_GPS_RESET)          |\
+                                     PIN_OSPEED_2M(GPIOB_PIN5)               |\
                                      PIN_OSPEED_2M(GPIOB_GPS_SCL)            |\
                                      PIN_OSPEED_2M(GPIOB_GPS_SDA)            |\
-                                     PIN_OSPEED_2M(GPIOB_PIN8)               |\
-                                     PIN_OSPEED_2M(GPIOB_PIN9)               |\
+                                     PIN_OSPEED_2M(GPIOB_GPS_RESET)          |\
+                                     PIN_OSPEED_2M(GPIOB_BUZZER)             |\
                                      PIN_OSPEED_2M(GPIOB_MTX2_EN)            |\
-                                     PIN_OSPEED_2M(GPIOB_MTX2_TXD_ALT)       |\
-                                     PIN_OSPEED_2M(GPIOB_LED_RB)             |\
+                                     PIN_OSPEED_2M(GPIOB_PIN11)              |\
                                      PIN_OSPEED_2M(GPIOB_LED_RADIO)          |\
+                                     PIN_OSPEED_2M(GPIOB_LED_RB)             |\
                                      PIN_OSPEED_2M(GPIOB_LED_GPS)            |\
                                      PIN_OSPEED_2M(GPIOB_LED_STATUS))
 #define VAL_GPIOB_PUPDR             (PIN_PUPDR_PULLUP(GPIOB_PIN0)            |\
                                      PIN_PUPDR_FLOATING(GPIOB_MTX2_P0)       |\
                                      PIN_PUPDR_FLOATING(GPIOB_MTX2_P1)       |\
-                                     PIN_PUPDR_FLOATING(GPIOB_SWO)           |\
+                                     PIN_PUPDR_PULLUP(GPIOB_PIN3)            |\
                                      PIN_PUPDR_PULLUP(GPIOB_PIN4)            |\
-                                     PIN_PUPDR_FLOATING(GPIOB_GPS_RESET)     |\
+                                     PIN_PUPDR_PULLUP(GPIOB_PIN5)            |\
                                      PIN_PUPDR_FLOATING(GPIOB_GPS_SCL)       |\
                                      PIN_PUPDR_FLOATING(GPIOB_GPS_SDA)       |\
-                                     PIN_PUPDR_PULLUP(GPIOB_PIN8)            |\
-                                     PIN_PUPDR_PULLUP(GPIOB_PIN9)            |\
+                                     PIN_PUPDR_FLOATING(GPIOB_GPS_RESET)     |\
+                                     PIN_PUPDR_FLOATING(GPIOB_BUZZER)        |\
                                      PIN_PUPDR_FLOATING(GPIOB_MTX2_EN)       |\
-                                     PIN_PUPDR_FLOATING(GPIOB_MTX2_TXD_ALT)  |\
-                                     PIN_PUPDR_FLOATING(GPIOB_LED_RB)        |\
+                                     PIN_PUPDR_PULLUP(GPIOB_PIN11)           |\
                                      PIN_PUPDR_FLOATING(GPIOB_LED_RADIO)     |\
+                                     PIN_PUPDR_FLOATING(GPIOB_LED_RB)        |\
                                      PIN_PUPDR_FLOATING(GPIOB_LED_GPS)       |\
                                      PIN_PUPDR_FLOATING(GPIOB_LED_STATUS))
 #define VAL_GPIOB_ODR               (PIN_ODR_HIGH(GPIOB_PIN0)                |\
                                      PIN_ODR_HIGH(GPIOB_MTX2_P0)             |\
                                      PIN_ODR_HIGH(GPIOB_MTX2_P1)             |\
-                                     PIN_ODR_HIGH(GPIOB_SWO)                 |\
+                                     PIN_ODR_HIGH(GPIOB_PIN3)                |\
                                      PIN_ODR_HIGH(GPIOB_PIN4)                |\
-                                     PIN_ODR_HIGH(GPIOB_GPS_RESET)           |\
+                                     PIN_ODR_HIGH(GPIOB_PIN5)                |\
                                      PIN_ODR_HIGH(GPIOB_GPS_SCL)             |\
                                      PIN_ODR_HIGH(GPIOB_GPS_SDA)             |\
-                                     PIN_ODR_HIGH(GPIOB_PIN8)                |\
-                                     PIN_ODR_HIGH(GPIOB_PIN9)                |\
+                                     PIN_ODR_HIGH(GPIOB_GPS_RESET)           |\
+                                     PIN_ODR_LOW(GPIOB_BUZZER)               |\
                                      PIN_ODR_LOW(GPIOB_MTX2_EN)              |\
-                                     PIN_ODR_HIGH(GPIOB_MTX2_TXD_ALT)        |\
-                                     PIN_ODR_LOW(GPIOB_LED_RB)               |\
+                                     PIN_ODR_HIGH(GPIOB_PIN11)               |\
                                      PIN_ODR_LOW(GPIOB_LED_RADIO)            |\
+                                     PIN_ODR_LOW(GPIOB_LED_RB)               |\
                                      PIN_ODR_LOW(GPIOB_LED_GPS)              |\
                                      PIN_ODR_LOW(GPIOB_LED_STATUS))
 #define VAL_GPIOB_AFRL              (PIN_AFIO_AF(GPIOB_PIN0, 0)              |\
                                      PIN_AFIO_AF(GPIOB_MTX2_P0, 0)           |\
                                      PIN_AFIO_AF(GPIOB_MTX2_P1, 0)           |\
-                                     PIN_AFIO_AF(GPIOB_SWO, 0)               |\
+                                     PIN_AFIO_AF(GPIOB_PIN3, 0)              |\
                                      PIN_AFIO_AF(GPIOB_PIN4, 0)              |\
-                                     PIN_AFIO_AF(GPIOB_GPS_RESET, 0)         |\
+                                     PIN_AFIO_AF(GPIOB_PIN5, 0)              |\
                                      PIN_AFIO_AF(GPIOB_GPS_SCL, 4)           |\
                                      PIN_AFIO_AF(GPIOB_GPS_SDA, 4))
-#define VAL_GPIOB_AFRH              (PIN_AFIO_AF(GPIOB_PIN8, 0)              |\
-                                     PIN_AFIO_AF(GPIOB_PIN9, 0)              |\
+#define VAL_GPIOB_AFRH              (PIN_AFIO_AF(GPIOB_GPS_RESET, 0)         |\
+                                     PIN_AFIO_AF(GPIOB_BUZZER, 0)            |\
                                      PIN_AFIO_AF(GPIOB_MTX2_EN, 7)           |\
-                                     PIN_AFIO_AF(GPIOB_MTX2_TXD_ALT, 0)      |\
-                                     PIN_AFIO_AF(GPIOB_LED_RB, 0)            |\
+                                     PIN_AFIO_AF(GPIOB_PIN11, 0)             |\
                                      PIN_AFIO_AF(GPIOB_LED_RADIO, 0)         |\
+                                     PIN_AFIO_AF(GPIOB_LED_RB, 0)            |\
                                      PIN_AFIO_AF(GPIOB_LED_GPS, 0)           |\
                                      PIN_AFIO_AF(GPIOB_LED_STATUS, 0))
 
