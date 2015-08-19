@@ -7,94 +7,148 @@
 
 #include <stdlib.h>
 #include "ADCs.h"
+
+#include <adc_lld.h>
 #include "microsd.h"
 #include "config.h"
 #include "state_estimation.h"
 #include "chprintf.h"
 
 
-#define ADC_NUM_CHANNELS   2 //What is a channel??
-#define ADC_BUF_DEPTH      1024
+#define ADC_NUM_CHANNELS   2            
+#define ADC_BUF_DEPTH      1024         
 
-#define SG1 GPIOA_STRAIN_1
-#define SG2 GPIOA_STRAIN_2
-#define SG3 GPIOA_STRAIN_3
-#define TC1 GPIOC_THERMO_1
-#define TC2 GPIOC_THERMO_2
-#define TC3 GPIOC_THERMO_3
+
+//Don't think I will need this
+#define SG1_PIN GPIOA_STRAIN_1          //PA0 = ADC IN0    
+#define SG2_PIN GPIOA_STRAIN_2          //PA1 = ADC IN1
+#define SG3_PIN GPIOA_STRAIN_3          //PA2 = ADC IN2
+#define TC1_PIN GPIOC_THERMO_1          //PC1 = ADC IN11
+#define TC2_PIN GPIOC_THERMO_2          //PC2 = ADC IN12    
+#define TC3_PIN GPIOC_THERMO_3          //PC3 = ADC IN13
+
+
+#define SG1_CHN     ADC_CHANNEL_IN0          //PA0 = ADC IN0    
+#define SG2_CHN     ADC_CHANNEL_IN1          //PA1 = ADC IN1
+#define SG3_CHN     ADC_CHANNEL_IN2          //PA2 = ADC IN2
+#define TC1_CHN     ADC_CHANNEL_IN10         //PC1 = ADC IN11
+#define TC2_CHN     ADC_CHANNEL_IN11         //PC2 = ADC IN12    
+#define TC3_CHN     ADC_CHANNEL_IN12         //PC3 = ADC IN13
+
+
+#define ADC_MICROSD_CHN_SG //---- TODO  ---  ///
+#define ADC_MICROSD_CHN_TC //---- TODO  ---  ///
+
+
+//Create arrays with the sample data from ADCs
+static adcsample_t samples1[ADC_GRP_NUM_CHANNELS * ADC_GRP_BUF_DEPTH];
+static adcsample_t samples2[ADC_GRP_NUM_CHANNELS * ADC_GRP_BUF_DEPTH];
+static adcsample_t samples3[ADC_GRP_NUM_CHANNELS * ADC_GRP_BUF_DEPTH];
 
 /* 
  * Configure a GPT object 
  */ 
 
-static adcsample_t samples1[ADC_GRP_NUM_CHANNELS * ADC_GRP_BUF_DEPTH];
-static adcsample_t samples2[ADC_GRP_NUM_CHANNELS * ADC_GRP_BUF_DEPTH];
-static adcsample_t samples3[ADC_GRP_NUM_CHANNELS * ADC_GRP_BUF_DEPTH];
-
-// Question?
-// This is the timer clock config? Should this be set to a higher number
-// and then called when it reaches a given number on line 155
 static GPTConfig gpt_adc_config = 
 { 
-     40000,  // timer clock: 4khz 
+     40000,  // timer clock: 40khz 
      gpt_adc_trigger  // Timer callback function 
 };
+
+static numberOfBuffersReady = 0;  //This number keeps track on how many times the full buffer callback has been called since last save.
 
 /*
 * ADC conversion group.
 * Mode:        Continuous, 1024 samples of 2 channels,
 * 
 * What does this mean:?
-*  SW triggered.
-* Channels:    IN7, IN8, IN7, IN8, IN7, IN8, Sensor, VBat/2.
+* TIMER 3 triggers adc1, 
+* 
+* !!!TODO!!! the others should be triggered by adc1
+* 
+* Channels:    {IN0, IN11} (1)
+*              {IN1, IN12} (2)
+*              {IN2, IN13} (3)
 */
 
 static const ADCConversionGroup adcConGrp = {
-  TRUE,
-  ADC_NUM_CHANNELS,
-  adccallback,
-  adcerrorcallback,
-  /I have no idea on what the following lines mean:/ //Question: Could you help me out here?
-  0,                                                            / CFGR     /
-  ADC_TR(0, 4095),                                              / TR1      /
-  ADC_CCR_DUAL(1) | ADC_CCR_TSEN | ADC_CCR_VBATEN,              / CCR      /
-  {                                                             / SMPR[2]  /
-    ADC_SMPR1_SMP_AN7(ADC_SMPR_SMP_19P5)
-    | ADC_SMPR1_SMP_AN8(ADC_SMPR_SMP_19P5),
-    ADC_SMPR2_SMP_AN16(ADC_SMPR_SMP_61P5)
-    | ADC_SMPR2_SMP_AN17(ADC_SMPR_SMP_61P5),
-  },
-  {                                                             / SQR[4]   
-    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN7)  | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN8) |
-    ADC_SQR1_SQ3_N(ADC_CHANNEL_IN7)  | ADC_SQR1_SQ4_N(ADC_CHANNEL_IN8),
-    ADC_SQR2_SQ5_N(ADC_CHANNEL_IN7)  | ADC_SQR2_SQ6_N(ADC_CHANNEL_IN8) |
-    ADC_SQR2_SQ7_N(ADC_CHANNEL_IN16) | ADC_SQR2_SQ8_N(ADC_CHANNEL_IN17),
+    TRUE,
+    ADC_NUM_CHANNELS,
+    adccallback,
+    adcerrorcallback,
+    /* cr1   */
+    0,                                           //I believe all the bits should be set to 0
+    /*cr2*/
+    ADC_CR2_EXTSEL_SRC(8) | ADC_CR2_EXTEN_0,     //this lines is supposed to clock the ADC to timer 3 TRGO event
+    /* smpr1 */
+    ADC_SMPR1_SMP_AN11(2) |         //The following lines will set all of them to 40 cycles per conversion (28 + 12)
+    ADC_SMPR1_SMP_AN12(2) |
+    ADC_SMPR1_SMP_AN13(2), 
+    /* smpr2*/  
+    ADC_SMPR2_SMP_AN0(2) |
+    ADC_SMPR2_SMP_AN1(2) |     
+    ADC_SMPR2_SMP_AN2(2),                                
+    /* sqr1 */
     0,
-    0
-  },
-  {                                                             / SSMPR[2] /
-    ADC_SMPR1_SMP_AN7(ADC_SMPR_SMP_19P5)
-    | ADC_SMPR1_SMP_AN8(ADC_SMPR_SMP_19P5),
-    ADC_SMPR2_SMP_AN16(ADC_SMPR_SMP_61P5)
-    | ADC_SMPR2_SMP_AN17(ADC_SMPR_SMP_61P5),
-  },
-  {                                                             / SSQR[4]  /
-    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN8)  | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN7) |
-    ADC_SQR1_SQ3_N(ADC_CHANNEL_IN8)  | ADC_SQR1_SQ4_N(ADC_CHANNEL_IN7),
-    ADC_SQR2_SQ5_N(ADC_CHANNEL_IN8)  | ADC_SQR2_SQ6_N(ADC_CHANNEL_IN7) |
-    ADC_SQR2_SQ7_N(ADC_CHANNEL_IN17) | ADC_SQR2_SQ8_N(ADC_CHANNEL_IN16),
+    /* sqr2 */
     0,
-    0
-  }
+    /* sqr3 */
+    ADC_SQR1_SQ1_N(SG1) | ADC_SQR1_SQ1_N(TC1) 
 }; 
 
-//Question? How do I stop the sampling after finding an element? Don't think each of them have a callback functioon? 
-//Should we do it linearly instead? Call this function at the given sample rate ->  
-static void gpt_adc_trigger(GPTDriver *gpt_ptr) { //
-    (void)gptp;
-    adcStartConversion(&ADCD1, &adcConGrp, samples1, ADC_BUF_DEPTH)
-    adcStartConversion(&ADCD2, &adcConGrp, samples1, ADC_BUF_DEPTH)
-    adcStartConversion(&ADCD3, &adcConGrp, samples1, ADC_BUF_DEPTH)
+static const ADCConversionGroup adcConGrp2 = {   /Should probably define this to be called when the others are called?
+    TRUE,
+    ADC_NUM_CHANNELS,
+    adccallback,
+    adcerrorcallback,
+    /* cr1   */
+    0,                                           //I believe all the bits should be set to 0
+    /*cr2*/
+    ADC_CR2_EXTSEL_SRC(8) | ADC_CR2_EXTEN_0,     //this lines is supposed to clock the ADC to timer 3 TRGO event
+    /* smpr1 */
+    ADC_SMPR1_SMP_AN11(2) |         //The following lines will set all of them to 40 cycles per conversion (28 + 12)
+    ADC_SMPR1_SMP_AN12(2) |
+    ADC_SMPR1_SMP_AN13(2), 
+    /* smpr2*/  
+    ADC_SMPR2_SMP_AN0(2) |
+    ADC_SMPR2_SMP_AN1(2) |     
+    ADC_SMPR2_SMP_AN2(2),                                
+    /* sqr1 */
+    0,
+    /* sqr2 */
+    0,
+    /* sqr3 */
+    ADC_SQR1_SQ1_N(SG2) | ADC_SQR1_SQ1_N(TC2) 
+}; 
+
+static const ADCConversionGroup adcConGrp3 = {   /Should probably define this to be called when the others are called?
+    TRUE,
+    ADC_NUM_CHANNELS,
+    adccallback,
+    adcerrorcallback,
+    /* cr1   */
+    0,                                           //I believe all the bits should be set to 0
+    /*cr2*/
+    ADC_CR2_EXTSEL_SRC(8) | ADC_CR2_EXTEN_0,     //this lines is supposed to clock the ADC to timer 3 TRGO event
+    /* smpr1 */
+    ADC_SMPR1_SMP_AN11(2) |         //The following lines will set all of them to 40 cycles per conversion (28 + 12)
+    ADC_SMPR1_SMP_AN12(2) |
+    ADC_SMPR1_SMP_AN13(2), 
+    /* smpr2*/  
+    ADC_SMPR2_SMP_AN0(2) |
+    ADC_SMPR2_SMP_AN1(2) |     
+    ADC_SMPR2_SMP_AN2(2),                                
+    /* sqr1 */
+    0,
+    /* sqr2 */
+    0,
+    /* sqr3 */
+    ADC_SQR1_SQ1_N(SG3) | ADC_SQR1_SQ1_N(TC3) 
+}; 
+ 
+
+static void gpt_adc_trigger(GPTDriver *gpt_ptr) { //Don't think I need this
+    (void)gpt_ptr;
     //chSysLockFromISR();
     //chSysUnlockFromISR();
 }
@@ -103,28 +157,52 @@ static void gpt_adc_trigger(GPTDriver *gpt_ptr) { //
 //Question? Is the buffer some kind of array with type abcsample_t/ uint16_t? Or 
 
 static void adccallback(ADCDriver *adcDriverpointer, adcsample_t *buffer, size_t n) {
-    (void)adcp;
+    (void)adcDriverpointer;
+    (void)buffer; //I hope this doesn't delete everything
+    
+    if (numberOfBuffersReady < 2)  //Checks if all the buffers are ready. i.e. the two others
+    {
+        numberOfBuffersReady++;
+    }
+    
+    else
+    {
+        numberOfBuffersReady = 0;
+        saveResults(n);
+    }
+}
+
+static void saveResults(size_t n)
+{
     int16_t SIZE = (int16_t)n;
     int16_t i = 0;
     int16_t j = 0;
-    const int8_t MAX_j = 20;
-    uint16_t bufferContent;
+    const int16_t MAX_i = 10;
+    
   
-  
-    while(j < n)
+    while(j < SIZE)
     {
-        bufferContent = buffer[j]
-        microsd_log_s16(CHAN_IMU_HGA, accels[0], accels[1], accels[2], 0);
-
-        j = j + 2;
-    }
-  
-  
+        //read and log all the SG samples
+        microsd_log_s16(ADC_MICROSD_CHN_SG, samples1[j], samples2[j], samples3[j], 0); //are these correctly adressed
+        
+        
+        //1 out of 10 samples are then saved to microSD_card with 
+        if (i == MAX_i)
+        {
+            i = 0;  //resets count to 0
+            microsd_log_s16(ADC_MICROSD_CHN_TC, samples1[j+1], samples2[j+1], samples3[j+1], 0);  //Check this, do not think this is correct
+        }
+        
+        i ++;
+        j += 2;
+    }    
 }
 
 static void adc_error_callback(ADCDriver *adcDriverpointer, adcerror_t err) {
   (void)adcp;
   (void)err;
+  
+  //could possibly implement some kind of reset function that turns of the 
 }
 
 
@@ -133,20 +211,18 @@ msg_t ADC_read_SGs_and_TCs (void *args)
 {
     (void) args;
     
-
-    
     const ADCConfig adcconfig = {};
-    
-
-        
+            
     chRegSetThreadName("ADCs");
-    
-        
     
     adcInit();
     adcStart(&ADCD1, &adcconfig);
     adcStart(&ADCD2, &adcconfig);
     adcStart(&ADCD3, &adcconfig);
+    
+    adcStartConversion(&ADCD1, &adcConGrp1, samples1, ADC_BUF_DEPTH)
+    adcStartConversion(&ADCD2, &adcConGrp2, samples2, ADC_BUF_DEPTH)
+    adcStartConversion(&ADCD3, &adcConGrp3, samples3, ADC_BUF_DEPTH)
     
     /* 
     * Start the GPT timer 
@@ -154,13 +230,10 @@ msg_t ADC_read_SGs_and_TCs (void *args)
     */ 
     gptStart(&GPTD1, &gpt_adc_config); 
     gptStartContinuous(&GPTD1, 1); //Is this the way to do it? 
-
-    while(TRUE)
-    {
-        
-    }
     
-    return (msg_t)NULL;
+    
+    
+    return (msg_t)NULL;  //What happens when this is reached? Should there be a infinite while loop
 } 
 
 
@@ -174,6 +247,9 @@ msg_t ADC_read_SGs_and_TCs (void *args)
 
 
 
+
+
+#region  HIDE
 
 
 /*
@@ -401,6 +477,62 @@ static const ADCConversionGroup adcgrpcfg2 = {
 
 #endregion
 */
+
+/*
+ * 
+ * #include "ch.h"
+#include "hal.h"
+#include "adc_in.h"
+
+#define ADC1_NUM_CHANNELS 1
+#define ADC1_BUF_DEPTH 1024
+
+adcsample_t adc_buffer[ADC1_NUM_CHANNELS * ADC1_BUF_DEPTH];
+
+static void newAdcBufferCb (ADCDriver *adcp, adcsample_t *buffer, size_t n) {
+   palSetPad(GPIOD, GPIOD_LED6);
+}
+
+static const ADCConversionGroup adcgrpconf1 = {
+   TRUE,
+   ADC1_NUM_CHANNELS,
+   newAdcBufferCb,
+   NULL,
+   0,
+   ADC_CR2_EXTSEL_SRC(8) | ADC_CR2_EXTEN_0, // Use TIM3_TRGO as source
+   0,
+   ADC_SMPR2_SMP_AN0(ADC_SAMPLE_15),
+   ADC_SQR1_NUM_CH(ADC1_NUM_CHANNELS),
+   0,
+   ADC_SQR3_SQ1_N(ADC_CHANNEL_IN0)
+};
+
+static void sampleRateCb (GPTDriver *gptp) {}
+
+static const GPTConfig sampleRateCfg = {
+   8000,      / 8kHz timer clock./
+   sampleRateCb  /Timer callback./
+};
+
+void startAdcAcquire(void) {
+   adcStart (&ADCD1, NULL);
+   gptStart (&GPTD3, &sampleRateCfg);
+}
+
+void beginAdcAcquire(void) {
+   adcStartConversion(&ADCD1, &adcgrpconf1, adc_buffer, ADC1_BUF_DEPTH);
+   gptStartContinuous (&GPTD3, 2); // Start ADC/DAC Timer
+   GPTD3.tim->SR = 0;
+   GPTD3.tim->DIER = 0;
+}
+
+void endAdcAcquire(void) {
+   adcStopConversion (&ADCD1);
+   gptStopTimer (&GPTD3); // Stop ADC/DAC Timer on closing
+}
+
+*/
+
 #region
 
 /* Usefull links: 
@@ -410,6 +542,8 @@ static const ADCConversionGroup adcgrpcfg2 = {
  * https://blog.udemy.com/embedded-c-tutorial/
  * http://forum.chibios.org/phpbb/viewtopic.php?f=3&t=1373
  * http://www.scriptoriumdesigns.com/embedded/interrupts.php
+ * http://forum.chibios.org/phpbb/viewtopic.php?f=3&t=1373
+ * 
  * 
  * Less usefull links
  * http://xmodulo.com/good-ide-for-c-cpp-linux.html

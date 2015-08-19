@@ -15,3 +15,4 @@ msg_t ADC_read_SGs_and_TCs (void *args);
 static void gpt_adc_trigger(GPTDriver *gpt_ptr);
 static void adccallback(ADCDriver *adcDriverpointer, adcsample_t *buffer, size_t n);
 static void adc_error_callback(ADCDriver *adcDriverpointer, adcerror_t err);
+static void saveResults(size_t n);
