@@ -223,7 +223,7 @@ static void adcerrorcallback(ADCDriver *adcDriverpointer, adcerror_t err) {
 
 
 
-msg_t ADC_read_SGs_and_TCs (void *args)
+msg_t ADCs_thread(void *args)
 {
     (void) args;
     
@@ -247,7 +247,7 @@ msg_t ADC_read_SGs_and_TCs (void *args)
     gptStart(&GPTD3, &gpt_adc_config); /*What is &GPTD3 ? */
     gptStartContinuous(&GPTD3, 1); /*Is this the way to do it? */
     
-    
+    chThdSleep(TIME_INFINITE);
     
     return (msg_t)NULL;  /*What happens when this is reached? Should there be a infinite while loop */
 } 

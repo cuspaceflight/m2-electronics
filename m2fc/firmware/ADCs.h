@@ -23,7 +23,7 @@
 
 
 
-msg_t ADC_read_SGs_and_TCs (void *args);
+msg_t ADCs_thread (void *args);
 
 static void gpt_adc_trigger(GPTDriver *gpt_ptr);
 static void adccallback(ADCDriver *adcDriverpointer, adcsample_t *buffer, size_t n);

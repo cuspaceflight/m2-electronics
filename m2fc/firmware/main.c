@@ -33,6 +33,7 @@ static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waMicroSD, 512);
 static WORKING_AREA(waPyros, 128);
 static WORKING_AREA(waThreadSBP, 1024);
+static WORKING_AREA(waADCs, 512);
 
 /*
  * Heatbeat thread.
@@ -202,6 +203,9 @@ int main(void) {
 
     chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
                       sbp_thread, NULL);
+                      
+    chThdCreateStatic(waADCs, sizeof(waADCs), NORMALPRIO,
+                      ADCs_thread, NULL);                  
 
     /* Start the command shell on the slave serial port */
     m2fc_shell_run();
