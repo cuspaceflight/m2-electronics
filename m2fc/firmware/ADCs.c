@@ -37,10 +37,8 @@
 #define TC2_CHN     ADC_CHANNEL_IN11         //PC2 = ADC IN12    
 #define TC3_CHN     ADC_CHANNEL_IN12         //PC3 = ADC IN13
 
-
-/* ------ TODO  -------- */
-#define ADC_MICROSD_CHN_SG   NULL /*---- TODO  ---  */
-#define ADC_MICROSD_CHN_TC   NULL /*---- TODO  ---  */
+#define ADC_MICROSD_CHN_SG   CHAN_SENS_SG 
+#define ADC_MICROSD_CHN_TC   CHAN_SENS_TC 
 
 
 
@@ -54,11 +52,17 @@ static adcsample_t samples3[ADC_NUM_CHANNELS * ADC_BUF_DEPTH];
  * Configure a GPT object 
  */ 
 
-static GPTConfig gpt_adc_config = 
+static const GPTConfig gpt_adc_config = 
 { 
      40000,  /* timer clock: 40khz */
      gpt_adc_trigger  /* Timer callback function */
 };
+
+
+/*
+ *  Configure ADCs
+ */
+static const ADCConfig adcconfig = {};
 
 static numberOfBuffersReady = 0;  /*This number keeps track on how many times the full buffer callback has been called since last save. */
 
@@ -76,7 +80,7 @@ static numberOfBuffersReady = 0;  /*This number keeps track on how many times th
 *              {IN2, IN13} (3)
 */
 
-static const ADCConversionGroup adcConGrp = {
+static const ADCConversionGroup adcConGrp1 = {
     TRUE,
     ADC_NUM_CHANNELS,
     adccallback,
@@ -98,7 +102,7 @@ static const ADCConversionGroup adcConGrp = {
     /* sqr2 */
     0,
     /* sqr3 */
-    ADC_SQR1_SQ1_N(SG1_CHN) | ADC_SQR1_SQ1_N(TC1_CHN) 
+    ADC_SQR3_SQ1_N(SG1_CHN) | ADC_SQR3_SQ2_N(TC1_CHN) 
 }; 
 
 static const ADCConversionGroup adcConGrp2 = {   
@@ -123,9 +127,8 @@ static const ADCConversionGroup adcConGrp2 = {
     /* sqr2 */
     0,
     /* sqr3 */
-    ADC_SQR1_SQ1_N(SG2_CHN) | ADC_SQR1_SQ1_N(TC2_CHN) 
+    ADC_SQR3_SQ1_N(SG2_CHN) | ADC_SQR3_SQ2_N(TC2_CHN) 
 }; 
-
 /*Should probably define this to be called when the others are called? */
 static const ADCConversionGroup adcConGrp3 = {   
     TRUE,
@@ -148,7 +151,6 @@ static const ADCConversionGroup adcConGrp3 = {
     ADC_SMPR2_SMP_AN0(2) |
     ADC_SMPR2_SMP_AN1(2) |     
     ADC_SMPR2_SMP_AN2(2),                                
-    
     /* sqr1 */
     0,
     
@@ -156,7 +158,7 @@ static const ADCConversionGroup adcConGrp3 = {
     0,
     
     /* sqr3 */
-    ADC_SQR1_SQ1_N(SG3_CHN) | ADC_SQR1_SQ1_N(TC3_CHN) 
+    ADC_SQR3_SQ1_N(SG3_CHN) | ADC_SQR3_SQ2_N(TC3_CHN) 
 }; 
  
 
@@ -171,7 +173,8 @@ static void gpt_adc_trigger(GPTDriver *gpt_ptr) { /*Don't think I need this */
 
 static void adccallback(ADCDriver *adcDriverpointer, adcsample_t *buffer, size_t n) {
     (void)adcDriverpointer;
-    (void)buffer; /*I hope this doesn't delete everything */
+    (void)buffer;   /*I hope this doesn't delete everything */
+    /*(void)n; */
     
     if (numberOfBuffersReady < 2)  /*Checks if all the buffers are ready. i.e. the two others */
     {
@@ -187,13 +190,13 @@ static void adccallback(ADCDriver *adcDriverpointer, adcsample_t *buffer, size_t
 
 static void saveResults(size_t n)
 {
-    int16_t SIZE = (int16_t)n;
+    int16_t size = (int16_t)n;
     int16_t i = 0;
     int16_t j = 0;
     const int16_t MAX_i = 10;
     
   
-    while(j < SIZE)
+    while(j < size)
     {
         /*read and log all the SG samples */
         microsd_log_s16(ADC_MICROSD_CHN_SG, samples1[j], samples2[j], samples3[j], 0); /*are these correctly adressed */
@@ -224,7 +227,7 @@ msg_t ADC_read_SGs_and_TCs (void *args)
 {
     (void) args;
     
-    const ADCConfig adcconfig = {};
+    
             
     chRegSetThreadName("ADCs");
     
