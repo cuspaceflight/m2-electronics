@@ -20,6 +20,9 @@
 #include "mission.h"
 #include "state_estimation.h"
 #include "sbp_io.h"
+#include "ADCs.h"
+
+#include "ADCs.c"
 
 /* Create working areas for all threads */
 static WORKING_AREA(waMS5611, 512);
