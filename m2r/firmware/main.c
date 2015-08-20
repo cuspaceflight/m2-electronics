@@ -27,11 +27,13 @@ static msg_t ThreadHeartbeat(void *arg) {
     while (TRUE) {
         palSetPad(GPIOB, GPIOB_LED_STATUS);
         IWDG->KR = 0xAAAA;
-        chThdSleepMilliseconds(500);
+        chThdSleepMilliseconds(50);
 
         palClearPad(GPIOB, GPIOB_LED_STATUS);
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
+        IWDG->KR = 0xAAAA;
+        chThdSleepMilliseconds(400);
     }
 
     return (msg_t)NULL;
@@ -42,28 +44,26 @@ int main(void) {
     chSysInit();
     chRegSetThreadName("main");
 
-    sbp_state_init(&sbp_state);
-    rockblock_init();
-    dispatch_init();
+    /*sbp_state_init(&sbp_state);*/
+    /*rockblock_init();*/
+    /*dispatch_init();*/
 
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,
                       ThreadHeartbeat, NULL);
 
-    chThdCreateStatic(waThreadUblox, sizeof(waThreadUblox), NORMALPRIO,
-                      ublox_thread, NULL);
+    /*chThdCreateStatic(waThreadUblox, sizeof(waThreadUblox), NORMALPRIO,*/
+                      /*ublox_thread, NULL);*/
 
     chThdCreateStatic(waThreadRadio, sizeof(waThreadRadio), NORMALPRIO,
                       radio_thread, NULL);
 
-    chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
-                      sbp_thread, NULL);
+    /*chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,*/
+                      /*sbp_thread, NULL);*/
 
     /* Configure and enable the watchdog timer */
-    /*
-    IWDG->KR = 0x5555;
-    IWDG->PR = 3;
-    IWDG->KR = 0xCCCC;
-    */
+    /*IWDG->KR = 0x5555;*/
+    /*IWDG->PR = 3;*/
+    /*IWDG->KR = 0xCCCC;*/
 
     chThdSetPriority(LOWPRIO);
     chThdSleep(TIME_INFINITE);

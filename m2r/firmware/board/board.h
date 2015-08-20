@@ -168,7 +168,7 @@
                                      PIN_MODE_OUTPUT(GPIOA_5VOUT)           |\
                                      PIN_MODE_ALTERNATE(GPIOA_SER_OUT)      |\
                                      PIN_MODE_ALTERNATE(GPIOA_SER_IN)       |\
-                                     PIN_MODE_ANALOG(GPIOA_MTX2_TXD)        |\
+                                     PIN_MODE_ALTERNATE(GPIOA_MTX2_TXD)     |\
                                      PIN_MODE_ANALOG(GPIOA_BAT_MON)         |\
                                      PIN_MODE_OUTPUT(GPIOA_LED_A)           |\
                                      PIN_MODE_OUTPUT(GPIOA_LED_C)           |\
@@ -200,7 +200,7 @@
                                      PIN_OSPEED_2M(GPIOA_5VOUT)             |\
                                      PIN_OSPEED_2M(GPIOA_SER_OUT)           |\
                                      PIN_OSPEED_2M(GPIOA_SER_IN)            |\
-                                     PIN_OSPEED_2M(GPIOA_MTX2_TXD)          |\
+                                     PIN_OSPEED_100M(GPIOA_MTX2_TXD)        |\
                                      PIN_OSPEED_2M(GPIOA_BAT_MON)           |\
                                      PIN_OSPEED_2M(GPIOA_LED_A)             |\
                                      PIN_OSPEED_2M(GPIOA_LED_C)             |\
@@ -245,10 +245,10 @@
                                      PIN_ODR_HIGH(GPIOA_SWCLK)              |\
                                      PIN_ODR_HIGH(GPIOA_PIN15))
 #define VAL_GPIOA_AFRL              (PIN_AFIO_AF(GPIOA_PIN0, 0)             |\
-                                     PIN_AFIO_AF(GPIOA_PIN1, 0)             |\
+                                     PIN_AFIO_AF(GPIOA_5VOUT, 0)            |\
                                      PIN_AFIO_AF(GPIOA_SER_OUT, 7)          |\
                                      PIN_AFIO_AF(GPIOA_SER_IN, 7)           |\
-                                     PIN_AFIO_AF(GPIOA_MTX2_TXD, 0)         |\
+                                     PIN_AFIO_AF(GPIOA_MTX2_TXD, 2)         |\
                                      PIN_AFIO_AF(GPIOA_BAT_MON, 0)          |\
                                      PIN_AFIO_AF(GPIOA_LED_A, 0)            |\
                                      PIN_AFIO_AF(GPIOA_LED_C, 0))
