@@ -14,6 +14,9 @@
 #include "radio.h"
 #include "dispatch.h"
 #include "rockblock.h"
+#include "m2r_shell.h"
+
+void initialise_monitor_handles(void);
 
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waThreadUblox, 4096);
@@ -40,6 +43,7 @@ static msg_t ThreadHeartbeat(void *arg) {
 }
 
 int main(void) {
+    initialise_monitor_handles();
     halInit();
     chSysInit();
     chRegSetThreadName("main");
@@ -60,13 +64,18 @@ int main(void) {
     /*chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,*/
                       /*sbp_thread, NULL);*/
 
-    /* Configure and enable the watchdog timer */
-    /*IWDG->KR = 0x5555;*/
-    /*IWDG->PR = 3;*/
-    /*IWDG->KR = 0xCCCC;*/
+    /* Configure and enable the watchdog timer, stopped in debug halt */
+    DBGMCU->APB1FZ |= DBGMCU_APB1_FZ_DBG_IWDG_STOP;
+    IWDG->KR = 0x5555;
+    IWDG->PR = 3;
+    IWDG->KR = 0xCCCC;
 
     chThdSetPriority(LOWPRIO);
     chThdSleep(TIME_INFINITE);
+
+    /* Stop the compiler from removing this function by calling it after going
+     * to sleep. Take that, optimiser! */
+    m2r_shell_run();
 
     return 0;
 }

@@ -93,7 +93,7 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/memstreams.c \
 			 ../../sbp/sbp.c ../../sbp/edc.c \
        main.c radio.c dispatch.c ublox.c rockblock.c serial_link.c \
-       audio_data.c sbp_io.c
+       audio_data.c sbp_io.c m2r_shell.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -210,7 +210,7 @@ UINCDIR = ../../sbp
 ULIBDIR =
 
 # List all user libraries here
-ULIBS = -lm
+ULIBS = --specs=rdimon.specs -lm -lc -lrdimon
 
 
 #
@@ -223,16 +223,17 @@ include $(RULESPATH)/rules.mk
 ##############################################################################
 # Black Magic Probe flashing via GDB
 #
+BMPPORT = /dev/serial/by-id/usb-Black_Sphere_Technologies_Black_Magic_Probe_E3BFB8A0-if00
 flash: build/$(PROJECT).elf
 	arm-none-eabi-gdb --batch \
-		              -ex 'target extended-remote /dev/ttyACM0' \
+		              -ex "target extended-remote $(BMPPORT)" \
 					  -ex 'monitor version' \
 					  -ex 'monitor swdp_scan' \
 					  -ex 'attach 1' \
-					  -ex 'load' build/$(PROJECT).elf \
+					  -ex "load build/$(PROJECT).elf"
 
 debug: build/$(PROJECT).elf
-	arm-none-eabi-gdb -ex 'target extended-remote /dev/ttyACM0' \
+	arm-none-eabi-gdb -ex "target extended-remote $(BMPPORT)" \
 		              -ex 'monitor swdp_scan' \
 					  -ex 'attach 1' \
 					  -ex "file build/$(PROJECT).elf"
