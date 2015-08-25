@@ -17,7 +17,7 @@ fn pack_message(llrs: &[f64; N]) -> [u8; K/8] {
 /// Each llr is a log likelihood ratio with positive values more likely to be 0.
 ///
 /// Returns the corresponding message bytes if decoding was possible, or None.
-fn decode(llrs: &[f64; N]) -> Option<[u8; K/8]> {
+pub fn decode(llrs: &[f64; N]) -> Option<[u8; K/8]> {
     const MAX_ITERS: u32 = 100;
     let h = parity_check_matrix::h();
     let (conns_chk, conns_var) = parity_check_matrix::connections(&h);
@@ -46,6 +46,8 @@ fn decode(llrs: &[f64; N]) -> Option<[u8; K/8]> {
                 u[i][a] = 1.0;
                 for &b in &conns_chk[i] {
                     if b != a {
+                        // This one line is responsible for 99% of CPU use at
+                        // low SNR. Could replace with a min* algorithm...
                         u[i][a] *= (v[b][i] / 2.0).tanh();
                     }
                 }
