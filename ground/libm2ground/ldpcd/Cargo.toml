@@ -1,9 +1,8 @@
 [package]
-name = "libldpcd"
+name = "ldpcd"
 version = "0.1.0"
 authors = ["Adam Greig <adam@adamgreig.com>"]
 
 [lib]
-name = "ldpcd"
 crate-type = ["dylib", "rlib"]
 path = "src/lib.rs"
