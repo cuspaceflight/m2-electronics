@@ -68,7 +68,15 @@ fn main() {
     // Start streaming data
     println!("\nCollecting data...");
     dev.start_rx(&|buf: &[f32]| {
-        tx_data.send(buf.to_vec()).unwrap();
+        // Send the buffer back to our parent as an owned vector,
+        // stopping operations if there was an error sending (e.g. parent died)
+        match tx_data.send(buf.to_vec()) {
+            Ok(_) => (),
+            Err(_) => return true
+        };
+
+        // Check for a command to stop from our parent, assuming continue if
+        // no command received.
         match rx_stop.try_recv() {
             Ok(r)  => r,
             Err(_) => false
@@ -78,18 +86,30 @@ fn main() {
     // Receive data
     let mut n_samples = 0usize;
     while dev.is_streaming() {
+        // Fetch buffer from callback
         let samples = rx_data.recv().unwrap();
         n_samples += samples.len() / 2;
+
+        // Turn buffer into a u8 of the appropriate length
         let buf: &[u8] = unsafe {
             std::slice::from_raw_parts(
                 std::mem::transmute(&samples[0] as *const f32),
-                samples.len() * 4)
+                samples.len() * std::mem::size_of::<f32>())
         };
+
+        // Write buffer to file
         f.write_all(buf).unwrap();
+
+        // Quit after 50M samples
         if n_samples > 50_000_000 {
             println!("Collected {} samples, stopping.", n_samples);
+            // Send stop command
             tx_stop.send(true).unwrap();
+            // Receive final buffer from callback and throw it on the floor.
+            // Note we could just quit immediately and the hangup on the data
+            // channel also triggers the callback to tell libairspy to stop.
             rx_data.recv().unwrap();
+            // OK, quit.
             break;
         }
     }
