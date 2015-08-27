@@ -1,6 +1,7 @@
 use std::ffi::CStr;
-use std::str;
 use std::result;
+use std::str;
+use std::sync::mpsc::{Sender};
 
 mod ffi;
 
@@ -96,11 +97,11 @@ macro_rules! ffifn {
     );
 }
 
-/// Callback in Rust to send to the libairspy C library that calls a user
-/// function provided to start_rx after mangling the memory into something
-/// appropriate for the transfer's sample_type. The library user thus does not
-/// need any unsafe code.
-extern "C" fn rx_cb<T>(transfer: *mut ffi::airspy_transfer_t) -> ffi::c_int {
+/// Callback in Rust to send to the libairspy C library that sends buffers
+/// through to a user channel, quitting streaming when the channel hangs up.
+extern "C" fn rx_cb<T>(transfer: *mut ffi::airspy_transfer_t) -> ffi::c_int
+    where T: Clone
+{
     let transfer = unsafe { &*transfer };
     let sample_count = transfer.sample_count as usize;
     let iq_multiplier = match transfer.sample_type {
@@ -111,12 +112,26 @@ extern "C" fn rx_cb<T>(transfer: *mut ffi::airspy_transfer_t) -> ffi::c_int {
         ffi::airspy_sample_type::AIRSPY_SAMPLE_UINT16_REAL => 1,
         ffi::airspy_sample_type::AIRSPY_SAMPLE_END => unreachable!()
     };
+
     let buffer = unsafe {
         std::slice::from_raw_parts(transfer.samples as *const T,
                                    sample_count * iq_multiplier)
-    };
-    let closure = transfer.ctx as *mut &Fn(&[T]) -> bool;
-    unsafe { (*closure)(buffer) as ffi::c_int }
+    }.to_vec();
+
+    // Turn the ctx into a &Sender and send the buffer along it.
+    // If it works, keep asking for more samples, but if not, we'll quit.
+    let sender: &Sender<Vec<T>> = unsafe { &*(transfer.ctx as *const _)};
+    match sender.send(buffer) {
+        Ok(_) => 0,
+        Err(_) => {
+            // Drop the Sender to prevent leaks,
+            // then tell libairspy to stop streaming.
+            let boxed: Box<Sender<Vec<T>>> = unsafe {
+                std::mem::transmute(transfer.ctx as *const _) };
+            std::mem::drop(boxed);
+            1
+        }
+    }
 }
 
 
@@ -164,19 +179,28 @@ impl Airspy {
 
     /// Start RX streaming from the Airspy.
     ///
-    /// Callback will be given a buffer of samples in a format dictated by the
-    /// most recent call to set_sample_type, and should return true to stop
-    /// the stream or false to continue streaming.
+    /// The given channel will be sent Vec<T> when Airspy callbacks occur. When
+    /// the remote channel hangs up, libairspy is told to stop streaming and
+    /// the Sender is dropped.
     ///
     /// T must match with whatever was set for SampleType, and must be one of
     /// f32, i16 or u16.
-    pub fn start_rx<T>(&mut self, callback: &Fn(&[T]) -> bool) -> Result<()>
+    pub fn start_rx<T>(&mut self, sender: Sender<Vec<T>>) -> Result<()>
+        where T: Clone
     {
-        let ctx = &callback as *const _ as *mut ffi::c_void;
+        // Box the Sender to move it onto the heap, then get a void* to it.
+        let boxed_sender = Box::new(sender);
+        let ctx = &*boxed_sender as *const _ as *mut ffi::c_void;
+        // Forget the heap Sender so it is not immediately destroyed.
+        std::mem::forget(boxed_sender);
         ffifn!(ffi::airspy_start_rx(self.ptr, rx_cb::<T>, ctx))
     }
 
     /// Stop the Airspy streaming.
+    ///
+    /// Causes the Sender from start_rx to leak. Consider destroying the
+    /// Receiver half instead, which will also trigger libairspy to stop
+    /// sending samples, but does not leak.
     pub fn stop_rx(&mut self) -> Result<()> {
         ffifn!(ffi::airspy_stop_rx(self.ptr))
     }

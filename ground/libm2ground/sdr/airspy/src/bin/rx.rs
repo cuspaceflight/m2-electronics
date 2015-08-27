@@ -63,25 +63,10 @@ fn main() {
 
     // Make a channel for talking to the callback
     let (tx_data, rx_data) = mpsc::channel();
-    let (tx_stop, rx_stop) = mpsc::channel();
 
     // Start streaming data
     println!("\nCollecting data...");
-    dev.start_rx(&|buf: &[f32]| {
-        // Send the buffer back to our parent as an owned vector,
-        // stopping operations if there was an error sending (e.g. parent died)
-        match tx_data.send(buf.to_vec()) {
-            Ok(_) => (),
-            Err(_) => return true
-        };
-
-        // Check for a command to stop from our parent, assuming continue if
-        // no command received.
-        match rx_stop.try_recv() {
-            Ok(r)  => r,
-            Err(_) => false
-        }
-    }).unwrap();
+    dev.start_rx::<f32>(tx_data).unwrap();
 
     // Receive data
     let mut n_samples = 0usize;
@@ -103,13 +88,9 @@ fn main() {
         // Quit after 50M samples
         if n_samples > 50_000_000 {
             println!("Collected {} samples, stopping.", n_samples);
-            // Send stop command
-            tx_stop.send(true).unwrap();
-            // Receive final buffer from callback and throw it on the floor.
-            // Note we could just quit immediately and the hangup on the data
-            // channel also triggers the callback to tell libairspy to stop.
-            rx_data.recv().unwrap();
-            // OK, quit.
+            // When this thread finishes and rx_data goes out of scope, it
+            // hangs up the channel, prompting the callback to return 'stop' to
+            // libairspy, quitting sampling.
             break;
         }
     }
