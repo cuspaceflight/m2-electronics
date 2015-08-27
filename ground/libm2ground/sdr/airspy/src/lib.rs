@@ -103,8 +103,17 @@ macro_rules! ffifn {
 extern "C" fn rx_cb<T>(transfer: *mut ffi::airspy_transfer_t) -> ffi::c_int {
     let transfer = unsafe { &*transfer };
     let sample_count = transfer.sample_count as usize;
-    let buffer: &[T] = unsafe {
-        std::slice::from_raw_parts(transfer.samples as *const T, sample_count)
+    let iq_multiplier = match transfer.sample_type {
+        ffi::airspy_sample_type::AIRSPY_SAMPLE_FLOAT32_IQ => 2,
+        ffi::airspy_sample_type::AIRSPY_SAMPLE_FLOAT32_REAL => 1,
+        ffi::airspy_sample_type::AIRSPY_SAMPLE_INT16_IQ => 2,
+        ffi::airspy_sample_type::AIRSPY_SAMPLE_INT16_REAL => 1,
+        ffi::airspy_sample_type::AIRSPY_SAMPLE_UINT16_REAL => 1,
+        ffi::airspy_sample_type::AIRSPY_SAMPLE_END => unreachable!()
+    };
+    let buffer = unsafe {
+        std::slice::from_raw_parts(transfer.samples as *const T,
+                                   sample_count * iq_multiplier)
     };
     let closure = transfer.ctx as *mut &Fn(&[T]) -> bool;
     unsafe { (*closure)(buffer) as ffi::c_int }

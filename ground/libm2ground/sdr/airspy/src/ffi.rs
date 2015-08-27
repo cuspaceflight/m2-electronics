@@ -55,7 +55,7 @@ pub struct airspy_read_partid_serialno_t {
 pub struct airspy_transfer_t {
     pub device: *mut airspy_device,
     pub ctx: *mut c_void,
-    pub samples: *mut c_void,
+    pub samples: *const c_void,
     pub sample_count: c_int,
     pub sample_type: airspy_sample_type
 }
