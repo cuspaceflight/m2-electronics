@@ -65,6 +65,8 @@ x = np.unpackbits(np.array((
     0xA0, 0x7F, 0x48, 0xF6
 ), dtype=np.uint8))
 cw1 = (np.dot(x, G) % 2).astype(np.uint8)
+cw1_llr = -5.0 * ((2 * cw1.astype(np.double)) - 1) + np.random.randn(256) * 2.0
+print(", ".join("{: .2f}".format(f) for f in cw1_llr))
 # print(" ".join("{:02X}".format(b) for b in np.packbits(cw1)))
 
 # Method two, generate H (the full parity check matrix) from the definition in

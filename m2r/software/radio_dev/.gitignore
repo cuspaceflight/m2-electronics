@@ -1,3 +1,5 @@
 hamming
 ldpc
 .ipynb_checkpoints/
+*.o
+*.so
