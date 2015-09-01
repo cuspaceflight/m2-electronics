@@ -20,9 +20,7 @@
 #include "mission.h"
 #include "state_estimation.h"
 #include "sbp_io.h"
-#include "ADCs.h"
-
-#include "ADCs.c"
+#include "analogue.h"
 
 /* Create working areas for all threads */
 static WORKING_AREA(waMS5611, 512);
@@ -33,7 +31,7 @@ static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waMicroSD, 512);
 static WORKING_AREA(waPyros, 128);
 static WORKING_AREA(waThreadSBP, 1024);
-static WORKING_AREA(waADCs, 512);
+static WORKING_AREA(waAnalogue, 512);
 
 /*
  * Heatbeat thread.
@@ -171,6 +169,7 @@ int main(void) {
 
 
     /* Configure and enable the watchdog timer */
+    DBGMCU->APB1FZ |= DBGMCU_APB1_FZ_DBG_IWDG_STOP;
     IWDG->KR = 0x5555;
     IWDG->PR = 3;
     IWDG->KR = 0xCCCC;
@@ -186,6 +185,7 @@ int main(void) {
     chThdCreateStatic(waMicroSD, sizeof(waMicroSD), HIGHPRIO,
                       microsd_thread, NULL);
 
+    /*
     chThdCreateStatic(waMission, sizeof(waMission), NORMALPRIO,
                       mission_thread, NULL);
 
@@ -203,9 +203,10 @@ int main(void) {
 
     chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
                       sbp_thread, NULL);
-                      
-    chThdCreateStatic(waADCs, sizeof(waADCs), NORMALPRIO,
-                      ADCs_thread, NULL);                  
+      
+    */
+    chThdCreateStatic(waAnalogue, sizeof(waAnalogue), NORMALPRIO,
+                      analogue_thread, NULL);                  
 
     /* Start the command shell on the slave serial port */
     m2fc_shell_run();

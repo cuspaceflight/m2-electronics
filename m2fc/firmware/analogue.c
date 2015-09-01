@@ -1,15 +1,12 @@
-
 /*
  * ADC Driver (ADC1, ADC2, ADC3)
  * M2FC
  * 2015 Eivind Roson Eide, Cambridge University Spaceflight
  */
 
-#include <stdlib.h>
-#include "ADCs.h"
+#include "analogue.h"
 
-#include <adc_lld.h>
-#include <gpt_lld.h>
+#include <string.h>
 
 #include "microsd.h"
 #include "config.h"
@@ -42,11 +39,18 @@
 
 
 
+static void gpt_adc_trigger(GPTDriver *gpt_ptr);
+static void adccallback(ADCDriver *adcDriverpointer, adcsample_t *buffer, size_t n);
+static void adcerrorcallback(ADCDriver *adcDriverpointer, adcerror_t err);
+static void save_results(void);
+
 
 //Create arrays with the sample data from ADCs
 static adcsample_t samples1[ADC_NUM_CHANNELS * ADC_BUF_DEPTH];
 static adcsample_t samples2[ADC_NUM_CHANNELS * ADC_BUF_DEPTH];
 static adcsample_t samples3[ADC_NUM_CHANNELS * ADC_BUF_DEPTH];
+
+static Thread *tp = NULL;
 
 /* 
  * Configure a GPT object 
@@ -55,16 +59,12 @@ static adcsample_t samples3[ADC_NUM_CHANNELS * ADC_BUF_DEPTH];
 static const GPTConfig gpt_adc_config = 
 { 
      40000,  /* timer clock: 40khz */
-     gpt_adc_trigger  /* Timer callback function */
+     gpt_adc_trigger,  /* Timer callback function */
+     0
 };
 
 
-/*
- *  Configure ADCs
- */
-static const ADCConfig adcconfig = {};
-
-static numberOfBuffersReady = 0;  /*This number keeps track on how many times the full buffer callback has been called since last save. */
+static volatile int numberOfBuffersReady = 0;  /*This number keeps track on how many times the full buffer callback has been called since last save. */
 
 /*
 * ADC conversion group.
@@ -98,7 +98,7 @@ static const ADCConversionGroup adcConGrp1 = {
     ADC_SMPR2_SMP_AN1(2) |     
     ADC_SMPR2_SMP_AN2(2),                                
     /* sqr1 */
-    0,
+    ADC_SQR1_NUM_CH(2),
     /* sqr2 */
     0,
     /* sqr3 */
@@ -123,12 +123,13 @@ static const ADCConversionGroup adcConGrp2 = {
     ADC_SMPR2_SMP_AN1(2) |     
     ADC_SMPR2_SMP_AN2(2),                                
     /* sqr1 */
-    0,
+    ADC_SQR1_NUM_CH(2),
     /* sqr2 */
     0,
     /* sqr3 */
     ADC_SQR3_SQ1_N(SG2_CHN) | ADC_SQR3_SQ2_N(TC2_CHN) 
 }; 
+
 /*Should probably define this to be called when the others are called? */
 static const ADCConversionGroup adcConGrp3 = {   
     TRUE,
@@ -152,7 +153,7 @@ static const ADCConversionGroup adcConGrp3 = {
     ADC_SMPR2_SMP_AN1(2) |     
     ADC_SMPR2_SMP_AN2(2),                                
     /* sqr1 */
-    0,
+    ADC_SQR1_NUM_CH(2),
     
     /* sqr2 */
     0,
@@ -162,10 +163,8 @@ static const ADCConversionGroup adcConGrp3 = {
 }; 
  
 
-static void gpt_adc_trigger(GPTDriver *gpt_ptr) { /*Don't think I need this */
+static void gpt_adc_trigger(GPTDriver *gpt_ptr) {
     (void)gpt_ptr;
-    /*chSysLockFromISR(); */
-    /*chSysUnlockFromISR(); */
 }
 
 
@@ -174,7 +173,7 @@ static void gpt_adc_trigger(GPTDriver *gpt_ptr) { /*Don't think I need this */
 static void adccallback(ADCDriver *adcDriverpointer, adcsample_t *buffer, size_t n) {
     (void)adcDriverpointer;
     (void)buffer;   /*I hope this doesn't delete everything */
-    /*(void)n; */
+    (void)n; 
     
     if (numberOfBuffersReady < 2)  /*Checks if all the buffers are ready. i.e. the two others */
     {
@@ -184,13 +183,17 @@ static void adccallback(ADCDriver *adcDriverpointer, adcsample_t *buffer, size_t
     else
     {
         numberOfBuffersReady = 0;
-        saveResults(n);
+        chSysLockFromIsr();
+        if(tp != NULL && tp->p_state != THD_STATE_READY) {
+            chSchReadyI(tp);
+        }
+        chSysUnlockFromIsr();
     }
 }
 
-static void saveResults(size_t n)
+static void save_results()
 {
-    int16_t size = (int16_t)n;
+    int16_t size = (int16_t)(ADC_BUF_DEPTH / ADC_NUM_CHANNELS);
     int16_t i = 0;
     int16_t j = 0;
     const int16_t MAX_i = 10;
@@ -223,32 +226,37 @@ static void adcerrorcallback(ADCDriver *adcDriverpointer, adcerror_t err) {
 
 
 
-msg_t ADCs_thread(void *args)
+msg_t analogue_thread(void *args)
 {
-    (void) args;
-    
-    
-            
-    chRegSetThreadName("ADCs");
-    
+    (void)args;
+
+    chRegSetThreadName("Analogue");
+
     adcInit();
-    adcStart(&ADCD1, &adcconfig);
-    adcStart(&ADCD2, &adcconfig);
-    adcStart(&ADCD3, &adcconfig);
+    adcStart(&ADCD1, NULL);
+    adcStart(&ADCD2, NULL);
+    adcStart(&ADCD3, NULL);
+    gptStart(&GPTD3, &gpt_adc_config); /*What is &GPTD3 ? - General Purpose Timer #3 (aka Timer 3) -AG */
     
     adcStartConversion(&ADCD1, &adcConGrp1, samples1, ADC_BUF_DEPTH);
     adcStartConversion(&ADCD2, &adcConGrp2, samples2, ADC_BUF_DEPTH);
     adcStartConversion(&ADCD3, &adcConGrp3, samples3, ADC_BUF_DEPTH);
-    
-    /* 
+
+    /*
     * Start the GPT timer 
     * Timer is clocked at 1Mhz (1us). Timer triggers at 1 and calls the callback function 
-    */ 
-    gptStart(&GPTD3, &gpt_adc_config); /*What is &GPTD3 ? */
-    gptStartContinuous(&GPTD3, 1); /*Is this the way to do it? */
-    
-    chThdSleep(TIME_INFINITE);
-    
+    */
+    GPTD3.tim->CR2 |= STM32_TIM_CR2_MMS(2);
+    gptStartContinuous(&GPTD3, 2); /*Is this the way to do it? */
+
+    while(true) {
+        chSysLock();
+        tp = chThdSelf();
+        chSchGoSleepS(THD_STATE_SUSPENDED);
+        chSysUnlock();
+        save_results();
+    }
+
     return (msg_t)NULL;  /*What happens when this is reached? Should there be a infinite while loop */
 } 
 
