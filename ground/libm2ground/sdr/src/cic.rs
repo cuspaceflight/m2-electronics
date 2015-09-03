@@ -40,10 +40,11 @@ impl CIC {
     pub fn process(&mut self, x: &Vec<Real<i16>>) -> Vec<Real<i16>> {
         // Check we were initialised correctly
         assert!(self.q > 0 && self.r > 0);
-        assert!(self.intg.len() == self.q && self.comb.len() == self.q + 1);
+        assert_eq!(self.intg.len(), self.q);
+        assert_eq!(self.comb.len(), self.q + 1);
 
         // To decimate by R we need a multiple of R in the input.
-        assert!(x.len() % self.r == 0);
+        assert_eq!(x.len() % self.r, 0);
 
         // Output will have 1/R the number of samples of the input.
         let mut y: Vec<Real<i16>> = Vec::with_capacity(x.len() / self.r);

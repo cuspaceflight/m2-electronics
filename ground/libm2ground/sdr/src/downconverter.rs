@@ -27,8 +27,8 @@ impl Downconverter {
     pub fn process(&mut self, x: &Vec<Real<u16>>) -> Vec<IQ<i16>> {
         // Check we were initialised correctly.
         assert!(self.n_cics > 0);
-        assert!(self.i_cics.len() == self.n_cics);
-        assert!(self.q_cics.len() == self.n_cics);
+        assert_eq!(self.i_cics.len(), self.n_cics);
+        assert_eq!(self.q_cics.len(), self.n_cics);
 
         // IQ mix IF down to 0Hz
         let (mut i, mut q) = Downconverter::convert_fs_4(x);
@@ -48,7 +48,7 @@ impl Downconverter {
     /// want to antialias and then decimate by at least 2 after this.
     fn convert_fs_4(x: &Vec<Real<u16>>) -> (Vec<Real<i16>>, Vec<Real<i16>>) {
         // Block length must be a multiple of 4 for downconversion.
-        assert!(x.len() % 4 == 0);
+        assert_eq!(x.len() % 4, 0);
 
         // Store new I and Q arrays separately to start with.
         let mut i: Vec<Real<i16>> = Vec::with_capacity(x.len());
@@ -87,7 +87,7 @@ impl Downconverter {
     /// Combine separate I and Q vectors into a single Vec<IQ>.
     fn combine_i_q(i: &Vec<Real<i16>>, q: &Vec<Real<i16>>) -> Vec<IQ<i16>> {
         // Check I and Q inputs are the same length
-        assert!(i.len() == q.len());
+        assert_eq!(i.len(), q.len());
 
         // Combine
         i.iter().zip(q).map(|(i, q)| IQ::new(*i, *q)).collect()
