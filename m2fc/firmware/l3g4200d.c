@@ -11,10 +11,12 @@
 
 #include <stdlib.h>
 #include "l3g4200d.h"
-#include "datalogging.h"
-#include "tweeter.h"
+#include "microsd.h"
+/* #include "tweeter.h" */
 
 
+
+/* TODO: Is this the same for B3 as for M2FC? */
 #define L3G4200D_I2C_ADDR   0x69
 
 /* Register Addresses */
@@ -78,6 +80,18 @@
 #define L3G4200D_FIFO_MODE_STREAM       0x02
 #define L3G4200D_FIFO_MODE_STF          0x03 /* Stream To FIFO */
 #define L3G4200D_FIFO_MODE_BTS          0x04 /* Bypass to Stream */
+
+
+/*
+ * TODO:
+ * 
+ * Quickly turn led on and off
+ * GPIOA, GPIOA_LED_SENSORS
+ * 
+ * 
+ */
+
+
 
 int16_t global_gyro[3];
 
@@ -189,7 +203,7 @@ void l3g4200d_wakeup(EXTDriver *extp, expchannel_t channel)
     chSysLockFromIsr();
     if(tpL3G4200D != NULL && tpL3G4200D->p_state != THD_STATE_READY) 
     {
-        palSetPad(GPIOD, GPIOD_IMU_GRN);
+        /*palSetPad(GPIOD, GPIOD_IMU_GRN);*/
         chSchReadyI(tpL3G4200D);
     }
     tpL3G4200D = NULL;
@@ -208,36 +222,35 @@ msg_t l3g4200d_thread(void *arg)
     i2cStart(&I2CD1, &i2cconfig);
     
     while (!l3g4200d_ID_check()) {
-        tweeter_set_error(ERROR_GYRO, true);
+        /*tweeter_set_error(ERROR_GYRO, true); */
         chThdSleepMilliseconds(500);
     }
-    tweeter_set_error(ERROR_GYRO, false);
+    /* tweeter_set_error(ERROR_GYRO, false); */
 
     /* Initialise the settings. */
 	while (!l3g4200d_init()) {
-        tweeter_set_error(ERROR_GYRO, true);
+        /* tweeter_set_error(ERROR_GYRO, true); */
 		chThdSleepMilliseconds(500);
 	}
-    tweeter_set_error(ERROR_GYRO, false);
+    /*tweeter_set_error(ERROR_GYRO, false);*/
     
 	while (TRUE) {
 		/* Sleep until DRDY */
 		chSysLock();
         tpL3G4200D = chThdSelf();
 		chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
-        palClearPad(GPIOD, GPIOD_IMU_GRN);
+        /* palClearPad(GPIOD, GPIOD_IMU_GRN); */
         tpL3G4200D = NULL;
 		chSysUnlock();
 
         /* Pull data from the gyro into buf_data. */
 		if (l3g4200d_receive(buf_data)) {
-            tweeter_set_error(ERROR_GYRO, false);
+           /* tweeter_set_error(ERROR_GYRO, false); */
             l3g4200d_rotation_convert(buf_data, rotation);
-            log_s16(CHAN_IMU_GYRO, rotation[0], rotation[1], rotation[2], 0);
+            microsd_log_s16(CHAN_IMU_GYRO, rotation[0], rotation[1], rotation[2], 0);
 		} else {
-            tweeter_set_error(ERROR_GYRO, true);
+            /* tweeter_set_error(ERROR_GYRO, true); */
 		    chThdSleepMilliseconds(20);
-        }
-		
+        }		
 	}
 }

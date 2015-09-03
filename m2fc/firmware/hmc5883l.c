@@ -6,9 +6,9 @@
 #include <stdlib.h>
 
 #include "hal.h"
-#include "datalogging.h"
+#include "microsd.h"
 #include "hmc5883l.h"
-#include "tweeter.h"
+/*#include "tweeter.h"*/
 
 
 #define HMC5883L_I2C_ADDR       0x1E
@@ -139,6 +139,7 @@ void hmc5883l_wakeup(EXTDriver *extp, expchannel_t channel)
     chSysUnlockFromIsr();
 }
 
+/*TODO: define new state estimation function, add tweeter*/
 msg_t hmc5883l_thread(void *arg)
 {
     (void)arg;
@@ -151,17 +152,17 @@ msg_t hmc5883l_thread(void *arg)
     i2cStart(&I2CD2, &i2cconfig);
     
     while (!hmc58831_ID_check()) {
-        tweeter_set_error(ERROR_MAGNO, true);
+       /* tweeter_set_error(ERROR_MAGNO, true);*/
         chThdSleepMilliseconds(500);
     }
-    tweeter_set_error(ERROR_MAGNO, false);
+    /*tweeter_set_error(ERROR_MAGNO, false);*/
     
     /* Initialise the settings. */
     while (!hmc5883l_init()) {
-        tweeter_set_error(ERROR_MAGNO, true);
+        /*tweeter_set_error(ERROR_MAGNO, true); */
         chThdSleepMilliseconds(500);
     }
-    tweeter_set_error(ERROR_MAGNO, false);
+    /*tweeter_set_error(ERROR_MAGNO, false); */
     
     while (TRUE)
     {
@@ -174,15 +175,15 @@ msg_t hmc5883l_thread(void *arg)
         
         /* Pull data from magno into buf_data. */
         if (hmc5883l_receive(buf_data)) {
-            tweeter_set_error(ERROR_MAGNO, false);
+            /*tweeter_set_error(ERROR_MAGNO, false);*/
             hmc5883l_field_convert(buf_data, field);
-            log_s16(CHAN_IMU_MAGNO, field[0], field[1], field[2], 0); 
+            microsd_log_s16(CHAN_IMU_MAGNO, field[0], field[1], field[2], 0); 
             /*define this state estimation function 
             state_estimation_new_magno(field[0], 
 			       field[1], field[2]); */
         } else {
             chThdSleepMilliseconds(20);
-            tweeter_set_error(ERROR_MAGNO, true);
+            /*tweeter_set_error(ERROR_MAGNO, true);*/
         }
     }
 }

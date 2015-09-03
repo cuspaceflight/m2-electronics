@@ -6,6 +6,9 @@
 #include "m2fc_shell.h"
 #include <hal.h>
 #include "chprintf.h"
+#include "hmc5883l.h"
+#include "l3g4200d.h" 
+
 
 static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
   size_t n, size;
@@ -63,12 +66,38 @@ static void cmd_rt(BaseSequentialStream *chp, int argc, char *argv[]) {
     chprintf(chp, "Real time clock frequency: %u\r\n", f);
 }
 
+static void cmd_gyro(BaseSequentialStream *chp, int argc, char *argv[]) {
+    (void)argc;	
+    (void)argv;
+
+    for(;;) {
+        /*chprintf(chp," x: %09d, y: %09d, z: %09d \n", global_gyro[0], global_gyro[1], global_gyro[2]);*/
+        chprintf(chp,"%09d %09d %09d \n", global_gyro[0], global_gyro[1], global_gyro[2]);
+        chThdSleepMilliseconds(1);
+    }
+    return;
+}
+
+static void cmd_magnotest(BaseSequentialStream *chp, int argc, char *argv[]) {
+    (void)argv;
+    (void)argc;
+    for(;;) {
+        /* chprintf(chp, "Magno X: 0x%x %d\r\n", global_magno[0]);
+        chprintf(chp, "Magno Y: 0x%x %d\r\n", global_magno[1]);
+        chprintf(chp, "Magno Z: 0x%x %d\r\n", global_magno[2]); */
+        chprintf(chp,"%09d %09d %09d \n", global_magno[0], global_magno[1], global_magno[2]);
+        chThdSleepMilliseconds(100);
+    }
+}
+
 void m2fc_shell_run()
 {
     static const ShellCommand commands[] = {
         {"mem", cmd_mem},
         {"threads", cmd_threads},
         {"rt", cmd_rt},
+        {"magno", cmd_magnotest},
+        {"gyro", cmd_gyro},
         {NULL, NULL}
     };
     static const ShellConfig shell_cfg = {

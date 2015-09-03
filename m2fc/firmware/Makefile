@@ -96,7 +96,7 @@ CSRC = $(PORTSRC) \
 		 ../../sbp/sbp.c ../../edc.c \
        main.c ms5611.c adxl3x5.c pyro.c microsd.c m2fc_shell.c \
 	   state_estimation.c mission.c time_utils.c fault_handlers.c \
-	   config.c sbp_io.c analogue.c
+	   config.c sbp_io.c analogue.c l3g4200d.c hmc5883l.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

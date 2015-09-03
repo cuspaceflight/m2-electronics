@@ -21,6 +21,9 @@
 #include "state_estimation.h"
 #include "sbp_io.h"
 #include "analogue.h"
+#include "l3g4200d.h"
+#include "hmc5883l.h"
+
 
 /* Create working areas for all threads */
 static WORKING_AREA(waMS5611, 512);
@@ -32,6 +35,8 @@ static WORKING_AREA(waMicroSD, 512);
 static WORKING_AREA(waPyros, 128);
 static WORKING_AREA(waThreadSBP, 1024);
 static WORKING_AREA(waAnalogue, 512);
+static WORKING_AREA(waHMC5883L, 512);
+static WORKING_AREA(waL3G4200D, 1024);
 
 /*
  * Heatbeat thread.
@@ -203,7 +208,22 @@ int main(void) {
 
     chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
                       sbp_thread, NULL);
-      
+      */
+    /* Cannot enable magno and radio at same time without resolving
+     * the DMA channel conflict with a lock etc
+     */
+     
+     /*
+    if(USE_MAGNO) {
+        chThdCreateStatic(waHMC5883L, sizeof(waHMC5883L), NORMALPRIO,
+                          hmc5883l_thread, NULL);
+    }
+    
+    if(USE_GYRO) {
+        chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
+                          l3g4200d_thread, NULL);
+    }
+    
     */
     chThdCreateStatic(waAnalogue, sizeof(waAnalogue), NORMALPRIO,
                       analogue_thread, NULL);                  
