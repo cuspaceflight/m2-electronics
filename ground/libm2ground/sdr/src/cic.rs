@@ -51,45 +51,47 @@ impl CIC {
         unsafe { y.set_len(x.len() / self.r) };
 
         // Push samples through the chain.
-        for k in 0usize..x.len() {
-            // Add up the integrators. Note that this cascaded approach adds
-            // additional time delay (but not much!) but is easier to compute.
-            unsafe { 
-                *self.intg.get_unchecked_mut(0) =
-                    self.intg.get_unchecked(0)
-                             .wrapping_add(*x.get_unchecked(k) as i32);
+        // It's a fair bit faster to loop over the outputs and have a tighter
+        // loop over the inputs.
+        for k in 0usize..y.len() {
+            for o in 0..self.r {
+                // Add up the integrators. Note that this cascaded approach adds
+                // additional time delay (but not much!) but is easier to compute.
+                unsafe { 
+                    *self.intg.get_unchecked_mut(0) =
+                        self.intg.get_unchecked(0)
+                                 .wrapping_add(*x.get_unchecked(k*self.r+o) as i32);
 
-                for l in 1usize..self.q {
-                    *self.intg.get_unchecked_mut(l) =
-                        self.intg.get_unchecked(l)
-                                 .wrapping_add(*self.intg.get_unchecked(l - 1));
+                    for l in 1usize..self.q {
+                        *self.intg.get_unchecked_mut(l) =
+                            self.intg.get_unchecked(l)
+                                     .wrapping_add(*self.intg.get_unchecked(l - 1));
+                    }
+
                 }
-
             }
 
             // Run the comb section at 1/R the sample rate
-            if k % self.r == self.r - 1 {
-                // Each comb register is set to the output of the decimator,
-                // minus all the combs before itself
-                for l in 0usize..(self.q + 1) {
-                    let l = self.q - l;
-                    unsafe {
-                        *self.comb.get_unchecked_mut(l) =
-                            *self.intg.get_unchecked(self.q - 1);
+            // Each comb register is set to the output of the decimator,
+            // minus all the combs before itself
+            for l in 0usize..(self.q + 1) {
+                let l = self.q - l;
+                unsafe {
+                    *self.comb.get_unchecked_mut(l) =
+                        *self.intg.get_unchecked(self.q - 1);
 
-                        for m in 0usize..l {
-                            *self.comb.get_unchecked_mut(l) =
-                                self.comb.get_unchecked(l)
-                                         .wrapping_sub(*self.comb.get_unchecked(m));
-                        }
+                    for m in 0usize..l {
+                        *self.comb.get_unchecked_mut(l) =
+                            self.comb.get_unchecked(l)
+                                     .wrapping_sub(*self.comb.get_unchecked(m));
                     }
                 }
-
-                // The output is the final "output" comb register, scaled to
-                // give unity filter gain.
-                unsafe { *y.get_unchecked_mut(k/(self.r)) =
-                            (*self.comb.get_unchecked(self.q) >> self.gain_shift) as i16 }
             }
+
+            // The output is the final "output" comb register, scaled to
+            // give unity filter gain.
+            unsafe { *y.get_unchecked_mut(k) =
+                        (*self.comb.get_unchecked(self.q) >> self.gain_shift) as i16 }
         }
 
         y
