@@ -2,6 +2,7 @@ extern crate time;
 extern crate sdr;
 use sdr::fir::FIR;
 
+#[cfg_attr(test, allow(dead_code))]
 fn main() {
     let q = 5usize;
     let r = 16usize;

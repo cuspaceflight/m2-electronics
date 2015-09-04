@@ -3,6 +3,7 @@ extern crate sdr;
 
 use sdr::downconverter::Downconverter;
 
+#[cfg_attr(test, allow(dead_code))]
 fn main() {
     let n_samples = 1<<23 as usize;
     let n_repeats = 10u64;
