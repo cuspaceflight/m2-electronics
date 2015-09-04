@@ -52,7 +52,8 @@ impl FIR {
         assert!(decimate > 0);
         let q = q as i32;
         let r = r as f64;
-        let f: Vec<f64> = (0..512).map(|x| x as f64 / (16.0_f64 * 512.0_f64)).collect();
+        let f: Vec<f64> = (0..512).map(|x|
+            x as f64 / (16.0_f64 * 512.0_f64)).collect();
         let mut h: Vec<f64> = f.iter().map(|f|
             ((PI * f * r).sin() / (r * (PI * f).sin())).abs().powi(q).recip())
             .collect();
@@ -93,12 +94,15 @@ impl FIR {
         let delay_p = &mut self.delay[0] as *mut i32;
         let out_p = &mut y[0] as *mut i16;
         let mut in_p = &x[0] as *const i16;
+        let ylen = y.len() as isize;
+        let decimate = self.decimate as isize;
+        let tap0 = &self.taps[0] as *const i32;
 
         // Process each actually generated output sample
-        for k in 0isize..(y.len() as isize) {
+        for k in 0..ylen {
 
             // Feed the delay line, fast-forwarding through the skipped samples
-            for _ in 0..self.decimate {
+            for _ in 0..decimate {
                 unsafe {
                     *delay_p.offset(delay_idx) = *in_p as i32;
                     in_p = in_p.offset(1);
@@ -111,7 +115,7 @@ impl FIR {
 
             // Compute the multiply-accumulate for actual samples.
             let mut acc: i32 = 0;
-            let mut tap_p = unsafe { self.taps.get_unchecked(0) as *const i32 };
+            let mut tap_p = tap0;
 
             // First the index to the end of the buffer
             for idx in (delay_idx + 1)..delay_len {
@@ -258,7 +262,7 @@ mod tests {
 
     #[test]
     fn test_fir_compensate() {
-        let mut fir = FIR::cic_compensator(63, 5, 8, 2);
+        let fir = FIR::cic_compensator(63, 5, 8, 2);
         let taps = fir.taps();
         assert_eq!(*taps, vec!{
             -4, -43, -9, 53, 33, -66, -74, 72, 138, -54, -221, -3, 313, 118,

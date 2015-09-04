@@ -21,5 +21,6 @@ fn main() {
     let total_samples = n_samples as f64 * n_repeats as f64;
     let total_time = (t1 - t0) as f64 / 1e9;
     let throughput = total_samples / total_time;
-    println!("{} blocks of {} samples, {:.2}Msps", n_repeats, n_samples, throughput / 1000000.0_f64);
+    println!("{} blocks of {} samples, {:.2}Msps",
+             n_repeats, n_samples, throughput / 1000000.0_f64);
 }

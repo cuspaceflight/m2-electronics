@@ -58,19 +58,23 @@ impl CIC {
         let r = self.r as isize;
         let q = self.q as isize;
         let ylen = y.len() as isize;
+        let gain_shift = self.gain_shift;
 
         // Push samples through the chain.
         // It's a fair bit faster to loop over the outputs and have a tighter
         // loop over the inputs.
-        for k in 0isize..ylen {
-            for o in 0isize..r {
-                // Add up the integrators. Note that this cascaded approach adds
-                // additional time delay (but not much!) but is easier to compute.
+        for k in 0..ylen {
+            for o in 0..r {
+                // Add up the integrators. Note that this cascaded approach
+                // adds additional time delay (but not much!) but is easier to
+                // compute.
                 unsafe { 
-                    *intg_p = (*intg_p).wrapping_add(*in_p.offset(k*r + o) as i32);
+                    *intg_p = (*intg_p)
+                        .wrapping_add(*in_p.offset(k*r + o) as i32);
 
                     for l in 1isize..q {
-                        *intg_p.offset(l) = (*intg_p.offset(l)).wrapping_add((*intg_p.offset(l - 1)));
+                        *intg_p.offset(l) = (*intg_p.offset(l))
+                            .wrapping_add((*intg_p.offset(l - 1)));
                     }
 
                 }
@@ -79,13 +83,14 @@ impl CIC {
             // Run the comb section at 1/R the sample rate
             // Each comb register is set to the output of the decimator,
             // minus all the combs before itself
-            for l in 0isize..(q + 1) {
+            for l in 0..(q + 1) {
                 let l = q - l;
                 unsafe {
                     *comb_p.offset(l) = *intg_p.offset(q - 1);
 
                     for m in 0isize..l {
-                        *comb_p.offset(l) = (*comb_p.offset(l)).wrapping_sub(*comb_p.offset(m));
+                        *comb_p.offset(l) = (*comb_p.offset(l))
+                            .wrapping_sub(*comb_p.offset(m));
                     }
                 }
             }
@@ -93,7 +98,7 @@ impl CIC {
             // The output is the final "output" comb register, scaled to
             // give unity filter gain.
             unsafe {
-                *out_p.offset(k) = (*comb_p.offset(q) >> self.gain_shift) as i16;
+                *out_p.offset(k) = (*comb_p.offset(q) >> gain_shift) as i16;
             }
         }
 

@@ -81,17 +81,21 @@ impl Downconverter {
         let mut k: usize = 0;
         while k < x.len() {
             unsafe {
-                *i.get_unchecked_mut(k  ) =   (x.get_unchecked(k  ) & 0xFFF) - 2048;
+                *i.get_unchecked_mut(k  ) =   (x.get_unchecked(k  ) & 0xFFF)
+                                            - 2048;
                 *q.get_unchecked_mut(k  ) = 0;
 
                 *i.get_unchecked_mut(k+1) = 0;
-                *q.get_unchecked_mut(k+1) = -((x.get_unchecked(k+1) & 0xFFF) - 2048);
+                *q.get_unchecked_mut(k+1) = -((x.get_unchecked(k+1) & 0xFFF)
+                                            - 2048);
 
-                *i.get_unchecked_mut(k+2) = -((x.get_unchecked(k+2) & 0xFFF) - 2048);
+                *i.get_unchecked_mut(k+2) = -((x.get_unchecked(k+2) & 0xFFF)
+                                            - 2048);
                 *q.get_unchecked_mut(k+2) = 0;
 
                 *i.get_unchecked_mut(k+3) = 0;
-                *q.get_unchecked_mut(k+3) =   (x.get_unchecked(k+3) & 0xFFF) - 2048;
+                *q.get_unchecked_mut(k+3) =   (x.get_unchecked(k+3) & 0xFFF)
+                                            - 2048;
             }
             k += 4;
         }
