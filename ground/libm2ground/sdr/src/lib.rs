@@ -6,3 +6,4 @@ pub type Real<T> = T;
 
 pub mod downconverter;
 pub mod cic;
+pub mod fir;
