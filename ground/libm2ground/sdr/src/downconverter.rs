@@ -1,12 +1,15 @@
 use std::mem::transmute;
 pub use super::{Real, IQ};
 use cic::CIC;
+use fir::FIR;
 
 /// Downconverter
 pub struct Downconverter {
     n_cics: usize,
     i_cics: Vec<CIC>,
-    q_cics: Vec<CIC>
+    q_cics: Vec<CIC>,
+    i_firs: Vec<FIR>,
+    q_firs: Vec<FIR>,
 }
 
 impl Downconverter {
@@ -15,11 +18,19 @@ impl Downconverter {
     pub fn new(n_cics: usize) -> Downconverter {
         let mut i_cics: Vec<CIC> = Vec::with_capacity(n_cics);
         let mut q_cics: Vec<CIC> = Vec::with_capacity(n_cics);
+        let mut i_firs: Vec<FIR> = Vec::with_capacity(n_cics);
+        let mut q_firs: Vec<FIR> = Vec::with_capacity(n_cics);
         for _ in 0..n_cics {
             i_cics.push(CIC::new(5, 8));
             q_cics.push(CIC::new(5, 8));
+            i_firs.push(FIR::cic_compensator(64, 5, 8, 2));
+            q_firs.push(FIR::cic_compensator(64, 5, 8, 2));
         }
-        Downconverter{ n_cics: n_cics, i_cics: i_cics, q_cics: q_cics }
+        Downconverter{
+            n_cics: n_cics,
+            i_cics: i_cics, q_cics: q_cics,
+            i_firs: i_firs, q_firs: q_firs,
+        }
     }
 
     /// Downconvert a block of 12 bit unsigned IF=Fs/4 input to a block of
@@ -29,14 +40,18 @@ impl Downconverter {
         assert!(self.n_cics > 0);
         assert_eq!(self.i_cics.len(), self.n_cics);
         assert_eq!(self.q_cics.len(), self.n_cics);
+        assert_eq!(self.i_firs.len(), self.n_cics);
+        assert_eq!(self.q_firs.len(), self.n_cics);
 
         // IQ mix IF down to 0Hz
         let (mut i, mut q) = Downconverter::convert_fs_4(x);
 
         // Filter and decimate down to baseband
-        for (i_cic, q_cic) in self.i_cics.iter_mut().zip(self.q_cics.iter_mut()) {
-            i = i_cic.process(&i);
-            q = q_cic.process(&q);
+        for idx in 0..self.n_cics {
+            i = self.i_cics[idx].process(&i);
+            i = self.i_firs[idx].process(&i);
+            q = self.q_cics[idx].process(&q);
+            q = self.q_firs[idx].process(&q);
         }
 
         // Return the combined IQ vector

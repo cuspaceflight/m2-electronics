@@ -50,22 +50,27 @@ impl CIC {
         let mut y: Vec<Real<i16>> = Vec::with_capacity(x.len() / self.r);
         unsafe { y.set_len(x.len() / self.r) };
 
+        // Hold on to some pointers for more dangerous access later.
+        let intg_p = &mut self.intg[0] as *mut i32;
+        let comb_p = &mut self.comb[0] as *mut i32;
+        let out_p = &mut y[0] as *mut i16;
+        let in_p = &x[0] as *const i16;
+        let r = self.r as isize;
+        let q = self.q as isize;
+        let ylen = y.len() as isize;
+
         // Push samples through the chain.
         // It's a fair bit faster to loop over the outputs and have a tighter
         // loop over the inputs.
-        for k in 0usize..y.len() {
-            for o in 0..self.r {
+        for k in 0isize..ylen {
+            for o in 0isize..r {
                 // Add up the integrators. Note that this cascaded approach adds
                 // additional time delay (but not much!) but is easier to compute.
                 unsafe { 
-                    *self.intg.get_unchecked_mut(0) =
-                        self.intg.get_unchecked(0)
-                                 .wrapping_add(*x.get_unchecked(k*self.r+o) as i32);
+                    *intg_p = (*intg_p).wrapping_add(*in_p.offset(k*r + o) as i32);
 
-                    for l in 1usize..self.q {
-                        *self.intg.get_unchecked_mut(l) =
-                            self.intg.get_unchecked(l)
-                                     .wrapping_add(*self.intg.get_unchecked(l - 1));
+                    for l in 1isize..q {
+                        *intg_p.offset(l) = (*intg_p.offset(l)).wrapping_add((*intg_p.offset(l - 1)));
                     }
 
                 }
@@ -74,24 +79,22 @@ impl CIC {
             // Run the comb section at 1/R the sample rate
             // Each comb register is set to the output of the decimator,
             // minus all the combs before itself
-            for l in 0usize..(self.q + 1) {
-                let l = self.q - l;
+            for l in 0isize..(q + 1) {
+                let l = q - l;
                 unsafe {
-                    *self.comb.get_unchecked_mut(l) =
-                        *self.intg.get_unchecked(self.q - 1);
+                    *comb_p.offset(l) = *intg_p.offset(q - 1);
 
-                    for m in 0usize..l {
-                        *self.comb.get_unchecked_mut(l) =
-                            self.comb.get_unchecked(l)
-                                     .wrapping_sub(*self.comb.get_unchecked(m));
+                    for m in 0isize..l {
+                        *comb_p.offset(l) = (*comb_p.offset(l)).wrapping_sub(*comb_p.offset(m));
                     }
                 }
             }
 
             // The output is the final "output" comb register, scaled to
             // give unity filter gain.
-            unsafe { *y.get_unchecked_mut(k) =
-                        (*self.comb.get_unchecked(self.q) >> self.gain_shift) as i16 }
+            unsafe {
+                *out_p.offset(k) = (*comb_p.offset(q) >> self.gain_shift) as i16;
+            }
         }
 
         y
