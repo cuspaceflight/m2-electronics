@@ -54,7 +54,6 @@ static void ms5611_read_u16(uint8_t adr, uint16_t* c)
 static void ms5611_read_s24(uint8_t adr, int32_t* d)
 {
     uint8_t adc_adr = 0x00, rx[3];
-    int32_t t0;
 
     /* Start conversion */
     spiSelect(&MS5611_SPID);
@@ -63,16 +62,10 @@ static void ms5611_read_s24(uint8_t adr, int32_t* d)
     /*
      * Wait for conversion to complete. There doesn't appear to be any way
      * to do this without timing it, unfortunately.
-     *
-     * If we just watch the clock we'll consume enormous CPU time for little
-     * gain. Instead we'll sleep for "roughly" 1ms and then wait until at least
-     * the desired 0.6ms have passed.
+     * This means we also lose out on rate - ideally we'd only pause for 0.6ms
+     * instead of this vaguely 1-2ms.
      */
-    t0 = halGetCounterValue();
-    chThdSleepMilliseconds(1);
-    while(halGetCounterValue() - t0 < US2RTT(600)) {
-        chThdYield();
-    }
+    chThdSleepMilliseconds(2);
 
     /* Deassert CS */
     spiUnselect(&MS5611_SPID);
@@ -135,20 +128,34 @@ static void ms5611_read(MS5611CalData* cal_data,
 {
     int32_t d1, d2;
     int64_t off, sens, dt;
+    int64_t t2 = 0, sens2 = 0, off2 = 0;
     ms5611_read_s24(0x40, &d1);
     ms5611_read_s24(0x50, &d2);
 
-    dt = (int64_t)d2 - (int64_t)cal_data->c5 * (1<<8);
-    *temperature = 2000 + (dt * (int64_t)cal_data->c6) / (1<<23);
+    /* Fetch and compute temperature */
+    dt = (int64_t)d2 - ((int64_t)cal_data->c5 << 8);
+    *temperature = 2000 + ((dt * (int64_t)cal_data->c6) >> 23);
     
-    off = (int64_t)cal_data->c2 * (1<<16) + \
-          ((int64_t)cal_data->c4 * dt) / (1<<7);
+    /* Compute offset and sensitivity */
+    off = ((int64_t)cal_data->c2 << 16) + (((int64_t)cal_data->c4 * dt) >> 7);
+    sens = ((int64_t)cal_data->c1 << 15) + (((int64_t)cal_data->c3 * dt) >> 8);
 
-    sens = (int64_t)cal_data->c1 * (1<<15) + \
-           ((int64_t)cal_data->c3 * dt) / (1<<8);
+    /* Perform low temperature compensation */
+    if(*temperature < 2000) {
+        t2 = (dt * dt) >> 31;
+        off2 = 5 * (*temperature - 2000)*(*temperature - 2000) >> 1;
+        sens2 = off2 >> 1;
+        if(*temperature < -1500) {
+            off2 += 7 * (*temperature + 1500)*(*temperature + 1500);
+            sens2 += 11 * (*temperature + 1500)*(*temperature + 1500) >> 1;
+        }
+        *temperature -= t2;
+        off -= off2;
+        sens -= sens2;
+    }
 
-    *pressure = ((d1 * sens) / (1<<21) - off) / (1<<15);
-
+    /* Compute and store new pressure and temperature */
+    *pressure = (((d1 * sens) >> 21) - off) >> 15;
     microsd_log_s32(CHAN_IMU_BARO, *pressure, *temperature);
 }
 
