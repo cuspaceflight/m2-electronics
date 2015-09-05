@@ -224,9 +224,8 @@ void adxl345_wakeup(EXTDriver *extp, expchannel_t channel)
     (void)channel;
 
     chSysLockFromIsr();
-    if(tp345 != NULL) {
+    if(tp345 != NULL && tp345->p_state != THD_STATE_READY) {
         chSchReadyI(tp345);
-        tp345 = NULL;
     }
     chSysUnlockFromIsr();
 }
@@ -237,9 +236,8 @@ void adxl375_wakeup(EXTDriver *extp, expchannel_t channel)
     (void)channel;
 
     chSysLockFromIsr();
-    if(tp375 != NULL) {
+    if(tp375 != NULL && tp375->p_state != THD_STATE_READY) {
         chSchReadyI(tp375);
-        tp375 = NULL;
     }
     chSysUnlockFromIsr();
 }
@@ -286,6 +284,7 @@ msg_t adxl345_thread(void *arg)
         chSysLock();
         tp345 = chThdSelf();
         chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
+        tp345 = NULL;
         chSysUnlock();
     }
 
@@ -323,6 +322,7 @@ msg_t adxl375_thread(void *arg)
         chSysLock();
         tp375 = chThdSelf();
         chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
+        tp345 = NULL;
         chSysUnlock();
     }
 
