@@ -227,7 +227,7 @@ include $(RULESPATH)/rules.mk
 ##############################################################################
 # Black Magic Probe flashing via GDB
 #
-flash: build/$(PROJECT).elf
+flash: build/$(PROJECT).dmp
 	arm-none-eabi-gdb --batch \
 		              -ex 'target extended-remote /dev/ttyACM0' \
 					  -ex 'monitor version' \
@@ -235,7 +235,7 @@ flash: build/$(PROJECT).elf
 					  -ex 'attach 1' \
 					  -ex 'load' build/$(PROJECT).elf
 
-debug: build/$(PROJECT).elf
+debug: build/$(PROJECT).dmp
 	arm-none-eabi-gdb -ex 'target extended-remote /dev/ttyACM0' \
 		              -ex 'monitor swdp_scan' \
 					  -ex 'attach 1' \
