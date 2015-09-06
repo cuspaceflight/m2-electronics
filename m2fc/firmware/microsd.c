@@ -12,7 +12,7 @@
 #include "ff.h"
 #include "config.h"
 
-#define MICROSD_MEMPOOL_ITEMS 4096
+#define MICROSD_MEMPOOL_ITEMS 3072
 #define MICROSD_CACHE_SIZE    16384
 
 static MemoryPool microsd_mp;

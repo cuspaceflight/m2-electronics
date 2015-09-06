@@ -243,3 +243,7 @@ debug: build/$(PROJECT).dmp
 #
 # End BMP flashing
 ##############################################################################
+
+size: build/$(PROJECT).elf
+	arm-none-eabi-size -A $<
+	arm-none-eabi-size -B $<
