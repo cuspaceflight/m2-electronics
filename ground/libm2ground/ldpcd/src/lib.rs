@@ -1,5 +1,5 @@
 mod parity_check_matrix;
-use parity_check_matrix::{N, K, is_codeword};
+use parity_check_matrix::{N, K, ParityMatrix};
 
 /// Threshold and pack `llrs` into a K-long binary message
 fn pack_message(llrs: &[f64; N]) -> [u8; K/8] {
@@ -14,13 +14,15 @@ fn pack_message(llrs: &[f64; N]) -> [u8; K/8] {
 
 /// Decode from N `llrs` into a packed K-long message
 ///
-/// Each llr is a log likelihood ratio with positive values more likely to be 0.
+/// Each llr is a log likelihood ratio,
+/// with positive values more likely to be 0.
+///
+/// Takes a &ParityMatrix such as parity_check_matrix::ParityMatrix::New()
 ///
 /// Returns the corresponding message bytes if decoding was possible, or None.
-pub fn decode(llrs: &[f64; N]) -> Option<[u8; K/8]> {
+pub fn decode(llrs: &[f64; N], h: &ParityMatrix) -> Option<[u8; K/8]>
+{
     const MAX_ITERS: u32 = 100;
-    let h = parity_check_matrix::h();
-    let (conns_chk, conns_var) = parity_check_matrix::connections(&h);
     let mut r = [0.0f64; N];
     let mut u = [[0.0f64; N]; K];
     let mut v = [[0.0f64; K]; N];
@@ -35,16 +37,16 @@ pub fn decode(llrs: &[f64; N]) -> Option<[u8; K/8]> {
 
     for _ in 0..MAX_ITERS {
         // Check if we have a codeword yet
-        if is_codeword(&r, &h) {
+        if h.is_codeword(&r) {
             return Some(pack_message(&r));
         }
 
         // Compute check node to variable node messages
         // u_(i->a) = 2 atanh(product_[b!=a](tanh( v_(b->i) / 2)))
         for i in 0..K {
-            for &a in &conns_chk[i] {
+            for &a in &h.conns_row[i] {
                 u[i][a] = 1.0;
-                for &b in &conns_chk[i] {
+                for &b in &h.conns_row[i] {
                     if b != a {
                         // This one line is responsible for 99% of CPU use at
                         // low SNR. Could replace with a min* algorithm...
@@ -58,9 +60,9 @@ pub fn decode(llrs: &[f64; N]) -> Option<[u8; K/8]> {
         for a in 0..N {
             // Compute variable nodes to check nodes
             // v_(a->i) = llrs[a] + sum_[j!=i](u_(j->a))
-            for &i in &conns_var[a] {
+            for &i in &h.conns_col[a] {
                 v[a][i] = llrs[a];
-                for &j in &conns_var[a] {
+                for &j in &h.conns_col[a] {
                     if j != i {
                         v[a][i] += u[j][a];
                     }
@@ -80,7 +82,8 @@ pub fn decode(llrs: &[f64; N]) -> Option<[u8; K/8]> {
 
 #[no_mangle]
 pub extern fn ldpc_decode(llrs: &[f64; N], out: &mut[u8; K/8]) -> i32 {
-    match decode(&llrs) {
+    let h = ParityMatrix::new();
+    match decode(&llrs, &h) {
         Some(result) => { *out = result; return 0; },
         None => { return 1; }
     }
@@ -89,7 +92,7 @@ pub extern fn ldpc_decode(llrs: &[f64; N], out: &mut[u8; K/8]) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::{pack_message, decode};
-    use parity_check_matrix::N;
+    use parity_check_matrix::{N, ParityMatrix};
 
     #[test]
     fn test_decode() {
@@ -123,7 +126,8 @@ mod tests {
              2.96,  5.20, -5.61,  4.79, -5.59,  5.47,  5.87,  4.17,  3.62,
             -2.49, -6.61,  2.19, -3.07,  4.16,  6.06, -1.97, -8.25,  4.42,
             -1.07, -5.57, -4.65, -4.74];
-        let result = decode(&cw).unwrap();
+        let h = ParityMatrix::new();
+        let result = decode(&cw, &h).unwrap();
         assert!(result == [
             0xA7, 0x15, 0x66, 0x01, 0x40, 0x0C, 0x02, 0x79, 0xC5, 0x47, 0x47, 0xA0,
             0xA0, 0x7F, 0x48, 0xF6]);
@@ -159,7 +163,7 @@ mod tests {
              0.39, -0.04,  3.09,  1.50, -5.81, -0.70, -6.44,  5.38,  0.38,
              3.62, -0.35,  2.04,  0.35
         ];
-        let result = decode(&bad_cw);
+        let result = decode(&bad_cw, &h);
         assert!(result == None);
     }
 

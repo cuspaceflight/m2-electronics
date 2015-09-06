@@ -18,9 +18,6 @@ pub const N: usize = BR * M;
 /// Alias for MxM binary matrix
 type Block = [[u8; M]; M];
 
-/// Alias for K*N binary matrix
-pub type ParityMatrix = [[u8; N]; K];
-
 /// Returns an all-zeros array of size M*M
 fn z() -> Block {
     return [[0; M]; M];
@@ -58,76 +55,82 @@ fn ip(n: usize) -> Block {
     a
 }
 
-/// Compute the parity check matrix
+/// Store a parity check matrix and its connectivity representation
 ///
-/// Parity check matrix is the H_128x256 defined in CCSDS 231.1-O-1 p2-2
-pub fn h() -> ParityMatrix {
-    let mut h = [[0u8; N]; K];
-    let a = [
-        [ip(31),  p(15), p(25), p(0),  z(),   p(20), p(12), i()  ],
-        [ p(28), ip(30), p(29), p(24), i(),   z(),   p(1),  p(20)],
-        [ p(8),   p(0), ip(28), p(1),  p(29), i(),   z(),   p(21) ],
-        [ p(18),  p(30), p(0), ip(30), p(25), p(26), i(),   z()  ]
-    ];
-
-    for i in 0usize..K {
-        for j in 0usize..N {
-            h[i][j] = a[i/M][j/M][i % M][j % M];
-        }
-    }
-
-    h
+/// TODO: Put N, K etc into here when Associated Constants lands.
+pub struct ParityMatrix {
+    pub h: [[u8; N]; K],
+    pub conns_row: Vec<Vec<usize>>,
+    pub conns_col: Vec<Vec<usize>>,
 }
 
-/// Compute the connections between each check and variable node
-pub fn connections(h: &ParityMatrix) -> (Vec<Vec<usize>>, Vec<Vec<usize>>) {
-    let mut conns_chk: Vec<Vec<usize>> = Vec::new();
-    let mut conns_var: Vec<Vec<usize>> = Vec::new();
+impl ParityMatrix {
+    /// Compute the parity check matrix
+    ///
+    /// Parity check matrix is the H_128x256 defined in CCSDS 231.1-O-1 p2-2
+    pub fn new() -> ParityMatrix {
+        let mut h = [[0u8; N]; K];
+        let a = [
+            [ip(31),  p(15), p(25), p(0),  z(),   p(20), p(12), i()  ],
+            [ p(28), ip(30), p(29), p(24), i(),   z(),   p(1),  p(20)],
+            [ p(8),   p(0), ip(28), p(1),  p(29), i(),   z(),   p(21)],
+            [ p(18),  p(30), p(0), ip(30), p(25), p(26), i(),   z()  ]
+        ];
 
-    for i in 0usize..K {
-        conns_chk.push(Vec::new());
-        for a in 0usize..N {
-            if i == 0 {
-                conns_var.push(Vec::new());
-            }
-
-            if h[i][a] == 1 {
-                conns_chk[i].push(a);
-                conns_var[a].push(i);
+        for i in 0usize..K {
+            for j in 0usize..N {
+                h[i][j] = a[i/M][j/M][i % M][j % M];
             }
         }
+
+        let mut conns_row: Vec<Vec<usize>> = Vec::new();
+        let mut conns_col: Vec<Vec<usize>> = Vec::new();
+
+        for i in 0usize..K {
+            conns_row.push(Vec::new());
+            for a in 0usize..N {
+                if i == 0 {
+                    conns_col.push(Vec::new());
+                }
+
+                if h[i][a] == 1 {
+                    conns_row[i].push(a);
+                    conns_col[a].push(i);
+                }
+            }
+        }
+
+        ParityMatrix{h: h, conns_row: conns_row, conns_col: conns_col}
     }
 
-    (conns_chk, conns_var)
-}
+    /// Compute x.H==0, i.e. "is x a codeword?"
+    ///
+    /// x is an array of LLRs, >0 implying 0 is more likely
+    pub fn is_codeword(&self, x: &[f64; N]) -> bool {
+        // For each parity check row
+        for i in 0usize..K {
+            // Keep track of running parity sum
+            let mut parity = 0u32;
 
-/// Compute x.H==0, i.e. "is x a codeword?"
-///
-/// x is an array of LLRs, >0 implying 0 is more likely
-pub fn is_codeword(x: &[f64; N], h: &ParityMatrix) -> bool {
-    // For each parity check row
-    for i in 0usize..K {
-        // Keep track of running parity sum
-        let mut parity = 0u32;
+            // For each coded bit
+            for a in 0usize..N {
 
-        // For each coded bit
-        for a in 0usize..N {
+                // If this edge is in the parity check matrix and this bit is 1,
+                // add it to the parity sum
+                if self.h[i][a] == 1 && x[a] <= 0.0 {
+                    parity += 1;
+                }
+            }
 
-            // If this edge is in the parity check matrix and this bit is 1,
-            // add it to the parity sum
-            if h[i][a] == 1 && x[a] <= 0.0 {
-                parity += 1;
+            // Break as soon as any parity check row is not satisfied
+            if parity % 2 != 0 {
+                return false;
             }
         }
 
-        // Break as soon as any parity check row is not satisfied
-        if parity % 2 != 0 {
-            return false;
-        }
+        // If we got here without returning, all parity checks were satisfied
+        true
     }
-
-    // If we got here without returning, all parity checks were satisfied
-    true
 }
 
 #[cfg(test)]
@@ -158,7 +161,7 @@ mod tests {
 
     #[test]
     fn test_h() {
-        let hh = h();
+        let pm = ParityMatrix::new();
         let hh90: [u8; N] = [
             0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -173,16 +176,16 @@ mod tests {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         for a in 0..N {
-            assert!(hh[90][a] == hh90[a]);
+            assert!(pm.h[90][a] == hh90[a]);
         }
     }
     
 
     #[test]
     fn test_connections() {
-        let (conns_chk, conns_var) = connections(&h());
-        assert!(conns_chk[10] == [9, 10, 57, 67, 106, 190, 214, 234]);
-        assert!(conns_var[90] == [1, 61, 90, 94, 122]);
+        let pm = ParityMatrix::new();
+        assert!(pm.conns_row[10] == [9, 10, 57, 67, 106, 190, 214, 234]);
+        assert!(pm.conns_col[90] == [1, 61, 90, 94, 122]);
     }
 
     #[test]
@@ -213,9 +216,9 @@ mod tests {
              1.0, -1.0, -1.0,  1.0, -1.0,  1.0,  1.0, -1.0, -1.0,  1.0, -1.0,
             -1.0, -1.0, -1.0
         ];
-        let hh = h();
-        assert!(is_codeword(&x, &hh));
+        let pm = ParityMatrix::new();
+        assert!(pm.is_codeword(&x));
         x[100] = -x[100];
-        assert!(!is_codeword(&x, &hh));
+        assert!(!pm.is_codeword(&x));
     }
 }

@@ -35,24 +35,36 @@ for row in range(128):
 Wp = np.packbits(W.T, axis=1)
 G = np.hstack((np.eye(128), W))
 
-snr = 20
-sigma = np.sqrt(1.0 / snr)
+snrs_db = [2.5, 3, 3.5, 4, 4.5, 5]
 
-np.random.seed(0)
-times = []
-errors = 0
-repeats = 500
-for repeat in range(repeats):
-    packed = np.random.randint(0, 256, 16).astype(np.uint8)
-    msg = np.unpackbits(packed)
-    cw = np.dot(msg, G) % 2
-    llr = -1 * ((2 * cw.astype(np.double)) - 1) + np.random.randn(256) * sigma
-    result = np.empty(16, np.uint8)
-    t0 = time.time()
-    rdecode(llr, result)
-    t1 = time.time()
-    times.append(t1 - t0)
-    if not np.all(result == packed):
-        errors += 1
-print("SNR {:.0f}dB, BER {:.4e}, Avg Time {:.6f}s ({} repeats)"
-      .format(10*np.log10(snr), errors/repeats, np.mean(times), repeats))
+for snr_db in snrs_db:
+    snr = 10.0**(snr_db/10.0)
+    sigma = np.sqrt(1.0 / snr)
+    times = []
+    errors = 0
+    repeats = 500
+    for repeat in range(repeats):
+        np.random.seed(repeat)
+        packed = np.random.randint(0, 256, 16).astype(np.uint8)
+        msg = np.unpackbits(packed)
+        cw = np.dot(msg, G) % 2
+        noise = np.random.randn(256) * sigma
+        x = 2 * cw.astype(np.double) - 1
+        y = x + noise
+        p_y_xp = np.exp(-(y-1)**2 / (2*sigma**2))
+        p_y_xm = np.exp(-(y+1)**2 / (2*sigma**2))
+        p_x1_y = p_y_xp / (p_y_xp + p_y_xm)
+        p_x0_y = 1 - p_x1_y
+        llr = np.log(p_x0_y / p_x1_y)
+        result = np.empty(16, np.uint8)
+        t0 = time.time()
+        rdecode(llr, result)
+        t1 = time.time()
+        times.append(t1 - t0)
+        if not np.all(result == packed):
+            errors += 1
+    packets_per_sec = 1.0/np.mean(times)
+    print("SNR {:.2f}dB, BER {:.4e}, {} Repeats, "
+          "Avg Time {:.6f}s, {:.0f} packets/s"
+          .format(snr_db, errors/float(repeats), repeats, np.mean(times),
+                  packets_per_sec))
