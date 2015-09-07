@@ -215,15 +215,20 @@ int main(void) {
 
     chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
                       sbp_thread, NULL);
+                      
+    #endif /*RUN_THREADS*/
     
+    #ifdef TEST_MUTEX 
     chThdCreateStatic(waHMC5883L, sizeof(waHMC5883L), NORMALPRIO,
                           hmc5883l_thread, NULL);
     
     chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
                           l3g4200d_thread, NULL);
     
+    #endif /*TEST_MUTEX*/
     
-    #endif /*RUN_THREADS*/
+    chThdCreateStatic(waAnalogue, sizeof(waAnalogue), NORMALPRIO,
+                      analogue_thread, NULL);       
       
     /* Cannot enable magno and radio at same time without resolving
      * the DMA channel conflict with a lock etc
@@ -241,9 +246,9 @@ int main(void) {
     }
     
     */
-    chThdCreateStatic(waAnalogue, sizeof(waAnalogue), NORMALPRIO,
-                      analogue_thread, NULL);                  
-
+    
+    
+              
     /* Start the command shell on the slave serial port */
     m2fc_shell_run();
 
