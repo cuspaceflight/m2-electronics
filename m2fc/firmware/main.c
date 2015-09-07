@@ -24,7 +24,7 @@
 #include "l3g4200d.h"
 #include "hmc5883l.h"
 #include <chmtx.h>
-/*#include "mutex.h"*/
+/*#include "dma1_stream0_mutex.h"*/
 
 /* Create working areas for all threads */
 static WORKING_AREA(waMS5611, 512);
@@ -170,11 +170,11 @@ int main(void) {
     halInit();
     chSysInit();
     chRegSetThreadName("Main");
-	
-	Mutex mtx;
-	Mutex* mtx_ptr = &mtx;
-	/* initilices the mutex*/
-	chMtxInit(&mtx);
+    
+    Mutex dma1_stream0_mutex_object;
+    Mutex* dma1_stream0_mutex = &dma1_stream0_mutex_object;
+    /* initilices the mutex*/
+    chMtxInit(dma1_stream0_mutex);
 
     /* Start the heartbeat thread so it will be resetting the watchdog. */
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,

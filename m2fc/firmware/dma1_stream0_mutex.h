@@ -3,8 +3,8 @@
 #ifndef MUTEX_H
 #define MUTEX_H
 
-#include <chmtx.h>
-extern Mutex* mtx_ptr	;
+#include <ch.h>
+extern Mutex* dma1_stream0_mutex;
 
 
 #endif /*MUTEX_H*/

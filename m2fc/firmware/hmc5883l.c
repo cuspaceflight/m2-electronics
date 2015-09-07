@@ -8,7 +8,7 @@
 #include "hal.h"
 #include "microsd.h"
 #include "hmc5883l.h"
-#include "dma_1_0_mutex.h"
+#include "dma1_stream0_mutex.h"
 
 /*#include "tweeter.h"*/
 
@@ -28,7 +28,7 @@ static Thread *tpHMC5883L = NULL;
 int16_t global_magno[3];
 
 static const I2CConfig i2cconfig = {
-	OPMODE_I2C, 100000, STD_DUTY_CYCLE
+    OPMODE_I2C, 100000, STD_DUTY_CYCLE
 };
 
 
@@ -115,7 +115,7 @@ static void hmc5883l_field_convert(uint8_t *buf_data, float *field) {
     {
         concatenated_field = (buf_data[(i*2)] << 8) | (buf_data[(i*2+1)]);
         global_magno[i] = concatenated_field;
-    	field [i] = ((float)concatenated_field) * sensitivity;
+        field [i] = ((float)concatenated_field) * sensitivity;
     }
     /* Note the order of received is X,Z,Y, so re-arrangement is done here. */
     float temp;
@@ -145,10 +145,10 @@ void hmc5883l_wakeup(EXTDriver *extp, expchannel_t channel)
 msg_t hmc5883l_thread(void *arg)
 {
     (void)arg;
-
+    bool_t data_recieved = FALSE;
     uint8_t buf_data[6];
     float field[3];
-	
+    
     chRegSetThreadName("HMC5883L");
 
     i2cStart(&I2CD2, &i2cconfig);
@@ -175,20 +175,21 @@ msg_t hmc5883l_thread(void *arg)
         tpHMC5883L = NULL;
         chSysUnlock();
         
-        chMtxLock(mtx_ptr);
+        chMtxLock(dma1_stream0_mutex);
+        data_recieved = hmc5883l_receive(buf_data);
+        chMtxUnlock();
+ 
         /* Pull data from magno into buf_data. */
-        if (hmc5883l_receive(buf_data)) {
+        if (data_recieved) {
             /*tweeter_set_error(ERROR_MAGNO, false);*/
-            mtx_ptr = chMtxUnlock();
 
             hmc5883l_field_convert(buf_data, field);
             microsd_log_s16(CHAN_IMU_MAGNO, field[0], field[1], field[2], 0); 
             /*define this state estimation function 
             state_estimation_new_magno(field[0], 
-			       field[1], field[2]); */
+                   field[1], field[2]); */
 
         } else {
-			mtx_ptr = chMtxUnlock();
             chThdSleepMilliseconds(20);
             /*tweeter_set_error(ERROR_MAGNO, true);*/
         }

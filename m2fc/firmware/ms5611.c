@@ -9,7 +9,7 @@
 
 #include "hal.h"
 #include "chprintf.h"
-#include "dma_1_0_mutex.h"
+#include "dma1_stream0_mutex.h"
 
 
 #define MS5611_SPID        SPID3
@@ -174,16 +174,17 @@ msg_t ms5611_thread(void *arg)
     static int32_t temperature, pressure;
 
     chRegSetThreadName("MS5611");
-	
-	chMtxLock(mtx_ptr);
+    
+    chMtxLock(dma1_stream0_mutex);
 
     spiStart(&MS5611_SPID, &spi_cfg);
     ms5611_init(&cal_data);
-    mtx_ptr = chMtxUnlock();
+    chMtxUnlock();
+    
     while (TRUE) {
-		chMtxLock(mtx_ptr);
+        chMtxLock(dma1_stream0_mutex);
         ms5611_read(&cal_data, &temperature, &pressure);
-        mtx_ptr = chMtxUnlock();
+        chMtxUnlock();
         state_estimation_new_pressure((float)pressure);
         
     }
