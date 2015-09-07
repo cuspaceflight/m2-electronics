@@ -23,7 +23,7 @@
 #include "analogue.h"
 #include "l3g4200d.h"
 #include "hmc5883l.h"
-#include "mutex.h"
+/*#include "mutex.h"*/
 
 /* Create working areas for all threads */
 static WORKING_AREA(waMS5611, 512);
@@ -169,7 +169,8 @@ int main(void) {
     halInit();
     chSysInit();
     chRegSetThreadName("Main");
-
+	
+	Mutex mtx;
 	/* initilices the mutex*/
 	chMtxInit(&mtx);
 
@@ -195,7 +196,8 @@ int main(void) {
     chThdCreateStatic(waMicroSD, sizeof(waMicroSD), HIGHPRIO,
                       microsd_thread, NULL);
 
-    /*
+    #ifdef RUN_THREADS
+    
     chThdCreateStatic(waMission, sizeof(waMission), NORMALPRIO,
                       mission_thread, NULL);
 
@@ -213,7 +215,16 @@ int main(void) {
 
     chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
                       sbp_thread, NULL);
-      */
+    
+    chThdCreateStatic(waHMC5883L, sizeof(waHMC5883L), NORMALPRIO,
+                          hmc5883l_thread, NULL);
+    
+    chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
+                          l3g4200d_thread, NULL);
+    
+    
+    #endif /*RUN_THREADS*/
+      
     /* Cannot enable magno and radio at same time without resolving
      * the DMA channel conflict with a lock etc
      */
