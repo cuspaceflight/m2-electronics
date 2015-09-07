@@ -4,7 +4,7 @@
 #define MUTEX_H
 
 #include <chmtx.h>
-extern volatile Mutex mtx;
+extern Mutex* mtx_ptr	;
 
 
 #endif /*MUTEX_H*/

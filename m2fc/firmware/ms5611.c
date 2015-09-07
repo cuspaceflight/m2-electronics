@@ -9,6 +9,8 @@
 
 #include "hal.h"
 #include "chprintf.h"
+#include "mutex.h"
+
 
 #define MS5611_SPID        SPID3
 #define MS5611_SPI_CS_PORT GPIOD
@@ -177,8 +179,10 @@ msg_t ms5611_thread(void *arg)
     ms5611_init(&cal_data);
 
     while (TRUE) {
+		chMtxLock(mtx_ptr);
         ms5611_read(&cal_data, &temperature, &pressure);
         state_estimation_new_pressure((float)pressure);
+        mtx_ptr = chMtxUnlock();
     }
 
     return (msg_t)NULL;

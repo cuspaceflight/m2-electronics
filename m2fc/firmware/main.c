@@ -172,6 +172,7 @@ int main(void) {
     chRegSetThreadName("Main");
 	
 	Mutex mtx;
+	Mutex* mtx_ptr = &mtx;
 	/* initilices the mutex*/
 	chMtxInit(&mtx);
 

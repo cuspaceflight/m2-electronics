@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include "l3g4200d.h"
 #include "microsd.h"
-#include "mutex.h"
 
 /* #include "tweeter.h" */
 
@@ -248,10 +247,8 @@ msg_t l3g4200d_thread(void *arg)
         /* Pull data from the gyro into buf_data. */
 		if (l3g4200d_receive(buf_data)) {
            /* tweeter_set_error(ERROR_GYRO, false); */
-			chMtxLock(&mtx);
             l3g4200d_rotation_convert(buf_data, rotation);
             microsd_log_s16(CHAN_IMU_GYRO, rotation[0], rotation[1], rotation[2], 0);
-            &mtx = chMtxUnlock(void);
 		} else {
             /* tweeter_set_error(ERROR_GYRO, true); */
 		    chThdSleepMilliseconds(20);
