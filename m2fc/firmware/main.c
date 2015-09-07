@@ -23,7 +23,7 @@
 #include "analogue.h"
 #include "l3g4200d.h"
 #include "hmc5883l.h"
-
+#include "mutex.h"
 
 /* Create working areas for all threads */
 static WORKING_AREA(waMS5611, 512);
@@ -37,6 +37,8 @@ static WORKING_AREA(waThreadSBP, 1024);
 static WORKING_AREA(waAnalogue, 512);
 static WORKING_AREA(waHMC5883L, 512);
 static WORKING_AREA(waL3G4200D, 1024);
+
+
 
 /*
  * Heatbeat thread.
@@ -167,6 +169,9 @@ int main(void) {
     halInit();
     chSysInit();
     chRegSetThreadName("Main");
+
+	/* initilices the mutex*/
+	chMtxInit(&mtx);
 
     /* Start the heartbeat thread so it will be resetting the watchdog. */
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,

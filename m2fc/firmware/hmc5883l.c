@@ -8,6 +8,8 @@
 #include "hal.h"
 #include "microsd.h"
 #include "hmc5883l.h"
+#include "mutex.h"
+
 /*#include "tweeter.h"*/
 
 
@@ -176,11 +178,14 @@ msg_t hmc5883l_thread(void *arg)
         /* Pull data from magno into buf_data. */
         if (hmc5883l_receive(buf_data)) {
             /*tweeter_set_error(ERROR_MAGNO, false);*/
+            chMtxLock(&mtx);
             hmc5883l_field_convert(buf_data, field);
             microsd_log_s16(CHAN_IMU_MAGNO, field[0], field[1], field[2], 0); 
             /*define this state estimation function 
             state_estimation_new_magno(field[0], 
 			       field[1], field[2]); */
+            &mtx = chMtxUnlock(void);
+
         } else {
             chThdSleepMilliseconds(20);
             /*tweeter_set_error(ERROR_MAGNO, true);*/
