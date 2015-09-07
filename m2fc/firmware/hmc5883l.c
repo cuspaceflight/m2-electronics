@@ -35,22 +35,33 @@ static const I2CConfig i2cconfig = {
 /* Transmit data to sensor (used in init function only) */
 static bool_t hmc5883l_transmit(uint8_t address, uint8_t data) {
     uint8_t buffer[2];
+    bool_t result;
     buffer[0] = address;
     buffer[1] = data;
 
     /* Transmit message */
-    return (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, buffer, 2, NULL, 0, 1000) == RDY_OK);
+    chMtxLock(dma1_stream0_mutex);
+	result = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, buffer, 2, NULL, 0, 1000) == RDY_OK);
+	chMtxUnlock();
+    return (result);
+    
 }
 
 /* When called, will read 6 bytes of XZY data into buf_data: [XH][XL][ZH][ZL][YH][YL] NOTE THE ORDER! */
 static bool_t hmc5883l_receive(uint8_t *buf_data) {
     uint8_t address = HMC5883L_RA_OUT;
-    return (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &address, 1, buf_data, 6, 1000) == RDY_OK);
+    bool_t result;
+    chMtxLock(dma1_stream0_mutex);
+	result = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &address, 1, buf_data, 6, 1000) == RDY_OK);
+    chMtxUnlock();
+    return result;
 }
 
 static bool_t hmc5883l_init(void) {
     bool_t success = TRUE;
     
+    chMtxLock(dma1_stream0_mutex);
+
     /* Config Reg A: Data Rates
        Send 00010000 [0][00 = mov avg ovr 1 samp][100 = 15Hz][00 = normal operation] */
     success &= hmc5883l_transmit(HMC5883L_RA_CONFIG_A,0x10);
@@ -63,6 +74,8 @@ static bool_t hmc5883l_init(void) {
        Send 00000000 [000000][00 = cont mode] */
     success &= hmc5883l_transmit(HMC5883L_RA_MODE,0x00);
 
+	chMtxUnlock();
+
     return success;
 }
 
@@ -71,24 +84,40 @@ static bool_t hmc58831_ID_check(void) {
     uint8_t buf;
     uint8_t id_reg;
     bool_t success = TRUE;
-    
+    bool_t mutex_lock_success;
     /* Forcefully try to read each ID register since it seems like they don't exist. */
     id_reg = HMC5883L_RA_ID_A;
-    if(i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &id_reg, 1, &buf, 1, 1000) == RDY_OK) {
+    
+    chMtxLock(dma1_stream0_mutex);
+    
+    mutex_lock_success = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &id_reg, 1, &buf, 1, 1000) == RDY_OK);
+    chMtxUnlock();
+    
+    if(mutex_lock_success) {
         success &= (buf == 0x48);
     } else {
         return FALSE;
     }
+   
     
     id_reg = HMC5883L_RA_ID_B;
-    if(i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &id_reg, 1, &buf, 1, 1000) == RDY_OK) {
+    chMtxLock(dma1_stream0_mutex);
+    mutex_lock_success = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &id_reg, 1, &buf, 1, 1000) == RDY_OK);
+    chMtxUnlock();
+    
+    if(mutex_lock_success) {
         success &= (buf == 0x34);
     } else {
         return FALSE;
     }
     
     id_reg = HMC5883L_RA_ID_C;
-    if(i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &id_reg, 1, &buf, 1, 1000) == RDY_OK) {
+    
+    chMtxLock(dma1_stream0_mutex);
+    mutex_lock_success = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &id_reg, 1, &buf, 1, 1000) == RDY_OK);
+    chMtxUnlock(); 
+      
+    if(mutex_lock_success) {
         success &= (buf == 0x33);
     } else {
         return FALSE;
@@ -145,13 +174,13 @@ void hmc5883l_wakeup(EXTDriver *extp, expchannel_t channel)
 msg_t hmc5883l_thread(void *arg)
 {
     (void)arg;
-    bool_t data_recieved = FALSE;
     uint8_t buf_data[6];
     float field[3];
     
     chRegSetThreadName("HMC5883L");
 
     i2cStart(&I2CD2, &i2cconfig);
+    
     
     while (!hmc58831_ID_check()) {
        /* tweeter_set_error(ERROR_MAGNO, true);*/
@@ -175,12 +204,9 @@ msg_t hmc5883l_thread(void *arg)
         tpHMC5883L = NULL;
         chSysUnlock();
         
-        chMtxLock(dma1_stream0_mutex);
-        data_recieved = hmc5883l_receive(buf_data);
-        chMtxUnlock();
  
         /* Pull data from magno into buf_data. */
-        if (data_recieved) {
+        if (hmc5883l_receive(buf_data)) {
             /*tweeter_set_error(ERROR_MAGNO, false);*/
 
             hmc5883l_field_convert(buf_data, field);

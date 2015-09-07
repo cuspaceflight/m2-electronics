@@ -40,6 +40,8 @@ static WORKING_AREA(waHMC5883L, 512);
 static WORKING_AREA(waL3G4200D, 1024);
 
 
+Mutex dma1_stream0_mutex_object;
+Mutex* dma1_stream0_mutex = &dma1_stream0_mutex_object;
 
 /*
  * Heatbeat thread.
@@ -171,8 +173,7 @@ int main(void) {
     chSysInit();
     chRegSetThreadName("Main");
     
-    Mutex dma1_stream0_mutex_object;
-    Mutex* dma1_stream0_mutex = &dma1_stream0_mutex_object;
+
     /* initilices the mutex*/
     chMtxInit(dma1_stream0_mutex);
 
