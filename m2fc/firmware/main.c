@@ -23,7 +23,7 @@
 #include "analogue.h"
 #include "l3g4200d.h"
 #include "hmc5883l.h"
-#include <chmtx.h>
+
 /*#include "dma1_stream0_mutex.h"*/
 
 /* Create working areas for all threads */
