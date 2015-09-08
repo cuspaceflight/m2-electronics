@@ -11,6 +11,7 @@
 #include "l3g4200d.h" 
 #include "ms5611.h"
 #include "adxl3x5.h"
+#include "pyro.h"
 
 static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
   size_t n, size;
@@ -109,6 +110,52 @@ static void cmd_accel(BaseSequentialStream *chp, int argc, char *argv[]) {
     return;
 }
 
+static void cmd_pyro(BaseSequentialStream *chp, int argc, char *argv[]) {
+    (void)argv;
+    bool p1, p2, p3;
+    
+    /* Continuity Check */
+
+    p1 = (int16_t)pyro_continuity(PYRO_1);
+    p2 = (int16_t)pyro_continuity(PYRO_2);
+    p3 = (int16_t)pyro_continuity(PYRO_3);
+    
+    chprintf(chp, "Results of Continuity Check: 1:%u, 2:%u, 3:%u\n",
+             p1, p2, p3);
+                                                    
+    if (argc > 0) 
+    {
+        if (argv[0][0] == "yes")
+        {
+            /* if (argv[0][1] == '1') 
+            {
+               pyro_fire(1, 1000);
+            }
+            
+            else if (argv[0][1] == '2') 
+            {
+                pyro_fire(2, 1000);
+            }
+            
+            else if (argv[0][1] == '3') 
+            {
+                pyro_fire(3, 1000);
+            }  
+            
+            else
+            {
+                chprintf(chp, "Please select which pyro you want to fire by writing pyro yes [number]");
+            }
+            */
+        }
+        
+        else
+        {
+        chprintf(chp, "Please confirm you want to test Pyros by writing yes as first argument");
+        }
+    }
+}
+
 void m2fc_shell_run()
 {
     static const ShellCommand commands[] = {
@@ -119,6 +166,7 @@ void m2fc_shell_run()
         {"gyro", cmd_gyro},
         {"baro", cmd_barotest},
         {"accel", cmd_accel},
+        {"baro", cmd_pyro},
         {NULL, NULL}
     };
     static const ShellConfig shell_cfg = {
