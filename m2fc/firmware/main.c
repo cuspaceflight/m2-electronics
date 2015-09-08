@@ -40,8 +40,7 @@ static WORKING_AREA(waHMC5883L, 512);
 static WORKING_AREA(waL3G4200D, 1024);
 
 
-Mutex dma1_stream0_mutex_object;
-Mutex* dma1_stream0_mutex = &dma1_stream0_mutex_object;
+Mutex dma1_stream0_mutex;
 
 /*
  * Heatbeat thread.
@@ -175,7 +174,7 @@ int main(void) {
     
 
     /* initilices the mutex*/
-    chMtxInit(dma1_stream0_mutex);
+    chMtxInit(&dma1_stream0_mutex);
 
     /* Start the heartbeat thread so it will be resetting the watchdog. */
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,

@@ -40,7 +40,7 @@ static bool_t hmc5883l_transmit(uint8_t address, uint8_t data) {
     buffer[1] = data;
 
     /* Transmit message */
-    chMtxLock(dma1_stream0_mutex);
+    chMtxLock(&dma1_stream0_mutex);
 	result = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, buffer, 2, NULL, 0, 1000) == RDY_OK);
 	chMtxUnlock();
     return (result);
@@ -51,7 +51,7 @@ static bool_t hmc5883l_transmit(uint8_t address, uint8_t data) {
 static bool_t hmc5883l_receive(uint8_t *buf_data) {
     uint8_t address = HMC5883L_RA_OUT;
     bool_t result;
-    chMtxLock(dma1_stream0_mutex);
+    chMtxLock(&dma1_stream0_mutex);
 	result = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &address, 1, buf_data, 6, 1000) == RDY_OK);
     chMtxUnlock();
     return result;
@@ -60,7 +60,7 @@ static bool_t hmc5883l_receive(uint8_t *buf_data) {
 static bool_t hmc5883l_init(void) {
     bool_t success = TRUE;
     
-    chMtxLock(dma1_stream0_mutex);
+    chMtxLock(&dma1_stream0_mutex);
 
     /* Config Reg A: Data Rates
        Send 00010000 [0][00 = mov avg ovr 1 samp][100 = 15Hz][00 = normal operation] */
@@ -88,7 +88,7 @@ static bool_t hmc58831_ID_check(void) {
     /* Forcefully try to read each ID register since it seems like they don't exist. */
     id_reg = HMC5883L_RA_ID_A;
     
-    chMtxLock(dma1_stream0_mutex);
+    chMtxLock(&dma1_stream0_mutex);
     
     mutex_lock_success = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &id_reg, 1, &buf, 1, 1000) == RDY_OK);
     chMtxUnlock();
@@ -101,7 +101,7 @@ static bool_t hmc58831_ID_check(void) {
    
     
     id_reg = HMC5883L_RA_ID_B;
-    chMtxLock(dma1_stream0_mutex);
+    chMtxLock(&dma1_stream0_mutex);
     mutex_lock_success = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &id_reg, 1, &buf, 1, 1000) == RDY_OK);
     chMtxUnlock();
     
@@ -113,7 +113,7 @@ static bool_t hmc58831_ID_check(void) {
     
     id_reg = HMC5883L_RA_ID_C;
     
-    chMtxLock(dma1_stream0_mutex);
+    chMtxLock(&dma1_stream0_mutex);
     mutex_lock_success = (i2cMasterTransmitTimeout(&I2CD2, HMC5883L_I2C_ADDR, &id_reg, 1, &buf, 1, 1000) == RDY_OK);
     chMtxUnlock(); 
       

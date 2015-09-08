@@ -175,14 +175,14 @@ msg_t ms5611_thread(void *arg)
 
     chRegSetThreadName("MS5611");
     
-    chMtxLock(dma1_stream0_mutex);
+    chMtxLock(&dma1_stream0_mutex);
 
     spiStart(&MS5611_SPID, &spi_cfg);
     ms5611_init(&cal_data);
     chMtxUnlock();
     
     while (TRUE) {
-        chMtxLock(dma1_stream0_mutex);
+        chMtxLock(&dma1_stream0_mutex);
         ms5611_read(&cal_data, &temperature, &pressure);
         chMtxUnlock();
         state_estimation_new_pressure((float)pressure);
