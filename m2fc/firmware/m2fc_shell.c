@@ -2,13 +2,15 @@
  * M2FC Shell Commands
  * M2FC
  * 2014 Adam Greig, Cambridge University Spaceflight
+ * 2015 Eivind Roson Eide, Cambridge University Spaceflight
  */
 #include "m2fc_shell.h"
 #include <hal.h>
 #include "chprintf.h"
 #include "hmc5883l.h"
 #include "l3g4200d.h" 
-
+#include "ms5611.h"
+#include "adxl3x5.h"
 
 static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
   size_t n, size;
@@ -78,6 +80,14 @@ static void cmd_gyro(BaseSequentialStream *chp, int argc, char *argv[]) {
     return;
 }
 
+static void cmd_barotest(BaseSequentialStream *chp, int argc, char *argv[]) {
+    (void)argv;
+    (void)argc;
+    
+    chprintf(chp, "Current Pressure: %d\r\n", pressure);
+    chprintf(chp, "Current Temperature: %d\r\n", temperature);
+}
+
 static void cmd_magnotest(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argv;
     (void)argc;
@@ -90,6 +100,15 @@ static void cmd_magnotest(BaseSequentialStream *chp, int argc, char *argv[]) {
     }
 }
 
+static void cmd_accel(BaseSequentialStream *chp, int argc, char *argv[]) {
+    (void)argc;	
+    (void)argv;
+    /*Should probably convert using adxl3x5_accels_to_axis */
+    
+    chprintf(chp," x: %d, y: %d, z: %d \n", accels[0], accels[1], accels[2]);
+    return;
+}
+
 void m2fc_shell_run()
 {
     static const ShellCommand commands[] = {
@@ -98,6 +117,8 @@ void m2fc_shell_run()
         {"rt", cmd_rt},
         {"magno", cmd_magnotest},
         {"gyro", cmd_gyro},
+        {"baro", cmd_barotest},
+        {"accel", cmd_accel},
         {NULL, NULL}
     };
     static const ShellConfig shell_cfg = {

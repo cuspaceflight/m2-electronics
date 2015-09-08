@@ -218,14 +218,18 @@ int main(void) {
     chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
                       sbp_thread, NULL);
                       
+    chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
+                          l3g4200d_thread, NULL);
+                      
     #endif /*RUN_THREADS*/
     
     #ifdef TEST_MUTEX 
     chThdCreateStatic(waHMC5883L, sizeof(waHMC5883L), NORMALPRIO,
                           hmc5883l_thread, NULL);
-    
-    chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
-                          l3g4200d_thread, NULL);
+
+    chThdCreateStatic(waMS5611, sizeof(waMS5611), NORMALPRIO,
+                      ms5611_thread, NULL);    
+
     
     #endif /*TEST_MUTEX*/
     

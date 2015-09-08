@@ -167,7 +167,7 @@ static bool_t l3g4200d_init(void)
 
 /* Checks the ID of the Gyro to ensure that we're actually talking to the Gyro and not some other component. */
 bool_t l3g4200d_ID_check(void) {
-	uint8_t id_reg = L3G4200D_RA_WHO_AM_I;
+    uint8_t id_reg = L3G4200D_RA_WHO_AM_I;
     uint8_t buf[1];
     if (i2cMasterTransmitTimeout(&I2CD1, L3G4200D_I2C_ADDR, &id_reg, 1, buf, 1, 1000) == RDY_OK) {
         return buf[0] == 0xD3;
@@ -186,7 +186,7 @@ static void l3g4200d_rotation_convert(uint8_t *buf_data, float *rotation)
     int i;
     int16_t total_rotation;
     for (i =0; i<3; i++) {
-	    total_rotation = (buf_data[(2*i+1)] << 8) | (buf_data[(2*i)]);
+        total_rotation = (buf_data[(2*i+1)] << 8) | (buf_data[(2*i)]);
         global_gyro[i] = total_rotation;
         rotation[i] = ((float)total_rotation) * sensitivity;
     }
@@ -217,9 +217,9 @@ msg_t l3g4200d_thread(void *arg)
     (void)arg;
     uint8_t buf_data[8];
     float rotation[3];
-	
+    
     chRegSetThreadName("L3G4200D");
-	
+    
     i2cStart(&I2CD1, &i2cconfig);
     
     while (!l3g4200d_ID_check()) {
@@ -229,29 +229,34 @@ msg_t l3g4200d_thread(void *arg)
     /* tweeter_set_error(ERROR_GYRO, false); */
 
     /* Initialise the settings. */
-	while (!l3g4200d_init()) {
+    while (!l3g4200d_init()) {
         /* tweeter_set_error(ERROR_GYRO, true); */
-		chThdSleepMilliseconds(500);
-	}
+        chThdSleepMilliseconds(500);
+    }
     /*tweeter_set_error(ERROR_GYRO, false);*/
     
-	while (TRUE) {
-		/* Sleep until DRDY */
-		chSysLock();
+    while (TRUE) {
+        /* Sleep until DRDY */
+        chSysLock();
         tpL3G4200D = chThdSelf();
-		chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
+        chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
         /* palClearPad(GPIOD, GPIOD_IMU_GRN); */
         tpL3G4200D = NULL;
-		chSysUnlock();
-
+        chSysUnlock();
+        /* Clears SENSOR LED */
+        palClearPad(GPIOA, GPIOA_LED_SENSORS);        
+            
         /* Pull data from the gyro into buf_data. */
-		if (l3g4200d_receive(buf_data)) {
+        if (l3g4200d_receive(buf_data)) {
            /* tweeter_set_error(ERROR_GYRO, false); */
             l3g4200d_rotation_convert(buf_data, rotation);
             microsd_log_s16(CHAN_IMU_GYRO, rotation[0], rotation[1], rotation[2], 0);
-		} else {
+            /*Is green to show that everything is in order */
+            palSetPad(GPIOA, GPIOA_LED_SENSORS);
+
+        } else {
             /* tweeter_set_error(ERROR_GYRO, true); */
-		    chThdSleepMilliseconds(20);
-        }		
-	}
+            chThdSleepMilliseconds(20);
+        }       
+    }
 }

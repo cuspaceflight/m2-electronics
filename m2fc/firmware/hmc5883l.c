@@ -204,10 +204,15 @@ msg_t hmc5883l_thread(void *arg)
         tpHMC5883L = NULL;
         chSysUnlock();
         
- 
+        /*Clears the SENSORS LED before recieving data*/
+        palClearPad(GPIOA, GPIOA_LED_SENSORS);
+		
         /* Pull data from magno into buf_data. */
         if (hmc5883l_receive(buf_data)) {
             /*tweeter_set_error(ERROR_MAGNO, false);*/
+            
+            /*If date is succesfully recieved set SENSORS LED */
+            palSetPad(GPIOA, GPIOA_LED_SENSORS);
 
             hmc5883l_field_convert(buf_data, field);
             microsd_log_s16(CHAN_IMU_MAGNO, field[0], field[1], field[2], 0); 
