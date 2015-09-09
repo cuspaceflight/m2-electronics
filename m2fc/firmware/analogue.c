@@ -187,6 +187,12 @@ static void save_results()
 {
     int16_t size = (int16_t)(ADC_BUF_DEPTH); /*Removed "/ ADC_NUM_CHANNELS " */
     int16_t j = 0;
+
+	int16_t sum_TC_samples_1, sum_TC_samples_2, sum_TC_samples_3; 
+    
+    sum_TC_samples_1 = 0;
+    sum_TC_samples_2 = 0; 
+    sum_TC_samples_3 = 0; 
     
     /* int16_t i = 0; 
     const int16_t MAX_i = 10; */
@@ -199,15 +205,28 @@ static void save_results()
         microsd_log_s16(ADC_MICROSD_CHN_SG, samples_1[j], 
                         samples_2[j], samples_3[j], 0);
         
+        sum_TC_samples_1 += samples_1[j + 1];
+        sum_TC_samples_2 += samples_2[j + 1];
+        sum_TC_samples_3 += samples_3[j + 1];        
         /* 1 out of 10 samples are then saved to microSD_card with 
          * Will start logging the first,
          *  and then every 10th thermo couple (i.e. every 20th sample
          */
         if (j % log_interval == 0)
         {
+
             /* Commented out : i = 0; */ /*resets count to 0 */
-            microsd_log_s16(ADC_MICROSD_CHN_TC, samples_1[j+1], 
-                            samples_2[j+1], samples_3[j+1], 0); 
+                            
+            sum_TC_samples_1 *= 0.1;
+            sum_TC_samples_2 *= 0.1;  
+            sum_TC_samples_3 *= 0.1; 
+            
+            microsd_log_s16(ADC_MICROSD_CHN_TC, sum_TC_samples_1, 
+                            sum_TC_samples_2, sum_TC_samples_3, 0);
+                            
+            sum_TC_samples_1 = 0;
+            sum_TC_samples_2 = 0;  
+            sum_TC_samples_3 = 0; 
         }
         
         /* Commented out i ++; */
