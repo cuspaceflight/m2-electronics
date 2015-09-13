@@ -1,5 +1,4 @@
 import sys
-import json
 import struct
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,21 +9,6 @@ def main():
         print("Usage: {} <logfile>".format(sys.argv[0]))
         return
 
-    baro_t = []
-    pressures = []
-    temperatures = []
-    hg_accel_t = []
-    hg_accel_x = []
-    hg_accel_y = []
-    hg_accel_z = []
-    lg_accel_t = []
-    lg_accel_x = []
-    lg_accel_y = []
-    lg_accel_z = []
-    states = []
-    se_h = []
-    se_v = []
-    se_a = []
     sg_t = []
     sg1 = []
     sg2 = []
@@ -68,43 +52,42 @@ def main():
 
     sg_t = np.array(sg_t) / 168E6
     tc_t = np.array(tc_t) / 168E6
+    tc1 = np.array(tc1)
+    tc2 = np.array(tc2)
+    tc3 = np.array(tc3)
+    sg1 = np.array(sg1)
+    sg2 = np.array(sg2)
+    sg3 = np.array(sg3)
 
-    #plt.plot(lg_accel_t, lg_accel_x, label="x")
-    #plt.plot(lg_accel_t, lg_accel_y, label="y")
-    #plt.plot(lg_accel_t, lg_accel_z, label="z")
-    #plt.title("Low G Accelerometer")
+    #sg_t = sg_t[::10]
+    #sg1 = sg1[::10]
+    #sg2 = sg2[::10]
+    #sg3 = sg3[::10]
+    #plt.plot(sg_t, sg1, '-o', label="SG1")
+    #plt.plot(sg_t, sg2, '-o', label="SG2")
+    #plt.plot(sg_t, sg3, '-o', label="SG3")
+    #plt.title("Strain Gauges")
     #plt.legend()
     #plt.show()
-    #plt.plot(hg_accel_t, hg_accel_x, label="x")
-    #plt.plot(hg_accel_t, hg_accel_y, label="y")
-    #plt.plot(hg_accel_t, hg_accel_z, label="z")
-    #plt.title("High G Accelerometer")
-    #plt.legend()
-    #plt.show()
-    #plt.plot(baro_t, pressures)
-    #plt.title("Pressure")
-    #plt.show()
-    #plt.plot(baro_t, temperatures)
-    #plt.title("Barometer Temperature")
-    #plt.show()
-    #plt.plot(se_h, label="Height")
-    #plt.plot(se_v, label="Velocity")
-    #plt.plot(se_a, label="Acceleration")
-    #plt.title("State Estimation")
-    #plt.legend()
-    #plt.show()
-    plt.plot(sg_t, sg1, label="SG1")
-    plt.plot(sg_t, sg2, label="SG2")
-    plt.plot(sg_t, sg3, label="SG3")
-    plt.title("Strain Gauges")
-    plt.legend()
-    plt.show()
-    plt.plot(tc_t, tc1, label="TC1")
-    plt.plot(tc_t, tc2, label="TC2")
-    plt.plot(tc_t, tc3, label="TC3")
-    plt.title("Thermocouples")
-    plt.legend()
-    plt.show()
+
+    tstep = 50000
+    #tc_t = np.arange(0, tc1.size/2000, 1/2000)
+    #for t0 in range(0, tc1.size, tstep):
+        #plt.plot(tc_t[t0:t0+tstep], tc1[t0:t0+tstep], '-o', label="TC1")
+        #plt.plot(tc_t[t0:t0+tstep], tc2[t0:t0+tstep], '-o', label="TC2")
+        #plt.plot(tc_t[t0:t0+tstep], tc3[t0:t0+tstep], '-o', label="TC3")
+        #plt.title("Thermocouples")
+        #plt.legend()
+        #plt.show()
+
+    #sg_t = np.arange(0, sg1.size/20000, 1/20000)
+    for t0 in range(0, sg1.size, tstep):
+        plt.plot(sg_t[t0:t0+tstep], sg1[t0:t0+tstep], '-o', label="SG1")
+        plt.plot(sg_t[t0:t0+tstep], sg2[t0:t0+tstep], '-o', label="SG2")
+        plt.plot(sg_t[t0:t0+tstep], sg3[t0:t0+tstep], '-o', label="SG2")
+        plt.title("Strain Gauges")
+        plt.legend()
+        plt.show()
 
 if __name__ == "__main__":
     main()
