@@ -127,7 +127,7 @@ int main(void) {
     /* Various module initialisation */
     state_estimation_init();
     dma_mutexes_init();
-    config_read_location();
+    config_init();
 
     /* Activate the EXTI pin change interrupts */
     extStart(&EXTD1, &extcfg);

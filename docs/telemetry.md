@@ -67,8 +67,8 @@ the `Data` section.
        0     5      Low-G accelerometer  [x y z 0]
        1     5      High-G accelerometer [x y z 0]
        2     3      Barometer            [pressure temperature]
-       3     -      Rate gyroscope       [x y z 0]
-       4     -      Magnetometer         [x y z 0]
+       3     5      Rate gyroscope       [x y z 0]
+       4     5      Magnetometer         [x y z 0]
 
 
     0x3           EXTERNAL SENSORS

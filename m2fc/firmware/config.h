@@ -1,62 +1,66 @@
 /*
- * Mission configuration file
- * M2FC
- * 2014 Adam Greig, Cambridge University Spaceflight
+ * Configuration access and parsing.
+ * M2FC / Badger 3
+ * 2015 Chi Pham, Cambridge University Spaceflight
+ * 2015 Adam Greig, Cambridge University Spaceflight
  */
 
 #ifndef CONFIG_H
 #define CONFIG_H
 
-/* Velocity (m/s) beyond which the rocket has left the pad */
-#define IGNITION_VELOCITY 10.0f
+#include <stdbool.h>
+#include "ch.h"
 
-/* Acceleration (m/s/s) below which the motor has ceased burning */
-#define BURNOUT_ACCELERATION 2.0f
+#define CFG_M2FC_NOSE 0
+#define CFG_M2FC_BODY 1
 
-/* Time (ms) since launch beyond which the motor has ceased burning */
-#define BURNOUT_TIMER 5200
+#define CFG_PYRO_UNUSED 0
+#define CFG_PYRO_DROGUE 1
+#define CFG_PYRO_MAIN   2
 
-/* Time (ms) since launch beyond which apogee has been reached */
-#define APOGEE_TIMER 55000
-
-/* Altitude (m ASL) below which to deploy main chute */
-#define MAIN_DEPLOY_ALTITUDE 1450.0f
-
-/* Time (ms) since apogee beyond which to deploy the main chute */
-#define MAIN_DEPLOY_TIMER 30000
-
-/* Time (ms) since apogee after which the rocket has landed */
-#define LANDED_TIMER 300000
-
-/* Duration (ms) to fire pyros for */
-#define PYRO_FIRETIME 5000
-
-/* Which flight computer should fire which pyros when? */
-#define PYRO_DROGUE_BODY_1 FALSE
-#define PYRO_DROGUE_BODY_2 FALSE
-#define PYRO_DROGUE_BODY_3 FALSE
-#define PYRO_DROGUE_NOSE_1 TRUE
-#define PYRO_DROGUE_NOSE_2 TRUE
-#define PYRO_DROGUE_NOSE_3 TRUE
-#define PYRO_MAIN_BODY_1   FALSE
-#define PYRO_MAIN_BODY_2   FALSE
-#define PYRO_MAIN_BODY_3   TRUE
-#define PYRO_MAIN_NOSE_1   FALSE
-#define PYRO_MAIN_NOSE_2   FALSE
-#define PYRO_MAIN_NOSE_3   FALSE
-
-/* Thrust axis for the two accelerometers.
- * 0 - X
- * 1 - Y
- * 2 - Z
+/* Exposes functions for reading config file from sd card.
+ * Usage: config MUST be initialised with config_init, then macros can be used
+ * to access config.
+ *
+ * NOTE: to add a config option, you have to add it the following places:
+ *   - in the config_t type defined in here
+ *   - in the read_config function of config.c
  */
-#define ACCEL_THRUST_AXIS 2
 
+/* ------------------------------------------------------------------------- */
 
-/* END OF CONFIGURATION OPTIONS */
+/* Read config from the file on the sd card specified by <path>.
+ * If none/error occurred, return false, if succeeded return true.
+ */
+bool config_init(void);
 
-typedef enum { M2FC_BODY=1, M2FC_NOSE=2, M2R=3 } config_avionics_t;
-extern config_avionics_t m2fc_location;
-void config_read_location(void);
+/* Sanity check the loaded config.
+ */
+bool check_config(void);
 
-#endif /* CONFIG_H */
+//-----------------------------------------------------------------------------
+
+/* See docs/config.md for descriptions */
+typedef struct config_ {
+    char version[8];
+    bool config_loaded;
+    unsigned int location;
+    unsigned int accel_axis;
+    unsigned int pyro_firetime, pyro_1, pyro_2, pyro_3;
+    unsigned int ignition_accel;
+    unsigned int burnout_time;
+    unsigned int apogee_time;
+    unsigned int main_altitude, main_time;
+    unsigned int landing_time;
+    bool read_analogue;
+} config_t;
+
+/* This is the global configuration that can be accessed from any file.
+ * In practice, it should ONLY be written to from config.c.
+ * Use the macros above to get the config values.
+ */
+extern config_t conf;
+
+msg_t config_thread(void* arg);
+
+#endif  /* CONFIG_H */

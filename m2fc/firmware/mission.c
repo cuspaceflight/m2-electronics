@@ -10,7 +10,6 @@
 #include "pyro.h"
 #include "datalogging.h"
 #include "config.h"
-#include "sbp_io.h"
 
 typedef state_t state_func_t(instance_data_t *data);
 
@@ -42,7 +41,7 @@ static state_t do_state_pad(instance_data_t *data)
     state_estimation_trust_barometer = 1;
     if(chTimeNow() < 10000)
         return STATE_PAD;
-    else if(data->state.v > IGNITION_VELOCITY)
+    else if(data->state.a > conf.ignition_accel)
         return STATE_IGNITION;
     else
         return STATE_PAD;
@@ -58,9 +57,9 @@ static state_t do_state_ignition(instance_data_t *data)
 static state_t do_state_powered_ascent(instance_data_t *data)
 {
     state_estimation_trust_barometer = 0;
-    if(data->state.a < BURNOUT_ACCELERATION)
+    if(data->state.a < 0.0f)
         return STATE_FREE_ASCENT;
-    else if(chTimeElapsedSince(data->t_launch) > BURNOUT_TIMER)
+    else if(chTimeElapsedSince(data->t_launch) > conf.burnout_time)
         return STATE_FREE_ASCENT;
     else
         return STATE_POWERED_ASCENT;
@@ -71,7 +70,7 @@ static state_t do_state_free_ascent(instance_data_t *data)
     state_estimation_trust_barometer = 1;
     if(data->state.v < 0.0f)
         return STATE_APOGEE;
-    else if(chTimeElapsedSince(data->t_launch) > APOGEE_TIMER)
+    else if(chTimeElapsedSince(data->t_launch) > conf.apogee_time)
         return STATE_APOGEE;
     else
         return STATE_FREE_ASCENT;
@@ -88,9 +87,9 @@ static state_t do_state_apogee(instance_data_t *data)
 static state_t do_state_drogue_descent(instance_data_t *data)
 {
     state_estimation_trust_barometer = 1;
-    if(data->state.h < MAIN_DEPLOY_ALTITUDE)
+    if(data->state.h < conf.main_altitude)
         return STATE_RELEASE_MAIN;
-    else if(chTimeElapsedSince(data->t_apogee) > MAIN_DEPLOY_TIMER)
+    else if(chTimeElapsedSince(data->t_apogee) > conf.main_time)
         return STATE_RELEASE_MAIN;
     else
         return STATE_DROGUE_DESCENT;
@@ -107,7 +106,7 @@ static state_t do_state_release_main(instance_data_t *data)
 static state_t do_state_main_descent(instance_data_t *data)
 {
     state_estimation_trust_barometer = 1;
-    if(chTimeElapsedSince(data->t_apogee) > LANDED_TIMER)
+    if(chTimeElapsedSince(data->t_apogee) > conf.landing_time)
         return STATE_LAND;
     else
         return STATE_MAIN_DESCENT;
@@ -150,7 +149,6 @@ msg_t mission_thread(void* arg)
             log_i32(M2T_CH_STATE_MISSION,
                             (int32_t)cur_state, (int32_t)new_state);
             cur_state = new_state;
-            SBP_SEND(0x30, new_state);
         }
 
         /* Tick the state machine about every millisecond */

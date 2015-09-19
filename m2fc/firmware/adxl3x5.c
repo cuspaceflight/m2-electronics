@@ -198,8 +198,8 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g)
      * because 1g on the high-g accel was not very
      * distinguished from the other axes.
      */
-    *axis = ACCEL_THRUST_AXIS;
-    *g = accels_notest_avg[ACCEL_THRUST_AXIS];
+    *axis = conf.accel_axis;
+    *g = accels_notest_avg[conf.accel_axis];
 
     /* DATA_FORMAT: Full resolution, maximum range (no self test) */
     adxl3x5_write_u8(SPID, 0x31, (1<<3) | (1<<1) | (1<<0));

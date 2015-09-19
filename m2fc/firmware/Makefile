@@ -93,6 +93,7 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/chprintf.c \
 	   $(CHIBIOS)/os/various/evtimer.c \
 	   $(CHIBIOS)/os/various/shell.c \
+	   $(CHIBIOS)/os/various/syscalls.c \
 	   $(CHIBIOS)/os/various/memstreams.c \
        ../../sbp/sbp.c ../../edc.c \
        ../../m2telem/m2telem.c \
