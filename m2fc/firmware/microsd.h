@@ -1,54 +1,81 @@
 /*
- * MicroSD logging
- * M2FC
- * 2014 Adam Greig, Cambridge University Spaceflight
+ * MicroSD access
+ * M2FC/Badger3
+ * 2015 Chi Pham, Cambridge University Spaceflight
+ * 2015 Adam Greig, Cambridge University Spaceflight
  */
+
+/* This is a non-thread-safe "device driver" for the micro sd card and file
+ * system, pretty much acts as a file system access layer.
+ *
+ * Note: Assumes _LFN_UNICODE == 0 in FatFS config (ie. sizeof(TCHAR) == 1).
+ */
+
 #ifndef MICROSD_H
 #define MICROSD_H
-
-#include "ch.h"
 #include "ff.h"
 
-#define CHAN_INIT           0x00
-#define CHAN_CAL_TFREQ      0x10
-#define CHAN_CAL_LGA        0x11
-#define CHAN_CAL_HGA        0x12
-#define CHAN_CAL_BARO1      0x13
-#define CHAN_CAL_BARO2      0x14
-#define CHAN_IMU_LGA        0x20
-#define CHAN_IMU_HGA        0x21
-#define CHAN_IMU_BARO       0x22
-#define CHAN_IMU_GYRO       0x23
-#define CHAN_IMU_MAGNO      0x24
-#define CHAN_SENS_BAT       0x30
-#define CHAN_SENS_SG        0x31
-#define CHAN_SENS_TC        0x32
-#define CHAN_SM_MISSION     0x40
-#define CHAN_SE_P1          0x50
-#define CHAN_SE_P2          0x51
-#define CHAN_SE_U_P         0x52
-#define CHAN_SE_U_A         0x53
-#define CHAN_PYRO_C         0x60
-#define CHAN_PYRO_F         0x61
+/* ------------------------------------------------------------------------- */
 
-
-
-/* Log data to the micro SD card.
- * The channel is 0 to 255.
- * Data is either char* (the first 8 bytes will be copied),
- * or a number of integers that add up to 64 bits.
- * The time the function is called is stored against the sample.
+/* SDMODE takes the value of BYTE, which are the possible file opening modes.
+ * FA_READ for read access, FA_WRITE for write access, FA_CREATE_NEW to create
+ * file that doesn't already exist, etc.
+ * See FatFS documentation for all possible modes, or look in
+ * ChibiOS-RT/ext/fatfs/src/ff.h.
  */
-void microsd_log_c(uint8_t channel, const char* data);
-void microsd_log_s64(uint8_t channel, int64_t data);
-void microsd_log_s32(uint8_t channel, int32_t data_a, int32_t data_b);
-void microsd_log_s16(uint8_t channel, int16_t data_a, int16_t data_b,
-                                      int16_t data_c, int16_t data_d);
-void microsd_log_u16(uint8_t channel, uint16_t data_a, uint16_t data_b,
-                                      uint16_t data_c, uint16_t data_d);
-void microsd_log_f(uint8_t channel, float data_a, float data_b);
+typedef BYTE SDMODE;
 
-/* The MicroSD logging thread. Run me. */
-msg_t microsd_thread(void* arg);
+/* SDRESULT takes the values of FRESULT, which are return codes for file system
+ * interaction. Will return FR_OK if successful. For errors local to this
+ * (microsd) code, we use FR_INT_ERR by default.
+ * See FatFS documentation for all possible return codes, or look in
+ * ChibiOS-RT/ext/fatfs/src/ff.h.
+ */
+typedef FRESULT SDRESULT;
+
+/* File object */
+typedef FIL SDFILE;
+
+/* File system object */
+typedef FATFS SDFS;
+
+/* ------------------------------------------------------------------------- */
+
+/* File system/SD card functions */
+
+/* Open file in path <path> and opening mode <mode> to file object <fp>.
+ * Blocking operation. Re-attempts indefinitely upon failure.
+ * TODO: possibly implement timeout since there is no preemption
+ * TODO: fix->do not open multiple files at once ... bad things might happen.
+ */
+SDRESULT microsd_open_file(SDFILE* fp, const char* path, SDMODE mode,
+    SDFS* sd);
+
+/* Open file under incremental naming scheme.
+ */
+SDRESULT microsd_open_file_inc(SDFILE* fp, const char* path, const char* ext,
+    SDFS* sd);
+
+/* Close file object <fp>. */
+SDRESULT microsd_close_file(SDFILE* fp);
+
+/* Assumes file is open.
+ * Writes exactly <btw> bytes from <buff> to <fp>, or until disk is full.
+ */
+SDRESULT microsd_write(SDFILE* fp, const char* buff, unsigned int btw);
+
+/* Assumes file is open.
+ * Reads exactly <btr> bytes from <fp> to <buf>, or until reached end of file.
+ * Starts from beginning of file.
+ */
+SDRESULT microsd_read(SDFILE* fp, char* buf, unsigned int btr);
+
+/* Assumes file is open.
+ * Reads at most <size-1> chars from <fp> to <buf>, or until reaching a
+ * newline/EOF. The string read into <buf> is null-terminated.
+ * Returns FR_OK if succesfully read, returns something else if error/EOF, this
+ * can be checked with f_error(fp) and f_eof(fp).
+ */
+SDRESULT microsd_gets(SDFILE* fp, char* buf, int size);
 
 #endif /* MICROSD_H */

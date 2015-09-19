@@ -8,7 +8,7 @@
 #include "mission.h"
 #include "state_estimation.h"
 #include "pyro.h"
-#include "microsd.h"
+#include "datalogging.h"
 #include "config.h"
 #include "sbp_io.h"
 
@@ -147,7 +147,7 @@ msg_t mission_thread(void* arg)
 
         /* Log changes in state */
         if(new_state != cur_state) {
-            microsd_log_s32(CHAN_SM_MISSION,
+            log_i32(M2T_CH_STATE_MISSION,
                             (int32_t)cur_state, (int32_t)new_state);
             cur_state = new_state;
             SBP_SEND(0x30, new_state);

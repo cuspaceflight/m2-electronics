@@ -6,7 +6,7 @@
 
 #include "pyro.h"
 #include "config.h"
-#include "microsd.h"
+#include "datalogging.h"
 #include <hal.h>
 
 void pyro_off_1(void* arg);
@@ -62,7 +62,7 @@ bool_t pyro_continuities()
             ok &= p3;
     }
 
-    microsd_log_s16(CHAN_PYRO_C, p1, p2, p3, 0);
+    log_i16(M2T_CH_PYRO_CONT, p1, p2, p3, 0);
 
     return ok;
 }
@@ -80,7 +80,7 @@ void pyro_fire(uint8_t ch1, uint8_t ch2, uint8_t ch3,
     if(ch3)
         palSetPad(GPIOE, GPIOE_PYRO_3_F);
 
-    microsd_log_s16(CHAN_PYRO_F, ch1, ch2, ch3, 0);
+    log_i16(M2T_CH_PYRO_FIRE, ch1, ch2, ch3, 0);
     chThdSleepMilliseconds(duration_ms);
 
     if(ch1)

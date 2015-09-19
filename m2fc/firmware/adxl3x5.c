@@ -6,7 +6,7 @@
 
 #include <stdlib.h>
 #include "adxl3x5.h"
-#include "microsd.h"
+#include "datalogging.h"
 #include "config.h"
 #include "state_estimation.h"
 
@@ -276,11 +276,11 @@ msg_t adxl345_thread(void *arg)
 
     spiStart(&ADXL345_SPID, &spi_cfg);
     adxl3x5_init(&ADXL345_SPID, 4, &axis, &g);
-    microsd_log_s16(CHAN_CAL_LGA, axis, g, 0, 0);
+    log_i16(M2T_CH_CAL_LG_ACCEL, axis, g, 0, 0);
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
-        microsd_log_s16(CHAN_IMU_LGA, accels[0], accels[1], accels[2], 0);
+        log_i16(M2T_CH_IMU_LG_ACCEL, accels[0], accels[1], accels[2], 0);
         state_estimation_new_lg_accel(
             adxl3x5_accels_to_axis(accels, axis, g));
 
@@ -291,8 +291,6 @@ msg_t adxl345_thread(void *arg)
         tp345 = NULL;
         chSysUnlock();
     }
-
-    return (msg_t)NULL;
 }
 
 /*
@@ -314,11 +312,11 @@ msg_t adxl375_thread(void *arg)
 
     spiStart(&ADXL375_SPID, &spi_cfg);
     adxl3x5_init(&ADXL375_SPID, 7, &axis, &g);
-    microsd_log_s16(CHAN_CAL_HGA, axis, g, 0, 0);
+    log_i16(M2T_CH_CAL_HG_ACCEL, axis, g, 0, 0);
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);
-        microsd_log_s16(CHAN_IMU_HGA, accels[0], accels[1], accels[2], 0);
+        log_i16(M2T_CH_IMU_HG_ACCEL, accels[0], accels[1], accels[2], 0);
         state_estimation_new_hg_accel(
             adxl3x5_accels_to_axis(accels, axis, g));
 
@@ -329,6 +327,4 @@ msg_t adxl375_thread(void *arg)
         tp345 = NULL;
         chSysUnlock();
     }
-
-    return (msg_t)NULL;
 }

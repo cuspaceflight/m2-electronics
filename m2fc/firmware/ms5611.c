@@ -7,7 +7,7 @@
 
 
 #include "ms5611.h"
-#include "microsd.h"
+#include "datalogging.h"
 
 #include "hal.h"
 #include "chprintf.h"
@@ -132,10 +132,8 @@ static void ms5611_read_cal(MS5611CalData* cal_data)
     ms5611_read_u16(0xAC, &(cal_data->c6));
     ms5611_read_u16(0xAE, &d7);
 
-    microsd_log_u16(CHAN_CAL_BARO1,
-                    d0, cal_data->c1, cal_data->c2, cal_data->c3);
-    microsd_log_u16(CHAN_CAL_BARO2,
-                    cal_data->c4, cal_data->c5, cal_data->c6, d7);
+    log_u16(M2T_CH_CAL_BARO_1, d0, cal_data->c1, cal_data->c2, cal_data->c3);
+    log_u16(M2T_CH_CAL_BARO_2, cal_data->c4, cal_data->c5, cal_data->c6, d7);
 }
 
 /*
@@ -194,7 +192,7 @@ static void ms5611_read(MS5611CalData* cal_data,
 
     /* Compute and store new pressure and temperature */
     *pressure = (((d1 * sens) >> 21) - off) >> 15;
-    microsd_log_s32(CHAN_IMU_BARO, *pressure, *temperature);
+    log_i32(M2T_CH_IMU_BARO, *pressure, *temperature);
 }
 
 /*

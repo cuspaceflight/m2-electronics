@@ -15,7 +15,7 @@
 #include "adxl3x5.h"
 #include "config.h"
 #include "pyro.h"
-#include "microsd.h"
+#include "datalogging.h"
 #include "m2fc_shell.h"
 #include "mission.h"
 #include "state_estimation.h"
@@ -32,7 +32,7 @@ static WORKING_AREA(waADXL345, 512);
 static WORKING_AREA(waADXL375, 512);
 static WORKING_AREA(waMission, 1024);
 static WORKING_AREA(waThreadHB, 128);
-static WORKING_AREA(waMicroSD, 512);
+static WORKING_AREA(waDatalogging, 512);
 static WORKING_AREA(waPyros, 128);
 static WORKING_AREA(waThreadSBP, 1024);
 static WORKING_AREA(waAnalogue, 512);
@@ -133,8 +133,8 @@ int main(void) {
     extStart(&EXTD1, &extcfg);
 
     /* Start module threads */
-    chThdCreateStatic(waMicroSD, sizeof(waMicroSD), HIGHPRIO,
-                      microsd_thread, NULL);
+    chThdCreateStatic(waDatalogging, sizeof(waDatalogging), HIGHPRIO,
+                      datalogging_thread, NULL);
 
     chThdCreateStatic(waMission, sizeof(waMission), NORMALPRIO,
                       mission_thread, NULL);

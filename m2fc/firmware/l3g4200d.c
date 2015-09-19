@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "l3g4200d.h"
-#include "microsd.h"
+#include "datalogging.h"
 
 #define L3G4200D_I2C_ADDR   0x69
 #define L3G4200D_I2CD       I2CD2
@@ -253,7 +253,7 @@ msg_t l3g4200d_thread(void *arg)
         /* Pull data from the gyro into buf_data. */
         if (l3g4200d_receive(buf_data)) {
             l3g4200d_rotation_convert(buf_data, rotation);
-            microsd_log_s16(CHAN_IMU_GYRO, rotation[0], rotation[1], rotation[2], 0);
+            log_i16(M2T_CH_IMU_GYRO, rotation[0], rotation[1], rotation[2], 0);
 
             /*Set LED to show that everything is in order */
             palSetPad(GPIOA, GPIOA_LED_SENSORS);

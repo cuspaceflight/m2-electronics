@@ -1,172 +1,18 @@
-/*
- * MicroSD logging
- * M2FC
- * 2014 Adam Greig, Cambridge University Spaceflight
- */
-
-#include <string.h>
-#include <stdio.h>
+#include <stdbool.h>
 #include "microsd.h"
 #include "hal.h"
-#include "chprintf.h"
 #include "ff.h"
-#include "config.h"
+#include "chprintf.h"
 
-#define MICROSD_MEMPOOL_ITEMS 3072
-#define MICROSD_CACHE_SIZE    16384
+/* ------------------------------------------------------------------------- */
 
-static MemoryPool microsd_mp;
-static volatile char microsd_mp_b[MICROSD_MEMPOOL_ITEMS * 16]
-                     __attribute__((aligned(sizeof(stkalign_t))))
-                     __attribute__((section(".ccm")));
+static bool microsd_card_init(FATFS* fs);
+static void microsd_card_try_init(FATFS* fs);
+static void microsd_card_deinit(void);
 
-static Mailbox microsd_mb;
-static volatile msg_t microsd_mb_q[MICROSD_MEMPOOL_ITEMS];
+/* ------------------------------------------------------------------------- */
 
-static volatile char microsd_cache[MICROSD_CACHE_SIZE];
-
-static void microsd_mem_init(void);
-static void microsd_card_deinit(FIL* fp);
-static void microsd_card_try_init(FATFS* fs, FIL* fp);
-static bool_t microsd_card_init(FATFS* fs, FIL* fp);
-static bool_t microsd_open_file(FIL* fp);
-static bool_t microsd_write(FIL* fp);
-
-
-void microsd_log_c(uint8_t channel, const char* data)
-{
-    volatile char *msg;
-    msg = (char*)chPoolAlloc(&microsd_mp);
-    msg[4] = (char)(0 | m2fc_location << 4);
-    msg[5] = (char)channel;
-    memcpy((void*)msg, (void*)&halGetCounterValue(), 4);
-    memcpy((void*)&msg[8], data, 8);
-    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
-}
-
-void microsd_log_s64(uint8_t channel, int64_t data)
-{
-    char *msg;
-    msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[4] = (char)(1 | m2fc_location << 4);
-    msg[5] = (char)channel;
-    memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8], &data, 8);
-    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
-}
-
-void microsd_log_s32(uint8_t channel, int32_t data_a, int32_t data_b)
-{
-    char *msg;
-    msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[4] = (char)(3 | m2fc_location << 4);
-    msg[5] = (char)channel;
-    memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8],  &data_a, 4);
-    memcpy(&msg[12], &data_b, 4);
-    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
-}
-
-void microsd_log_s16(uint8_t channel, int16_t data_a, int16_t data_b,
-                                      int16_t data_c, int16_t data_d)
-{
-    char *msg;
-    msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[4] = (char)(5 | m2fc_location << 4);
-    msg[5] = (char)channel;
-    memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8],  &data_a, 2);
-    memcpy(&msg[10], &data_b, 2);
-    memcpy(&msg[12], &data_c, 2);
-    memcpy(&msg[14], &data_d, 2);
-    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
-}
-
-void microsd_log_u16(uint8_t channel, uint16_t data_a, uint16_t data_b,
-                                      uint16_t data_c, uint16_t data_d)
-{
-    char *msg;
-    msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[4] = (char)(6 | m2fc_location << 4);
-    msg[5] = (char)channel;
-    memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8],  &data_a, 2);
-    memcpy(&msg[10], &data_b, 2);
-    memcpy(&msg[12], &data_c, 2);
-    memcpy(&msg[14], &data_d, 2);
-    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
-}
-
-void microsd_log_f(uint8_t channel, float data_a, float data_b)
-{
-    char *msg;
-    msg = (void*)chPoolAlloc(&microsd_mp);
-    msg[4] = (char)(9 | m2fc_location << 4);
-    msg[5] = (char)channel;
-    memcpy(msg, (void*)&halGetCounterValue(), 4);
-    memcpy(&msg[8],  &data_a, 4);
-    memcpy(&msg[12], &data_b, 4);
-    chMBPost(&microsd_mb, (msg_t)msg, TIME_IMMEDIATE);
-}
-
-static void microsd_mem_init()
-{
-    chPoolInit(&microsd_mp, 16, NULL);
-    chPoolLoadArray(&microsd_mp, (void*)microsd_mp_b, MICROSD_MEMPOOL_ITEMS);
-    chMBInit(&microsd_mb, (msg_t*)microsd_mb_q, MICROSD_MEMPOOL_ITEMS);
-}
-
-/* Attempt to open a log file on the SD card's filesystem.
- * Tries successive files of the form log_00001.bin etc.
- * Returns TRUE on success, FALSE on failure.
- */
-static bool_t microsd_open_file(FIL* fp)
-{
-    uint32_t file_idx = 0;
-    char fname[16];
-    FRESULT err;
-    BYTE mode = FA_WRITE | FA_CREATE_NEW;
-
-    while(1) {
-        file_idx++;
-        chsnprintf(fname, 16, "log_%05d.bin", file_idx);
-        err = f_open(fp, fname, mode);
-        if(err == FR_OK) {
-            return TRUE;
-        } else if(err != FR_EXIST) {
-            return FALSE;
-        } else if(file_idx > 99999) {
-            return FALSE;
-        }
-    }
-}
-
-static bool_t microsd_write(FIL* fp)
-{
-    UINT n;
-    FRESULT err;
-
-    /* Turn on SD CARD LED to indicate writing. */
-    palSetPad(GPIOA, GPIOA_LED_SDCARD);
-
-    /* Write the cache to the SD card. */
-    err = f_write(fp, (void*)microsd_cache, MICROSD_CACHE_SIZE, &n);
-
-    /* Be sad if it didn't work */
-    if(err != FR_OK || n != MICROSD_CACHE_SIZE) {
-        return FALSE;
-    }
-
-    /* Wait for sync */
-    f_sync(fp);
-
-    /* Clear the LED once data is safely on the card. */
-    palClearPad(GPIOA, GPIOA_LED_SDCARD);
-
-    return TRUE;
-}
-
-static bool_t microsd_card_init(FATFS* fs, FIL* fp)
+static bool microsd_card_init(FATFS* fs)
 {
     FRESULT err;
 
@@ -174,48 +20,29 @@ static bool_t microsd_card_init(FATFS* fs, FIL* fp)
     sdcStart(&SDCD1, NULL);
 
     /* Attempt to connect to the SD card */
-    if(sdcConnect(&SDCD1)) {
-        return FALSE;
+    int i = sdcConnect(&SDCD1);
+    if (i) {
+        return false;
     }
 
     /* Attempt to mount the filesystem */
     err = f_mount(0, fs);
-    if(err != FR_OK) {
-        return FALSE;
-    }
-
-    /* Attempt to open the log file */
-    if(!microsd_open_file(fp)) {
-        return FALSE;
-    }
-
-    /* We used to preallocate a large file but hopefully this isn't useful. */
-    /*
-    err = f_lseek(fp, 128 * MICROSD_CACHE_SIZE);
-    if(err != FR_OK) {
-        return FALSE;
-    }
-
-    err = f_lseek(fp, 0);
-    if(err != FR_OK) {
-        return FALSE;
-    }
-    */
-
-    return TRUE;
+    return err == FR_OK;
 }
 
-/* Best effort to turn off the SD card entirely. Mainly used if something has
- * broken and we should stop and try again.
- */
-static void microsd_card_deinit(FIL* fp)
+static void microsd_card_try_init(FATFS* fs)
 {
-    /* Close open file */
-    f_close(fp);
-    
+    while(!microsd_card_init(fs)) {
+        microsd_card_deinit();
+        chThdSleepMilliseconds(200);
+    }
+}
+
+static void microsd_card_deinit()
+{
     /* Unmount FS */
     f_mount(0, NULL);
-    
+
     /* Disconnect from card */
     sdcDisconnect(&SDCD1);
 
@@ -223,60 +50,97 @@ static void microsd_card_deinit(FIL* fp)
     sdcStop(&SDCD1);
 }
 
-static void microsd_card_try_init(FATFS* fs, FIL* fp)
+/* ------------------------------------------------------------------------- */
+
+/* open file in <path> to <fp>.
+ * mounts the file system and everything; blocking (see try_init function).
+ * NOTE!!! Assumes only one file opened at a time - might want to check if the
+ * sd card/file system is already connected/mounted when opening (is this even
+ * possible though).
+ */
+SDRESULT microsd_open_file(SDFILE* fp, const char* path, SDMODE mode,
+    SDFS* sd)
 {
-    while(!microsd_card_init(fs, fp)) {
-        /* TODO: report sadness up the chain */
-        microsd_card_deinit(fp);
-        palSetPad(GPIOA, GPIOA_LED_SDCARD);
-        chThdSleepMilliseconds(100);
-        palClearPad(GPIOA, GPIOA_LED_SDCARD);
-        chThdSleepMilliseconds(100);
+    SDRESULT err;
+    microsd_card_try_init(sd);
+    err = f_open(fp, path, mode);
+    return err;
+}
+
+/* Open/create file using incremental naming scheme that follows the format
+ * <filename>_<5-digit number>.<extension>.
+ * E.g. if log_00001.bin exists, try log_00002.bin until we find one that
+ * doesn't already exist or we reach the limit of 99999.
+ */
+SDRESULT microsd_open_file_inc(FIL* fp, const char* path, const char* ext,
+    SDFS* sd)
+{
+    SDRESULT err;
+    SDMODE mode = FA_WRITE | FA_CREATE_NEW;
+    uint32_t file_idx = 0;
+    char fname[25];
+
+    microsd_card_try_init(sd);
+
+    while (true) {
+        // try to open file with number file_idx
+        file_idx++;
+        chsnprintf(fname, 25, "%s_%05d.%s", path, file_idx, ext);
+        err = f_open(fp, fname, mode);
+        if (err == FR_EXIST) continue;
+        else return err;
     }
 }
 
-msg_t microsd_thread(void* arg)
+/* Close file in <fp>.
+ * Unmounts the file system and disconnects from the SD card as well.
+ */
+SDRESULT microsd_close_file(SDFILE* fp)
 {
-    static FATFS fs;
-    static FIL fp;
-    msg_t status, msgp;
-    bool_t write_success;
-    char *msg;
-    volatile char *cachep = microsd_cache;
+    SDRESULT err;
+    err = f_close(fp);
+    microsd_card_deinit();
+    return err;
+}
 
-    (void)arg;
+/* Write <btw> bytes from <buf> to <fp>.
+ * Number of bytes written is currently not used for anything ...
+ * If bytes_written < btw aftewards, disk is full.
+ */
+SDRESULT microsd_write(SDFILE* fp, const char* buf, unsigned int btw)
+{
+    SDRESULT err;
+    unsigned int bytes_written;
 
-    chRegSetThreadName("MicroSD");
+    palSetPad(GPIOA, GPIOA_LED_SDCARD);
+    err = f_write(fp, (void*) buf, btw, &bytes_written);
+    f_sync(fp);
+    palClearPad(GPIOA, GPIOA_LED_SDCARD);
 
-    microsd_mem_init();
+    return err;
+}
 
-    if(m2fc_location == M2FC_BODY)
-        microsd_log_c(0x00, "M2FCBODY");
-    else if(m2fc_location == M2FC_NOSE)
-        microsd_log_c(0x00, "M2FCNOSE");
-
-    microsd_card_try_init(&fs, &fp);
-
-    while(TRUE) {
-        status = chMBFetch(&microsd_mb, &msgp, TIME_INFINITE);
-        if(status != RDY_OK || msgp == 0) {
-            continue;
-        }
-
-        msg = (char*)msgp;
-        memcpy((void*)cachep, msg, 16);
-        chPoolFree(&microsd_mp, (void*)msg);
-        if(cachep + 16 == microsd_cache + MICROSD_CACHE_SIZE) {
-            write_success = microsd_write(&fp);
-
-            if(!write_success) {
-                microsd_card_deinit(&fp);
-                microsd_card_try_init(&fs, &fp);
-            }
-
-            cachep = microsd_cache;
-        } else {
-            cachep += 16;
-        }
+/* Read <btr> bytes from <fp> to <buf>.
+ * Number of bytes read is currently not used for anything ...
+ * If bytes_read < btr afterwards, reached end of file.
+ */
+SDRESULT microsd_read(SDFILE* fp, char* buf, unsigned int btr)
+{
+    SDRESULT err;
+    unsigned int bytes_read;
+    err = f_lseek(fp, 0);
+    if (err == FR_OK) {
+        err = f_read(fp, (void*)buf, btr, &bytes_read);
     }
+    return err;
+}
+
+/* Same as microsd_read, except reads only up to newline.
+ */
+SDRESULT microsd_gets(SDFILE* fp, char* buf, int size)
+{
+    TCHAR* res = f_gets(buf, size, fp);
+    // if res is null then either an error occurred (check with f_error(fp))
+    // or it reached end of file (check with f_eof(fp))
+    return res == NULL ? FR_INT_ERR : FR_OK;
 }

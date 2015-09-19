@@ -12,28 +12,25 @@
 
 /* Packet Structure ===========================================================
  */
-typedef union {
-    uint8_t raw[16];
-    struct {
-        union {
-            char        c[8];
-            int64_t     i64;
-            uint64_t    u64;
-            int32_t     i32[2];
-            uint32_t    u32[2];
-            int16_t     i16[4];
-            uint16_t    u16[4];
-            int8_t      i8[8];
-            uint8_t     u8[8];
-            float       f[2];
-            double      d;
-        };
-        uint32_t timestamp;
-        uint8_t metadata;
-        uint8_t channel;
-        uint16_t checksum;
-    } __attribute__((packed));
-} TelemPacket;
+typedef struct {
+    union {
+        char        c[8];
+        int64_t     i64;
+        uint64_t    u64;
+        int32_t     i32[2];
+        uint32_t    u32[2];
+        int16_t     i16[4];
+        uint16_t    u16[4];
+        int8_t      i8[8];
+        uint8_t     u8[8];
+        float       f[2];
+        double      d;
+    };
+    uint32_t timestamp;
+    uint8_t metadata;
+    uint8_t channel;
+    uint16_t checksum;
+} __attribute__((packed)) TelemPacket;
 
 /* Checksums ==================================================================
  *
@@ -56,7 +53,7 @@ bool m2telem_check_checksum(TelemPacket *packet);
  *
  * Sets `buf_len` to the number of bytes in the frame.
  */
-void m2telem_enframe(TelemPacket* in, uint8_t* buf, size_t* buf_len);
+void m2telem_enframe(TelemPacket* pkt, uint8_t* buf, size_t* buf_len);
 
 /*
  * Deframe a packet from a buffer that may contain fragments of packets.
@@ -76,7 +73,7 @@ typedef struct {
     uint8_t s;
 } DeframeState;
 bool m2telem_deframe(uint8_t* buf, size_t buf_len,
-                     DeframeState* state, TelemPacket* out);
+                     DeframeState* state, TelemPacket* pkt);
 
 /*
  * Channel constants ==========================================================

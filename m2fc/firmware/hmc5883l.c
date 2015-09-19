@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 #include "hal.h"
-#include "microsd.h"
+#include "datalogging.h"
 #include "hmc5883l.h"
 #include "dma_mutexes.h"
 
@@ -214,7 +214,7 @@ msg_t hmc5883l_thread(void *arg)
             palSetPad(GPIOA, GPIOA_LED_SENSORS);
 
             hmc5883l_field_convert(buf_data, field);
-            microsd_log_s16(CHAN_IMU_MAGNO, field[0], field[1], field[2], 0);
+            log_i16(M2T_CH_IMU_MAGNO, field[0], field[1], field[2], 0);
         }
     }
 }

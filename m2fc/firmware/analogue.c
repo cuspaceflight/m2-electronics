@@ -7,7 +7,7 @@
 #include <string.h>
 
 #include "analogue.h"
-#include "microsd.h"
+#include "datalogging.h"
 #include "config.h"
 #include "state_estimation.h"
 #include "chprintf.h"
@@ -23,8 +23,8 @@
 #define TC2_CHN     ADC_CHANNEL_IN11         /* PC2 = ADC IN12 */
 #define TC3_CHN     ADC_CHANNEL_IN12         /* PC3 = ADC IN13 */
 
-#define ADC_MICROSD_CHN_SG   CHAN_SENS_SG
-#define ADC_MICROSD_CHN_TC   CHAN_SENS_TC
+#define ADC_MICROSD_CHN_SG   M2T_CH_ADC_STRAIN
+#define ADC_MICROSD_CHN_TC   M2T_CH_ADC_THERMO
 
 static void gpt_adc_trigger(GPTDriver*);
 static void adc_call_back(ADCDriver*, adcsample_t*, size_t n);
@@ -174,7 +174,7 @@ static void save_results()
     while(j < size)
     {
         /* Read and log all the SG samples */
-        microsd_log_s16(ADC_MICROSD_CHN_SG, samples_1[j],
+        log_i16(ADC_MICROSD_CHN_SG, samples_1[j],
                         samples_2[j], samples_3[j], 0);
 
         /* Accumulate the TG samples and only save every ten,
@@ -186,7 +186,7 @@ static void save_results()
 
         if (j % log_interval == 0)
         {
-            microsd_log_s16(ADC_MICROSD_CHN_TC, sum_TC_samples_1,
+            log_i16(ADC_MICROSD_CHN_TC, sum_TC_samples_1,
                             sum_TC_samples_2, sum_TC_samples_3, 0);
 
             sum_TC_samples_1 = 0;
@@ -250,6 +250,4 @@ msg_t analogue_thread(void *args)
         chSysUnlock();
         save_results();
     }
-
-    return (msg_t)NULL;
 }
