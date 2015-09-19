@@ -2,17 +2,22 @@
  * MS5611-01BA03 Driver
  * M2FC
  * 2014 Adam Greig, Cambridge University Spaceflight
+ * 2015 Eivind Roson Eide, Cambridge University Spaceflight
  */
+
 
 #include "ms5611.h"
 #include "microsd.h"
 
 #include "hal.h"
 #include "chprintf.h"
+#include "dma1_stream0_mutex.h"
+
 
 #define MS5611_SPID        SPID3
 #define MS5611_SPI_CS_PORT GPIOD
 #define MS5611_SPI_CS_PIN  GPIOD_BARO_CS
+
 
 static void ms5611_reset(void);
 static void ms5611_read_u16(uint8_t adr, uint16_t* c);
@@ -21,6 +26,8 @@ static void ms5611_init(MS5611CalData* cal_data);
 static void ms5611_read_cal(MS5611CalData* cal_data);
 static void ms5611_read(MS5611CalData* cal_data,
                         int32_t* temperature, int32_t* pressure);
+
+int32_t temperature, pressure;
 
 /*
  * Resets the MS5611. Sends 0x1E, waits 5ms.
@@ -176,15 +183,20 @@ msg_t ms5611_thread(void *arg)
     };
 
     static MS5611CalData cal_data;
-    static int32_t temperature, pressure;
+    
 
     chRegSetThreadName("MS5611");
+    
+    chMtxLock(&dma1_stream0_mutex);
 
     spiStart(&MS5611_SPID, &spi_cfg);
     ms5611_init(&cal_data);
-
+    chMtxUnlock();
+    
     while (TRUE) {
+        chMtxLock(&dma1_stream0_mutex);
         ms5611_read(&cal_data, &temperature, &pressure);
+        chMtxUnlock();
         state_estimation_new_pressure((float)pressure);
     }
 

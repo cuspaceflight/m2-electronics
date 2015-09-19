@@ -30,6 +30,9 @@ static float adxl3x5_accels_to_axis(int16_t *accels, int16_t axis, int16_t g);
 static Thread *tp345 = NULL;
 static Thread *tp375 = NULL;
 
+int16_t accels[3], axis, g;
+
+
 /* Helper for sad moments */
 static void adxl3x5_sad(const uint8_t n)
 {
@@ -258,15 +261,16 @@ static float adxl3x5_accels_to_axis(int16_t *accels, int16_t axis, int16_t g)
 msg_t adxl345_thread(void *arg)
 {
     (void)arg;
-
+    
+    int16_t axis, g;
+    
     const SPIConfig spi_cfg = {
         NULL,
         ADXL345_SPI_CS_PORT,
         ADXL345_SPI_CS_PIN,
         SPI_CR1_BR_1 | SPI_CR1_BR_0 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
-    int16_t accels[3], axis, g;
-
+    
 
     chRegSetThreadName("ADXL345");
 

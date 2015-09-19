@@ -18,6 +18,8 @@
 #define CHAN_IMU_LGA        0x20
 #define CHAN_IMU_HGA        0x21
 #define CHAN_IMU_BARO       0x22
+#define CHAN_IMU_GYRO       0x23
+#define CHAN_IMU_MAGNO      0x24
 #define CHAN_SENS_BAT       0x30
 #define CHAN_SENS_SG        0x31
 #define CHAN_SENS_TC        0x32
@@ -28,6 +30,8 @@
 #define CHAN_SE_U_A         0x53
 #define CHAN_PYRO_C         0x60
 #define CHAN_PYRO_F         0x61
+
+
 
 /* Log data to the micro SD card.
  * The channel is 0 to 255.
