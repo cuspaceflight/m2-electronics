@@ -27,7 +27,7 @@ static Thread *tpHMC5883L = NULL;
 int16_t global_magno[3];
 
 static const I2CConfig i2cconfig = {
-    OPMODE_I2C, 100000, STD_DUTY_CYCLE
+    OPMODE_I2C, 10000, STD_DUTY_CYCLE
 };
 
 /* Acquire the mutex lock, start the I2C, perform a transation,
@@ -44,7 +44,13 @@ static msg_t hmc5883l_safe_tx(const uint8_t* txbuf, size_t txbytes,
                                   txbuf, txbytes, rxbuf, rxbytes, timeout);
     i2cStop(&HMC5883L_I2CD);
     chMtxUnlock();
-    return rv;
+    if(rv == RDY_OK)
+        return rv;
+    else {
+        i2cflags_t errs = i2cGetErrors(&HMC5883L_I2CD);
+        (void)errs;
+        return rv;
+    }
 }
 
 /* Transmit data to sensor (used in init function only) */
@@ -95,7 +101,7 @@ static bool hmc5883l_init(void) {
 /* Checks the ID of the Magno to ensure we're actually talking to the Magno and
  * not some other component.
  */
-static bool hmc58831_ID_check(void) {
+static bool hmc5883l_ID_check(void) {
     uint8_t buf;
     uint8_t id_reg;
     bool success = true;
@@ -187,7 +193,7 @@ msg_t hmc5883l_thread(void *arg)
     chRegSetThreadName("HMC5883L");
 
     /* Check the magnetometer ID. */
-    while (!hmc58831_ID_check()) {
+    while (!hmc5883l_ID_check()) {
         chThdSleepMilliseconds(500);
     }
 
