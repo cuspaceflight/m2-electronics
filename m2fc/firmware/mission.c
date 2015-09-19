@@ -38,7 +38,7 @@ state_t run_state(state_t cur_state, instance_data_t *data) {
 
 static state_t do_state_pad(instance_data_t *data)
 {
-    state_estimation_trust_barometer = 1;
+    state_estimation_trust_barometer = true;
     if(chTimeNow() < 10000)
         return STATE_PAD;
     else if(data->state.a > conf.ignition_accel)
@@ -49,14 +49,14 @@ static state_t do_state_pad(instance_data_t *data)
 
 static state_t do_state_ignition(instance_data_t *data)
 {
-    state_estimation_trust_barometer = 0;
+    state_estimation_trust_barometer = false;
     data->t_launch = chTimeNow();
     return STATE_POWERED_ASCENT;
 }
 
 static state_t do_state_powered_ascent(instance_data_t *data)
 {
-    state_estimation_trust_barometer = 0;
+    state_estimation_trust_barometer = false;
     if(data->state.a < 0.0f)
         return STATE_FREE_ASCENT;
     else if(chTimeElapsedSince(data->t_launch) > conf.burnout_time)
@@ -67,7 +67,7 @@ static state_t do_state_powered_ascent(instance_data_t *data)
 
 static state_t do_state_free_ascent(instance_data_t *data)
 {
-    state_estimation_trust_barometer = 1;
+    state_estimation_trust_barometer = true;
     if(data->state.v < 0.0f)
         return STATE_APOGEE;
     else if(chTimeElapsedSince(data->t_launch) > conf.apogee_time)
@@ -78,7 +78,7 @@ static state_t do_state_free_ascent(instance_data_t *data)
 
 static state_t do_state_apogee(instance_data_t *data)
 {
-    state_estimation_trust_barometer = 1;
+    state_estimation_trust_barometer = true;
     data->t_apogee = chTimeNow();
     pyro_fire_drogue();
     return STATE_DROGUE_DESCENT;
@@ -86,7 +86,7 @@ static state_t do_state_apogee(instance_data_t *data)
 
 static state_t do_state_drogue_descent(instance_data_t *data)
 {
-    state_estimation_trust_barometer = 1;
+    state_estimation_trust_barometer = true;
     if(data->state.h < conf.main_altitude)
         return STATE_RELEASE_MAIN;
     else if(chTimeElapsedSince(data->t_apogee) > conf.main_time)
@@ -98,15 +98,17 @@ static state_t do_state_drogue_descent(instance_data_t *data)
 static state_t do_state_release_main(instance_data_t *data)
 {
     (void)data;
-    state_estimation_trust_barometer = 1;
+    state_estimation_trust_barometer = true;
     pyro_fire_main();
     return STATE_MAIN_DESCENT;
 }
 
 static state_t do_state_main_descent(instance_data_t *data)
 {
-    state_estimation_trust_barometer = 1;
+    state_estimation_trust_barometer = true;
     if(chTimeElapsedSince(data->t_apogee) > conf.landing_time)
+        return STATE_LAND;
+    else if(fabs(data->state.v) < 0.5f)
         return STATE_LAND;
     else
         return STATE_MAIN_DESCENT;
@@ -114,14 +116,14 @@ static state_t do_state_main_descent(instance_data_t *data)
 
 static state_t do_state_land(instance_data_t *data)
 {
-    state_estimation_trust_barometer = 1;
     (void)data;
+    state_estimation_trust_barometer = true;
     return STATE_LANDED;
 }
 
 static state_t do_state_landed(instance_data_t *data)
 {
-    state_estimation_trust_barometer = 1;
+    state_estimation_trust_barometer = true;
     (void)data;
     return STATE_LANDED;
 }
@@ -132,8 +134,8 @@ msg_t mission_thread(void* arg)
     state_t cur_state = STATE_PAD;
     state_t new_state;
     instance_data_t data;
-    data.t_launch = -1;
-    data.t_apogee = -1;
+    data.t_launch = 0;
+    data.t_apogee = 0;
 
     chRegSetThreadName("Mission");
 
