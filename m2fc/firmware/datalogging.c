@@ -46,6 +46,8 @@ static volatile char mempool_buffer[LOG_MEMPOOL_ITEMS * sizeof(TelemPacket)]
 static volatile msg_t mailbox_buffer[LOG_MEMPOOL_ITEMS]
                       __attribute__((section(".ccm")));
 
+static uint8_t log_location = 0;
+
 /* ------------------------------------------------------------------------- */
 /* MAIN THREAD FUNCTIONS */
 /* ------------------------------------------------------------------------- */
@@ -66,17 +68,16 @@ msg_t datalogging_thread(void* arg)
     SDRESULT open_res;       // result of re-opening the log file
     (void)arg;
 
-    // initialise stuff
+    /* initialise stuff */
     chRegSetThreadName("Datalogging");
     mem_init();
     while (microsd_open_file_inc(&file, "log", "bin", &file_system) != FR_OK);
 
-    /* TODO: Log stage based on config file */
-    /*if (STAGE == 1) {*/
-        /*log_c(CHAN_INIT, "B3STAGE1");*/
-    /*} else if (STAGE == 2) {*/
-        /*log_c(CHAN_INIT, "B3STAGE2");*/
-    /*}*/
+    if(conf.location == CFG_M2FC_NOSE)
+        log_c(M2T_CH_SYS_INIT, "M2FCNOSE");
+    else if(conf.location == CFG_M2FC_BODY)
+        log_c(M2T_CH_SYS_INIT, "M2FCBODY");
+    log_c(M2T_CH_SYS_VERSION, conf.version);
 
     while (true) {
 
@@ -94,8 +95,9 @@ msg_t datalogging_thread(void* arg)
         if(cache_ptr + packet_size >= log_cache + LOG_CACHE_SIZE) {
             write_res = microsd_write(&file, (char*)log_cache, LOG_CACHE_SIZE);
 
-            // If the write failed, keep attempting to re-open the log file
-            // and write the data out when we succeed.
+            /* If the write failed, keep attempting to re-open the log file
+             * and write the data out when we succeed.
+             */
             while (write_res != FR_OK) {
                 microsd_close_file(&file);
                 open_res = microsd_open_file_inc(&file, "log", "bin",
@@ -106,7 +108,7 @@ msg_t datalogging_thread(void* arg)
                 }
             }
 
-            // reset cache pointer to beginning of cache
+            /* reset cache pointer to beginning of cache */
             cache_ptr = log_cache;
         } else {
             cache_ptr += packet_size;
@@ -122,10 +124,13 @@ static void mem_init(void)
     chMBInit(&log_mailbox, (msg_t*)mailbox_buffer, LOG_MEMPOOL_ITEMS);
     chPoolInit(&log_mempool, sizeof(TelemPacket), NULL);
 
-    // fill the memory pool with statically allocated bits of memory
-    // ie. prevent dynamic core memory allocation (which cannot be freed), we
-    // just want the "bookkeeping" that memory pools provide
+    /* fill the memory pool with statically allocated bits of memory
+     * ie. prevent dynamic core memory allocation (which cannot be freed), we
+     * just want the "bookkeeping" that memory pools provide
+     */
     chPoolLoadArray(&log_mempool, (void*)mempool_buffer, LOG_MEMPOOL_ITEMS);
+
+    log_location = 2 - conf.location;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -245,7 +250,7 @@ static void _log(TelemPacket *packet)
 {
     void* msg;
     msg_t retval;
-    packet->metadata = 0; /* TODO: Add origin from config */
+    packet->metadata = log_location;
     m2telem_write_checksum(packet);
 
     /* allocate space for the packet and copy it into a mailbox message */

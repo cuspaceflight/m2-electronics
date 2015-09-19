@@ -26,8 +26,8 @@ specified in the packet itself. Origins and channel constants are unchanged.
     [ 11  | TIMESTAMP  ]/
     [ 12  | METADATA   ]--- Origin of data and reserved bits.
     [ 13  | CHANNEL    ]--- Data channel.
-    [ 14  | CHECKSUM U ]\
-    [ 15  | CHECKSUM L ]/-- Verify packet contents.
+    [ 14  | CHECKSUM L ]\
+    [ 15  | CHECKSUM U ]/-- Verify packet contents.
 
 ## Metadata
 
@@ -40,6 +40,7 @@ lower four bits. The upper four bits are reserved.
     1   M2FC BODY
     2   M2FC NOSE
     3   M2R
+    A   Groundstation
 
 ## Channel
 
@@ -53,6 +54,7 @@ the `Data` section.
     -------------------------------------------------------------
     0x0            SYSTEM
        0     0      Initialisation message, contains the origin string
+       1     0      Firmware version, as Git commit hash
 
 
     0x1           CALIBRATION
@@ -98,7 +100,7 @@ the `Data` section.
 ## Checksum
 
 CRC16-CCITT with polynomial 0x1021 and initial value 0xFFFF, no 
-post-processing. Most significant byte transmitted first.
+post-processing. Stored little-endien.
 
 ## Data
 

@@ -86,6 +86,7 @@ bool m2telem_deframe(uint8_t* buf, size_t buf_len,
 
 #define M2T_CH_GROUP_SYS            (0x00)
 #define M2T_CH_SYS_INIT             (0x00)
+#define M2T_CH_SYS_VERSION          (0x01)
 
 #define M2T_CH_GROUP_CAL            (0x10)
 #define M2T_CH_CAL_TFREQ            (0x10)
