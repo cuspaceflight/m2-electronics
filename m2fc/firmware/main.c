@@ -27,12 +27,13 @@
 
 /* Create working areas for all threads */
 /* TODO: Move some stacks to CCM where possible (no DMA use). */
-static WORKING_AREA(waMS5611, 512);
+static WORKING_AREA(waMS5611, 768);
 static WORKING_AREA(waADXL345, 512);
 static WORKING_AREA(waADXL375, 512);
 static WORKING_AREA(waMission, 1024);
 static WORKING_AREA(waThreadHB, 128);
-static WORKING_AREA(waDatalogging, 512);
+static WORKING_AREA(waDatalogging, 2048);
+static WORKING_AREA(waConfig, 8192);
 static WORKING_AREA(waPyros, 128);
 static WORKING_AREA(waThreadSBP, 1024);
 static WORKING_AREA(waAnalogue, 512);
@@ -127,7 +128,11 @@ int main(void) {
     /* Various module initialisation */
     state_estimation_init();
     dma_mutexes_init();
-    config_init();
+
+    /* Read config from SD card and wait for completion. */
+    Thread* cfg_tp = chThdCreateStatic(waConfig, sizeof(waConfig),
+                                       NORMALPRIO, config_thread, NULL);
+    while(cfg_tp->p_state != THD_STATE_FINAL) chThdSleepMilliseconds(10);
 
     /* Activate the EXTI pin change interrupts */
     extStart(&EXTD1, &extcfg);
@@ -151,17 +156,16 @@ int main(void) {
     chThdCreateStatic(waPyros, sizeof(waPyros), NORMALPRIO,
                       pyro_continuity_thread, NULL);
 
-    chThdCreateStatic(waThreadSBP, sizeof(waThreadSBP), NORMALPRIO,
-                      sbp_thread, NULL);
-
     chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
                       l3g4200d_thread, NULL);
 
     chThdCreateStatic(waHMC5883L, sizeof(waHMC5883L), NORMALPRIO,
                       hmc5883l_thread, NULL);
 
-    chThdCreateStatic(waAnalogue, sizeof(waAnalogue), NORMALPRIO,
-                      analogue_thread, NULL);
+    if(conf.read_analogue) {
+        chThdCreateStatic(waAnalogue, sizeof(waAnalogue), NORMALPRIO,
+                          analogue_thread, NULL);
+    }
 
     /* Start the command shell on the slave serial port */
     m2fc_shell_run();
