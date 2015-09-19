@@ -13,6 +13,7 @@
 #include "ms5611.h"
 #include "adxl3x5.h"
 #include "pyro.h"
+#include "config.h"
 
 static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
   size_t n, size;
@@ -115,7 +116,7 @@ static void cmd_pyro(BaseSequentialStream *chp, int argc, char *argv[]) {
     p2 = (int16_t)pyro_continuity(PYRO_2);
     p3 = (int16_t)pyro_continuity(PYRO_3);
     
-    chprintf(chp, "Results of Continuity Check: 1:%u, 2:%u, 3:%u\n",
+    chprintf(chp, "Results of Continuity Check: PY1: %u, PY2: %u, PY3: %u\n",
              p1, p2, p3);
 
     if(argc == 1 && strcmp(argv[0], "fire") == 0) {
@@ -126,6 +127,41 @@ static void cmd_pyro(BaseSequentialStream *chp, int argc, char *argv[]) {
         }
         pyro_fire(true, true, true);
     }
+}
+
+static void cmd_config(BaseSequentialStream *chp, int argc, char* argv[]) {
+    (void)argc;
+    (void)argv;
+    chprintf(chp, " Configuration:\n===============");
+    chprintf(chp, "Firmware version: %c%c%c%c%c%c%c%c\n",
+             conf.version[0], conf.version[1], conf.version[2],
+             conf.version[3], conf.version[4], conf.version[5],
+             conf.version[6], conf.version[7]);
+    chprintf(chp, "Config loaded from SD card: %s\n",
+             conf.config_loaded ? "yes" : "no");
+
+    char location_names[2][9] = {"Nosecone", "Body"};
+    chprintf(chp, "Location: %s\n", location_names[conf.location]);
+
+    char axis_names[3] = {'X', 'Y', 'Z'};
+    chprintf(chp, "Accel axis: %d (%c)\n",
+             conf.accel_axis, axis_names[conf.accel_axis]);
+
+    chprintf(chp, "Pyro fire time: %dms\n", conf.pyro_firetime);
+    char pyro_uses[3][7] = {"Unused", "Drogue", "Main"};
+    chprintf(chp, "Pyro 1: %s\nPyro 2: %s\nPyro 3: %s\n",
+             pyro_uses[conf.pyro_1], pyro_uses[conf.pyro_2],
+             pyro_uses[conf.pyro_3]);
+
+    chprintf(chp, "Ignition detection acceleration: %dm/s/s\n",
+             conf.ignition_accel);
+    chprintf(chp, "Burnout timeout: %dms\n", conf.burnout_time);
+    chprintf(chp, "Apogee timeout: %dms\n", conf.apogee_time);
+    chprintf(chp, "Main release altitude: %dm ASL\n", conf.main_altitude);
+    chprintf(chp, "Main release timeout: %dms\n", conf.main_time);
+    chprintf(chp, "Landing timeout: %dms\n", conf.landing_time);
+    chprintf(chp, "Recording ADCs: %s\n", conf.read_analogue? "yes":"no");
+
 }
 
 void m2fc_shell_run()
@@ -139,6 +175,7 @@ void m2fc_shell_run()
         {"baro", cmd_baro},
         {"accel", cmd_accel},
         {"pyro", cmd_pyro},
+        {"config", cmd_config},
         {NULL, NULL}
     };
     static const ShellConfig shell_cfg = {
