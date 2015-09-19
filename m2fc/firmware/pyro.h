@@ -18,15 +18,14 @@ bool pyro_continuity(pyro_channel channel);
 /* Check that all pyros that should be installed are installed. */
 bool pyro_continuities(void);
 
-/* Fire the pyro channel `channel` for `duration_ms` milliseconds.
- * Non-blocking.
+/* Fire the pyro channels `channel` for `conf.pyro_firetime` milliseconds.
+ * Blocks.
  */
-void pyro_fire(uint8_t ch1, uint8_t ch2, uint8_t ch3);
+void pyro_fire(bool ch1, bool ch2, bool ch3);
 
 /* Fire the drogue or main chute, selecting the appropriate pyro channels from
  * the configuration.
- * Fires for PYRO_FIRETIME ms.
- * Does not block.
+ * Fires for conf.pyro_firetime ms, blocks.
  */
 void pyro_fire_drogue(void);
 void pyro_fire_main(void);

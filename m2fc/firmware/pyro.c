@@ -59,7 +59,7 @@ bool_t pyro_continuities()
  * Fire the pyro channels ch1/ch2/ch3 with 10ms on/off pulses for the
  * configured total duration.
  */
-void pyro_fire(uint8_t ch1, uint8_t ch2, uint8_t ch3)
+void pyro_fire(bool ch1, bool ch2, bool ch3)
 {
     unsigned int i;
     for(i=0; i<conf.pyro_firetime / 20; i++) {
