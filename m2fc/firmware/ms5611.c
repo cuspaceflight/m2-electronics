@@ -11,7 +11,7 @@
 
 #include "hal.h"
 #include "chprintf.h"
-#include "dma1_stream0_mutex.h"
+#include "dma_mutexes.h"
 
 
 #define MS5611_SPID        SPID3
@@ -19,6 +19,8 @@
 #define MS5611_SPI_CS_PIN  GPIOD_BARO_CS
 
 
+static void ms5611_spi_start(void);
+static void ms5611_spi_stop(void);
 static void ms5611_reset(void);
 static void ms5611_read_u16(uint8_t adr, uint16_t* c);
 static void ms5611_read_s24(uint8_t adr, int32_t* d);
@@ -29,14 +31,37 @@ static void ms5611_read(MS5611CalData* cal_data,
 
 int32_t temperature, pressure;
 
+static const SPIConfig spi_cfg = {
+    NULL,
+    MS5611_SPI_CS_PORT,
+    MS5611_SPI_CS_PIN,
+    SPI_CR1_BR_1 | SPI_CR1_CPOL | SPI_CR1_CPHA
+};
+
+/* Acquire mutex and initialise SPI with DMA. */
+static void ms5611_spi_start()
+{
+    chMtxLock(&dma1_stream0_mutex);
+    spiStart(&MS5611_SPID, &spi_cfg);
+}
+
+/* Release DMA and mutex. */
+static void ms5611_spi_stop()
+{
+    spiStop(&MS5611_SPID);
+    chMtxUnlock();
+}
+
 /*
  * Resets the MS5611. Sends 0x1E, waits 5ms.
  */
 static void ms5611_reset()
 {
     uint8_t adr = 0x1E;
+    ms5611_spi_start();
     spiSelect(&MS5611_SPID);
     spiSend(&MS5611_SPID, 1, (void*)&adr);
+    ms5611_spi_stop();
     chThdSleepMilliseconds(5);
     spiUnselect(&MS5611_SPID);
 }
@@ -47,10 +72,12 @@ static void ms5611_reset()
 static void ms5611_read_u16(uint8_t adr, uint16_t* c)
 {
     uint8_t rx[2];
+    ms5611_spi_start();
     spiSelect(&MS5611_SPID);
     spiSend(&MS5611_SPID, 1, (void*)&adr);
     spiReceive(&MS5611_SPID, 2, (void*)rx);
     spiUnselect(&MS5611_SPID);
+    ms5611_spi_stop();
 
     *c = rx[0] << 8 | rx[1];
 }
@@ -63,9 +90,11 @@ static void ms5611_read_s24(uint8_t adr, int32_t* d)
     uint8_t adc_adr = 0x00, rx[3];
 
     /* Start conversion */
+    ms5611_spi_start();
     spiSelect(&MS5611_SPID);
     spiSend(&MS5611_SPID, 1, (void*)&adr);
-    
+    ms5611_spi_stop();
+
     /*
      * Wait for conversion to complete. There doesn't appear to be any way
      * to do this without timing it, unfortunately.
@@ -78,10 +107,12 @@ static void ms5611_read_s24(uint8_t adr, int32_t* d)
     spiUnselect(&MS5611_SPID);
 
     /* Read ADC result */
+    ms5611_spi_start();
     spiSelect(&MS5611_SPID);
     spiSend(&MS5611_SPID, 1, (void*)&adc_adr);
     spiReceive(&MS5611_SPID, 3, (void*)rx);
     spiUnselect(&MS5611_SPID);
+    ms5611_spi_stop();
 
     *d = rx[0] << 16 | rx[1] << 8 | rx[2];
 }
@@ -142,7 +173,7 @@ static void ms5611_read(MS5611CalData* cal_data,
     /* Fetch and compute temperature */
     dt = (int64_t)d2 - ((int64_t)cal_data->c5 << 8);
     *temperature = 2000 + ((dt * (int64_t)cal_data->c6) >> 23);
-    
+
     /* Compute offset and sensitivity */
     off = ((int64_t)cal_data->c2 << 16) + (((int64_t)cal_data->c4 * dt) >> 7);
     sens = ((int64_t)cal_data->c1 << 15) + (((int64_t)cal_data->c3 * dt) >> 8);
@@ -175,30 +206,13 @@ msg_t ms5611_thread(void *arg)
 {
     (void)arg;
 
-    static const SPIConfig spi_cfg = {
-        NULL,
-        MS5611_SPI_CS_PORT,
-        MS5611_SPI_CS_PIN,
-        SPI_CR1_BR_1 | SPI_CR1_CPOL | SPI_CR1_CPHA
-    };
-
     static MS5611CalData cal_data;
-    
 
     chRegSetThreadName("MS5611");
-    
-    chMtxLock(&dma1_stream0_mutex);
-
-    spiStart(&MS5611_SPID, &spi_cfg);
     ms5611_init(&cal_data);
-    chMtxUnlock();
-    
+
     while (TRUE) {
-        chMtxLock(&dma1_stream0_mutex);
         ms5611_read(&cal_data, &temperature, &pressure);
-        chMtxUnlock();
         state_estimation_new_pressure((float)pressure);
     }
-
-    return (msg_t)NULL;
 }

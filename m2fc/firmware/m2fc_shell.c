@@ -125,8 +125,8 @@ static void cmd_pyro(BaseSequentialStream *chp, int argc, char *argv[]) {
                                                     
     if (argc > 0) 
     {
-        if (argv[0][0] == "yes")
-        {
+        /*if (argv[0][0] == "yes")*/
+        /*{*/
             /* if (argv[0][1] == '1') 
             {
                pyro_fire(1, 1000);
@@ -147,12 +147,12 @@ static void cmd_pyro(BaseSequentialStream *chp, int argc, char *argv[]) {
                 chprintf(chp, "Please select which pyro you want to fire by writing pyro yes [number]");
             }
             */
-        }
+        /*}*/
         
-        else
-        {
-        chprintf(chp, "Please confirm you want to test Pyros by writing yes as first argument");
-        }
+        /*else*/
+        /*{*/
+        /*chprintf(chp, "Please confirm you want to test Pyros by writing yes as first argument");*/
+        /*}*/
     }
 }
 

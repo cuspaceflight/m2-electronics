@@ -7,12 +7,13 @@
 #ifndef ANALOGUE_H
 #define ANALOGUE_H
 
-
 #include "ch.h"
-#include "hal.h"
-#include <stdlib.h>
 
-
+/*
+ * Run the ADCs, sampling the three strain gauges simultaneously and then the
+ * three thermocouples simultaneously, both at 20kS/s.
+ * The data is then logged to the SD card.
+ */
 msg_t analogue_thread(void *args);
 
 #endif // #ifndef ANALOGUE_H

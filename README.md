@@ -13,3 +13,14 @@ max alt) over a satellite radio and 70cm radio link.
 
 ## Radio Link M2RL
 Communicate between two M2FCs
+
+## Firmware
+### ChibiOS Instructions
+
+```bash
+$ git submodule update --init
+$ cd ChibiOS/ext
+$ unzip fatfs-0.9-patched.zip
+$ cd ../os/various/fatfs_bindings
+$ sed -i '/extern SDCDriver SDCD1;/d' fatfs_diskio.c
+```
