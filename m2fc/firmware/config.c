@@ -24,7 +24,7 @@ config_t conf = {
     .location = CFG_M2FC_NOSE, .accel_axis = 3, .pyro_firetime = 5000,
     .pyro_1 = CFG_PYRO_DROGUE, .pyro_2 = CFG_PYRO_DROGUE,
     .pyro_3 = CFG_PYRO_DROGUE, .ignition_accel = 30,
-    .burnout_time = 5200, .apogee_time = 55000, .main_altitude = 1450,
+    .burnout_time = 6000, .apogee_time = 60000, .main_altitude = 1500,
     .main_time = 30000, .landing_time = 300000, .read_analogue = false
 };
 
@@ -157,4 +157,12 @@ bool config_init()
 
     microsd_close_file(&file);
     return success;
+}
+
+msg_t config_thread(void* arg)
+{
+    (void)arg;
+    chRegSetThreadName("Config");
+    config_init();
+    return RDY_OK;
 }
