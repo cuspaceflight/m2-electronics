@@ -18,7 +18,7 @@ pyro_3           | Int   | Pyro channel 3 usage: 0=unused 1=drogue 2=main
 ignition_accel   | Int   | Acceleration threshold for detecting motor ignition, in m/s/s
 burnout_time     | Int   | Time limit on motor burn duration, in milliseconds
 apogee_time      | Int   | Time since burnout after which apogee is considered to have been reached, in milliseconds
-main_altitude    | Int   | Altitude below which to release the main parachute, in metres ASL
+main_altitude    | Int   | Altitude below which to release the main parachute, in metres AGL
 main_time        | Int   | Time since apogee at which to release the main parachute, in milliseconds
 landing_time     | Int   | Time since apogee at which to consider the rocket landed, in milliseconds
 read_analogue    | Bool  | 1 to read the ADCs, 0 to disable

@@ -20,6 +20,7 @@ typedef enum {
 struct instance_data {
     int32_t t_launch;
     int32_t t_apogee;
+    float h_ground;
     state_estimate_t state;
 };
 
@@ -53,6 +54,7 @@ state_t run_state(state_t cur_state, instance_data_t *data) {
 static state_t do_state_pad(instance_data_t *data)
 {
     state_estimation_trust_barometer = true;
+    data->h_ground = data->state.h;
     if(chTimeNow() < 10000)
         return STATE_PAD;
     else if(data->state.a > conf.ignition_accel)
@@ -101,7 +103,7 @@ static state_t do_state_apogee(instance_data_t *data)
 static state_t do_state_drogue_descent(instance_data_t *data)
 {
     state_estimation_trust_barometer = true;
-    if(data->state.h < conf.main_altitude)
+    if((data->state.h - data->h_ground) < conf.main_altitude)
         return STATE_RELEASE_MAIN;
     else if(chTimeElapsedSince(data->t_apogee) > conf.main_time)
         return STATE_RELEASE_MAIN;
@@ -150,6 +152,7 @@ msg_t mission_thread(void* arg)
     instance_data_t data;
     data.t_launch = 0;
     data.t_apogee = 0;
+    data.h_ground = 0.0f;
 
     chRegSetThreadName("Mission");
 

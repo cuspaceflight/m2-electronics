@@ -157,7 +157,7 @@ static void cmd_config(BaseSequentialStream *chp, int argc, char* argv[]) {
              conf.ignition_accel);
     chprintf(chp, "Burnout timeout: %dms\n", conf.burnout_time);
     chprintf(chp, "Apogee timeout: %dms\n", conf.apogee_time);
-    chprintf(chp, "Main release altitude: %dm ASL\n", conf.main_altitude);
+    chprintf(chp, "Main release altitude: %dm AGL\n", conf.main_altitude);
     chprintf(chp, "Main release timeout: %dms\n", conf.main_time);
     chprintf(chp, "Landing timeout: %dms\n", conf.landing_time);
     chprintf(chp, "Recording ADCs: %s\n", conf.read_analogue? "yes":"no");
