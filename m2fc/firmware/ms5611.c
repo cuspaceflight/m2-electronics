@@ -21,6 +21,8 @@
 
 static void ms5611_spi_start(void);
 static void ms5611_spi_stop(void);
+static void ms5611_spi_select(void);
+static void ms5611_spi_unselect(void);
 static void ms5611_reset(void);
 static void ms5611_read_u16(uint8_t adr, uint16_t* c);
 static void ms5611_read_s24(uint8_t adr, int32_t* d);
@@ -52,6 +54,18 @@ static void ms5611_spi_stop()
     chMtxUnlock();
 }
 
+/* Assert CS without needing to have the SPI peripheral ready */
+static void ms5611_spi_select()
+{
+    palClearPad(MS5611_SPID.config->ssport, MS5611_SPID.config->sspad);
+}
+
+/* Deassert CS without needing to have the SPI peripheral ready */
+static void ms5611_spi_unselect()
+{
+    palSetPad(MS5611_SPID.config->ssport, MS5611_SPID.config->sspad);
+}
+
 /*
  * Resets the MS5611. Sends 0x1E, waits 5ms.
  */
@@ -59,11 +73,11 @@ static void ms5611_reset()
 {
     uint8_t adr = 0x1E;
     ms5611_spi_start();
-    spiSelect(&MS5611_SPID);
+    ms5611_spi_select();
     spiSend(&MS5611_SPID, 1, (void*)&adr);
     ms5611_spi_stop();
     chThdSleepMilliseconds(5);
-    spiUnselect(&MS5611_SPID);
+    ms5611_spi_unselect();
 }
 
 /*
@@ -73,10 +87,10 @@ static void ms5611_read_u16(uint8_t adr, uint16_t* c)
 {
     uint8_t rx[2];
     ms5611_spi_start();
-    spiSelect(&MS5611_SPID);
+    ms5611_spi_select();
     spiSend(&MS5611_SPID, 1, (void*)&adr);
     spiReceive(&MS5611_SPID, 2, (void*)rx);
-    spiUnselect(&MS5611_SPID);
+    ms5611_spi_unselect();
     ms5611_spi_stop();
 
     *c = rx[0] << 8 | rx[1];
@@ -91,7 +105,7 @@ static void ms5611_read_s24(uint8_t adr, int32_t* d)
 
     /* Start conversion */
     ms5611_spi_start();
-    spiSelect(&MS5611_SPID);
+    ms5611_spi_select();
     spiSend(&MS5611_SPID, 1, (void*)&adr);
     ms5611_spi_stop();
 
@@ -104,14 +118,14 @@ static void ms5611_read_s24(uint8_t adr, int32_t* d)
     chThdSleepMilliseconds(2);
 
     /* Deassert CS */
-    spiUnselect(&MS5611_SPID);
+    ms5611_spi_unselect();
 
     /* Read ADC result */
     ms5611_spi_start();
-    spiSelect(&MS5611_SPID);
+    ms5611_spi_select();
     spiSend(&MS5611_SPID, 1, (void*)&adc_adr);
     spiReceive(&MS5611_SPID, 3, (void*)rx);
-    spiUnselect(&MS5611_SPID);
+    ms5611_spi_unselect();
     ms5611_spi_stop();
 
     *d = rx[0] << 16 | rx[1] << 8 | rx[2];
