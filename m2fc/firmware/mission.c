@@ -11,6 +11,20 @@
 #include "datalogging.h"
 #include "config.h"
 
+typedef enum {
+    STATE_PAD = 0, STATE_IGNITION, STATE_POWERED_ASCENT, STATE_FREE_ASCENT,
+    STATE_APOGEE, STATE_DROGUE_DESCENT, STATE_RELEASE_MAIN,
+    STATE_MAIN_DESCENT, STATE_LAND, STATE_LANDED, NUM_STATES
+} state_t;
+
+struct instance_data {
+    int32_t t_launch;
+    int32_t t_apogee;
+    state_estimate_t state;
+};
+
+typedef struct instance_data instance_data_t;
+
 typedef state_t state_func_t(instance_data_t *data);
 
 state_t run_state(state_t cur_state, instance_data_t *data);
@@ -108,7 +122,7 @@ static state_t do_state_main_descent(instance_data_t *data)
     state_estimation_trust_barometer = true;
     if(chTimeElapsedSince(data->t_apogee) > conf.landing_time)
         return STATE_LAND;
-    else if(fabs(data->state.v) < 0.5f)
+    else if(fabsf(data->state.v) < 0.5f)
         return STATE_LAND;
     else
         return STATE_MAIN_DESCENT;
