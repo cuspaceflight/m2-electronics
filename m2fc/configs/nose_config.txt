@@ -1,0 +1,12 @@
+accel_axis=2
+pyro_firetime=5000
+pyro_1=1
+pyro_2=1
+pyro_3=1
+ignition_accel=20
+burnout_time=5200
+apogee_time=55000
+main_altitude=1450
+main_time=30000
+landing_time=300000
+read_analogue=0
