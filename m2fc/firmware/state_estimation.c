@@ -323,6 +323,9 @@ float state_estimation_pressure_to_altitude(float pressure)
      * is inside that level, and use the appropriate conversion based on lapse
      * rate at that level.
      */
+    if(pressure > Pb[0]) {
+        return state_estimation_p2a_nonzero_lapse(pressure, 0);
+    }
     for(b = 0; b < 6; b++) {
         if(pressure <= Pb[b] && pressure > Pb[b+1]) {
             if(Lb[b] == 0.0f) {
