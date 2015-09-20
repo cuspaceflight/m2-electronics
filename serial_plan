@@ -1,0 +1,22 @@
+# Serial Handling
+
+Ideally common between M2R and M2FC.
+
+Something to source and sink M2Telem packets and react appropriately..
+
+M2FC body only sources M2Telem packets and sends them to M2FC Nose.
+M2FC nose sinks packets from M2FC Body but should immediately retransmit to
+M2R, and also sources its own packets to send to M2R.
+
+All devices should present a shell interface on their serial interfaces.
+
+Overview of logic and packet routing...
+
+Really need the status managment thing first which is responsible for
+generating the outgoing packets. 
+
+So first things first, the normal serial interface (not via xbee).
+
+# M2Serial
+
+Use ChibiOS Serial driver. transmit_packet(TelemPacket)

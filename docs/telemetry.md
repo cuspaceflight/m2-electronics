@@ -55,9 +55,14 @@ the `Data` section.
     0x0            SYSTEM
        0     0      Initialisation message, contains the origin string
        1     0      Firmware version, as Git commit hash
+       2     8      Statistics: [CPU_usage uSD_duty 0 0 0 0 0 0 0]
+       3     8      Status 1: [M2FCBODY M2FCNOSE M2R 0 0 0 0 0]
+       4     8      Status 2: [ADC Accel Baro Gyro Magno Pyro uSD 0]
+       5     8      Status 3: [SE MC Datalogging Config 0 0 0 0]
+       6     8      Status 4: [RockBLOCK Radio GPS 0 0 0 0 0]
 
 
-    0x1           CALIBRATION
+    0x1            CALIBRATION
        0     4      Timestamp frequency  [f 0]
        1     5      Low-G accelerometer  [axis gravity-magnitude 0 0]
        2     5      High-G accelerometer [axis gravity-magnitude 0 0]
@@ -65,7 +70,7 @@ the `Data` section.
        4     6      Barometer            [c4 c5 c6 d7]
 
 
-    0x2           INTERTIAL MEASUREMENT
+    0x2            INTERTIAL MEASUREMENT
        0     5      Low-G accelerometer  [x y z 0]
        1     5      High-G accelerometer [x y z 0]
        2     3      Barometer            [pressure temperature]
@@ -73,25 +78,25 @@ the `Data` section.
        4     5      Magnetometer         [x y z 0]
 
 
-    0x3           EXTERNAL SENSORS
-       0     3      Battery voltage [millivolts 0]
+    0x3            EXTERNAL SENSORS
+       0     5      Battery voltage [millivolts 0 0 0]
        1     5      Strain gauges   [ch1 ch2 ch3 0]
        2     5      Thermocouples   [ch1 ch2 ch3 0]
 
-    0x4           STATE MACHINES
+    0x4            STATE MACHINES
        0     3      Mission Control [old_state new_state]
 
-    0x5           STATE ESTIMATION
+    0x5            STATE ESTIMATION
        0     9      Prediction output  I     [dt       height]
        1     9      Prediction output II     [velocity acceleration]
        2     9      Pressure measurement     [sensor   estimate]
        3     9      Acceleration measurement [sensor   estimate]
 
-    0x6           PYROTECHNICS
+    0x6            PYROTECHNICS
        0     5      Continuity results [ch1 ch2 ch3 0]
        1     5      Fired              [ch1 ch2 ch3 0]
 
-    0x7           LOCATION
+    0x7            LOCATION
        0     8      GPS Time       [year_l year_h month day hour min sec valid]
        1     3      GPS Position   [latitude longitude]
        2     3      GPS Altitude   [height height_msl]

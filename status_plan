@@ -1,0 +1,160 @@
+# M2Status
+
+Easy part of the job is holding the latest readings from everything local for 
+transmission elsewhere. This part has update_x functions that update the thing, 
+storing it against a timestamp, and then every second (or so) the thread can 
+generate outgoing messages with the relevant data over the relevant links. 
+Likewise the thread can process any incoming messages and route them on to the 
+correct destination.
+
+Specifically for routing..
+
+M2FC: Packets generated locally are sent to the other M2FC over the xbee link. 
+Packets received from the other M2FC are logged to SD card and sent over the 
+serial link to M2R (in the Body case this happens but doesn't do anything). 
+Packets received from M2R are logged to SD card and sent over the xbee link to 
+M2FC Body for logging.
+
+M2R: Packets received from M2FC are queued for radio transmission. Packets 
+generated locally are also queued for radio transmission and are sent over the 
+serial link to M2FC Nose for logging.
+
+In both cases all the packets are used to update the local concept of state 
+from which other systems (e.g. RockBLOCK messages, radio backup, etc) are able 
+to generate appropriate messages.
+
+Hard part is tracking this flight-readiness. Need to know if everything is 
+ready to fly, getting ready to fly, or not ready to fly. Need to distinguish 
+between no data and success too, e.g. between a thread not running at all (and 
+thus not reporting errors) and also between a broken comms link (e.g. between 
+two M2FCs) causing no errors to be reported.
+
+For each item being tracked, start in STATE_ERR_NOT_STARTED. Items may then 
+update themselves to the relevant state during operation.
+
+Need to track items that should be talking to us in that case too, like M2FC 
+Body for M2FC Nose and M2FC Nose for M2R.
+
+# Layout
+
+Struct which holds..
+
+* Latest readings with timestamp for:
+    * M2FC:
+        * ADC readings for 3 SG and 3 TC
+        * Accel readings for LG and HG
+        * Baro readings
+        * Gyro readings
+        * Magno readings
+        * State estimation altitude and velocity and acceleration
+        * Mission control state
+        * Pyro continuity and a "fired" flag that is only set, never cleared
+    * M2R:
+        * Battery voltage
+        * GPS time, position, altitude, status
+* Other statistics..
+    * CPU usage
+    * M2FC:
+        * MicroSD duty cycle
+    * More things here
+* Status for...
+    * M2FC:
+        * ADC
+            * started running
+            * callback error
+        * Accel:
+            * started running
+            * invalid device ID
+            * LG selftest fail
+            * HG seltest fail
+            * LG callback while thread active
+            * HG callback while thread active
+        * Baro
+            * started running
+        * Gyro
+            * started running
+            * I2C error
+            * init error
+            * ID check error
+            * read data error
+            * callback while thread active
+        * Magno
+            * started running
+            * I2C error
+            * init error
+            * ID check error
+            * callback while thread active
+        * SE
+            * Could not map pressure to altitude
+        * Mission control
+            * Started running
+        * Pyros
+            * Continuity error
+        * MicroSD card
+            * Error connecting to SD card
+            * Error mounting filesystem
+            * Error opening file
+            * Error writing data
+            * Error reading data
+        * Datalogging
+            * Started running
+            * Logging message failed to allocate pool space
+            * Logging message failed to send mailbox message
+        * Config
+            * Started running
+            * Wrote config
+            * Invalid config
+            * Error reading config
+    * M2R:
+        * RockBLOCK:
+            * ?
+        * Radio:
+            * ?
+        * GPS:
+            * ?
+    * System
+        * Overall state: OK, warning, error?
+
+
+Item States
+
+STATE_OK
+STATE_WAIT
+STATE_ERR
+STATE_ERR_NOT_STARTED
+STATE_ERR_INITIALISING
+STATE_ERR_READING
+STATE_ERR_WRITING
+STATE_ERR_SENDING
+STATE_ERR_ALLOCATING
+STATE_ERR_CALLBACK_WHILE_ACTIVE
+STATE_ERR_SELFTEST_FAIL
+STATE_ERR_INVALID_DEVICE_ID
+STATE_ERR_PERIPHERAL
+STATE_ERR_BAD_INPUT
+
+Items to keep track of:
+
+On M2FC:
+    ADC
+    Accel
+    Baro
+    Gyro
+    Magno
+    State Estimation
+    Mission Control
+    Pyros
+    MicroSD
+    Datalogging
+    Config
+    M2FCBODY
+    M2FCNOSE
+On M2R:
+    RockBLOCK
+    Radio
+    GPS
+    M2FCBODY
+    M2FCNOSE
+    M2R
+
+Overall State is then STATE_OK, STATE_WAIT or STATE_ERR
