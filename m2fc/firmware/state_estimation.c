@@ -43,7 +43,7 @@ float state_estimation_p2a_nonzero_lapse(float p, int b);
 float state_estimation_p2a_zero_lapse(float p, int b);
 
 /* Generic accelerometer Kalman filter update, used by both the high-g and
- * log-g public functions.
+ * low-g public functions.
  */
 void state_estimation_update_accel(float accel, float r);
 
