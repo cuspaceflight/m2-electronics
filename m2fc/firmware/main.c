@@ -156,13 +156,17 @@ int main(void) {
     chThdCreateStatic(waPyros, sizeof(waPyros), NORMALPRIO,
                       pyro_continuity_thread, NULL);
 
-    chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
-                      l3g4200d_thread, NULL);
+    if(conf.use_gyro) {
+        chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
+                          l3g4200d_thread, NULL);
+    }
 
-    chThdCreateStatic(waHMC5883L, sizeof(waHMC5883L), NORMALPRIO,
-                      hmc5883l_thread, NULL);
+    if(conf.use_magno) {
+        chThdCreateStatic(waHMC5883L, sizeof(waHMC5883L), NORMALPRIO,
+                          hmc5883l_thread, NULL);
+    }
 
-    if(conf.read_analogue) {
+    if(conf.use_adc) {
         chThdCreateStatic(waAnalogue, sizeof(waAnalogue), NORMALPRIO,
                           analogue_thread, NULL);
     }

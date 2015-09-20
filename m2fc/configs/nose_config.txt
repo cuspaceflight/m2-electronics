@@ -9,4 +9,6 @@ apogee_time=55000
 main_altitude=250
 main_time=30000
 landing_time=300000
-read_analogue=0
+use_adc=0
+use_magno=1
+use_gyro=1

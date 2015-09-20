@@ -52,7 +52,7 @@ typedef struct config_ {
     unsigned int apogee_time;
     unsigned int main_altitude, main_time;
     unsigned int landing_time;
-    bool read_analogue;
+    bool use_adc, use_magno, use_gyro;
 } config_t;
 
 /* This is the global configuration that can be accessed from any file.

@@ -21,4 +21,6 @@ apogee_time      | Int   | Time since burnout after which apogee is considered t
 main_altitude    | Int   | Altitude below which to release the main parachute, in metres AGL
 main_time        | Int   | Time since apogee at which to release the main parachute, in milliseconds
 landing_time     | Int   | Time since apogee at which to consider the rocket landed, in milliseconds
-read_analogue    | Bool  | 1 to read the ADCs, 0 to disable
+use_adc          | Bool  | 1 to read the ADCs, 0 to disable
+use_magno        | Bool  | 1 to read the magno, 0 to disable
+use_gyro         | Bool  | 1 to read the gyro, 0 to disable

@@ -25,7 +25,8 @@ config_t conf = {
     .pyro_1 = CFG_PYRO_DROGUE, .pyro_2 = CFG_PYRO_DROGUE,
     .pyro_3 = CFG_PYRO_DROGUE, .ignition_accel = 30,
     .burnout_time = 6000, .apogee_time = 60000, .main_altitude = 300,
-    .main_time = 30000, .landing_time = 300000, .read_analogue = false
+    .main_time = 30000, .landing_time = 300000,
+    .use_adc = false, .use_magno = false, .use_gyro = false
 };
 
 /* ------------------------------------------------------------------------- */
@@ -96,7 +97,9 @@ bool read_config(SDFILE* file)
         read_int(file, "main_altitude", &conf.main_altitude) &&
         read_int(file, "main_time", &conf.main_time) &&
         read_int(file, "landing_time", &conf.landing_time) &&
-        read_bool(file, "read_analogue", &conf.read_analogue);
+        read_bool(file, "use_adc", &conf.use_adc) &&
+        read_bool(file, "use_magno", &conf.use_magno) &&
+        read_bool(file, "use_gyro", &conf.use_gyro);
 
     (void)read_float;
 
