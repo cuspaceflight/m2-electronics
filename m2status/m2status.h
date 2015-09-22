@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include "ch.h"
+#include "m2telem.h"
 
 typedef enum {
     STATUS_UNKNOWN = 0,
@@ -32,7 +33,7 @@ typedef struct {
         int32_t baro_p, baro_t;
         int16_t gyro_x, gyro_y, gyro_z;
         int16_t magno_x, magno_y, magno_z;
-        float se_dt, se_h, se_v, se_a, se_p_s, se_p_e, se_a_p, se_a_e;
+        float se_dt, se_h, se_v, se_a, se_p_s, se_p_e, se_a_s, se_a_e;
         int32_t mc_state;
         int16_t pyro_c_1, pyro_c_2, pyro_c_3;
         int16_t pyro_f_1, pyro_f_2, pyro_f_3;
@@ -44,10 +45,12 @@ typedef struct {
         uint8_t cpu_usage, microsd_duty;
     } latest;
     struct {
-        uint32_t sg, tc, lga, hga, baro, gyro, magno,
-                 se_predict, se_pressure, se_accel, mc,
-                 pyro_c, pyro_f, battery, gps_t, gps_p, gps_a, gps_s, stat;
+        uint32_t status_1, status_2, status_3, status_4,
+                 sg, tc, lga, hga, baro, gyro, magno,
+                 se_predict_1, se_predict_2, se_pressure, se_accel, mc,
+                 pyro_c, pyro_f, battery, gps_t, gps_p, gps_a, gps_s, stats;
     } latest_timestamps;
+    uint8_t origin;
 } SystemStatus;
 
 /* Store what we know of all the systems in the rocket. */
@@ -55,17 +58,18 @@ extern SystemStatus M2FCBodyStatus;
 extern SystemStatus M2FCNoseStatus;
 extern SystemStatus M2RStatus;
 
-/* Pointer to whichever of the SystemStatus represents "us" */
+/* Pointer to whichever of the SystemStatus represents "us".
+ * This MUST be set before starting the m2status thread! */
 extern SystemStatus* LocalStatus;
 
 /* Generate M2Telem packets from the current latest states. */
 msg_t m2status_thread(void* arg);
 
 /* Update our knowledge of the world by processing a received packet. */
-void m2status_rx_packet(TelemPacket packet);
+void m2status_rx_packet(TelemPacket *packet);
 
 /* Update our knowledge of our own latest readings. */
-void m2status_set_sg(int16_t sg1, int16_t sg3, int16_t sg3);
+void m2status_set_sg(int16_t sg1, int16_t sg2, int16_t sg3);
 void m2status_set_tc(int16_t tc1, int16_t tc2, int16_t tc3);
 void m2status_set_lga(int16_t x, int16_t y, int16_t z);
 void m2status_set_hga(int16_t x, int16_t y, int16_t z);

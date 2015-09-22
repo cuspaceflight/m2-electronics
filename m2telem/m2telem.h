@@ -76,6 +76,16 @@ bool m2telem_deframe(uint8_t* buf, size_t buf_len,
                      DeframeState* state, TelemPacket* pkt);
 
 /*
+ * Origin constants ===========================================================
+ *
+ */
+#define M2T_ORIGIN_M2FCBODY         (1)
+#define M2T_ORIGIN_M2FCNOSE         (2)
+#define M2T_ORIGIN_M2R              (3)
+#define M2T_ORIGIN_GROUND           (15)
+
+
+/*
  * Channel constants ==========================================================
  *
  * The _GROUP constants allow checking which group a channel is in by comparing
@@ -87,6 +97,11 @@ bool m2telem_deframe(uint8_t* buf, size_t buf_len,
 #define M2T_CH_GROUP_SYS            (0x00)
 #define M2T_CH_SYS_INIT             (0x00)
 #define M2T_CH_SYS_VERSION          (0x01)
+#define M2T_CH_SYS_STATS            (0x02)
+#define M2T_CH_SYS_STATUS_1         (0x03)
+#define M2T_CH_SYS_STATUS_2         (0x04)
+#define M2T_CH_SYS_STATUS_3         (0x05)
+#define M2T_CH_SYS_STATUS_4         (0x06)
 
 #define M2T_CH_GROUP_CAL            (0x10)
 #define M2T_CH_CAL_TFREQ            (0x10)

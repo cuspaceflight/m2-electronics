@@ -1,6 +1,8 @@
 -I .
 -I ./board
 -I ../../m2telem
+-I ../../m2status
+-I ../../m2serial
 -I ../../ChibiOS-RT/ext/fatfs/src
 -I ../../ChibiOS-RT/os/ports/common/ARMCMx/CMSIS/include
 -I ../../ChibiOS-RT/os/ports/common/ARMCMx/

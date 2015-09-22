@@ -97,6 +97,7 @@ CSRC = $(PORTSRC) \
 	   $(CHIBIOS)/os/various/memstreams.c \
        ../../sbp/sbp.c ../../edc.c \
        ../../m2telem/m2telem.c \
+	   ../../m2status/m2status.c \
        main.c ms5611.c adxl3x5.c pyro.c microsd.c m2fc_shell.c \
 	   state_estimation.c mission.c time_utils.c fault_handlers.c \
 	   config.c sbp_io.c analogue.c l3g4200d.c hmc5883l.c \

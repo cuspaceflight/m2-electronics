@@ -160,7 +160,7 @@ static void cmd_config(BaseSequentialStream *chp, int argc, char* argv[]) {
     chprintf(chp, "Main release altitude: %dm AGL\n", conf.main_altitude);
     chprintf(chp, "Main release timeout: %dms\n", conf.main_time);
     chprintf(chp, "Landing timeout: %dms\n", conf.landing_time);
-    chprintf(chp, "Recording ADCs: %s\n", conf.read_analogue? "yes":"no");
+    chprintf(chp, "Recording ADCs: %s\n", conf.use_adc? "yes":"no");
 
 }
 

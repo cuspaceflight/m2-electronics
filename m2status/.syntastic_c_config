@@ -1,5 +1,5 @@
 -I .
--I ../m2fc/firmware
+-I ../m2telem
 -I ../ChibiOS-RT/ext/fatfs/src
 -I ../ChibiOS-RT/os/ports/common/ARMCMx/CMSIS/include
 -I ../ChibiOS-RT/os/ports/common/ARMCMx/
