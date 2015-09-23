@@ -9,6 +9,7 @@
 #include "datalogging.h"
 #include "config.h"
 #include "state_estimation.h"
+#include "m2status.h"
 
 #include "chprintf.h"
 
@@ -29,9 +30,6 @@ static float adxl3x5_accels_to_axis(int16_t *accels, int16_t axis, int16_t g);
 
 static Thread *tp345 = NULL;
 static Thread *tp375 = NULL;
-
-int16_t accels[3], axis, g;
-
 
 /* Helper for sad moments */
 static void adxl3x5_sad(const uint8_t n)
@@ -262,15 +260,13 @@ msg_t adxl345_thread(void *arg)
 {
     (void)arg;
     
-    int16_t axis, g;
-    
     const SPIConfig spi_cfg = {
         NULL,
         ADXL345_SPI_CS_PORT,
         ADXL345_SPI_CS_PIN,
         SPI_CR1_BR_1 | SPI_CR1_BR_0 | SPI_CR1_CPOL | SPI_CR1_CPHA
     };
-    
+    int16_t accels[3], axis, g;
 
     chRegSetThreadName("ADXL345");
 
@@ -281,6 +277,7 @@ msg_t adxl345_thread(void *arg)
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
         log_i16(M2T_CH_IMU_LG_ACCEL, accels[0], accels[1], accels[2], 0);
+        m2status_set_lga(accels[0], accels[1], accels[2]);
         state_estimation_new_lg_accel(
             adxl3x5_accels_to_axis(accels, axis, g));
 

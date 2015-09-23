@@ -18,7 +18,4 @@ msg_t adxl375_thread(void *arg);
 void adxl345_wakeup(EXTDriver *extp, expchannel_t channel);
 void adxl375_wakeup(EXTDriver *extp, expchannel_t channel);
 
-extern int16_t accels[3];
-
-
 #endif /* ADXL3X5_H */

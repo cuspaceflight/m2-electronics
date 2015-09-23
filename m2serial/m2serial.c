@@ -15,10 +15,11 @@ msg_t m2serial_thread(void* arg)
     static uint8_t buf[32];
     static DeframeState df;
     static TelemPacket pkt;
-    size_t n;
+    size_t i, n;
     bool got_packet;
     int n_escapes = 0;
-    int i;
+
+    (void)arg;
 
     chMtxInit(&uart_mtx);
     chMtxLock(&uart_mtx);
@@ -41,7 +42,7 @@ msg_t m2serial_thread(void* arg)
 
             if(n_escapes == 4) {
                 if(m2serial_shell != NULL)
-                    m2serial_shell(&SD1);
+                    m2serial_shell((BaseSequentialStream*)&SD1);
                 n_escapes = 0;
                 break;
             }

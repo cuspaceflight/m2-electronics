@@ -14,6 +14,7 @@
 #include "adxl3x5.h"
 #include "pyro.h"
 #include "config.h"
+#include "m2status.h"
 
 static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
   size_t n, size;
@@ -103,7 +104,9 @@ static void cmd_accel(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argv;
     
     chprintf(chp, "Accel readings:\n x     y     z\n");
-    chprintf(chp," x: %d, y: %d, z: %d \n", accels[0], accels[1], accels[2]);
+    chprintf(chp," x: %d, y: %d, z: %d \n",
+             LocalStatus->latest.lga_x, LocalStatus->latest.lga_y,
+             LocalStatus->latest.lga_z);
     return;
 }
 

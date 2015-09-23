@@ -36,7 +36,7 @@ static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waDatalogging, 2048);
 static WORKING_AREA(waConfig, 8192);
 static WORKING_AREA(waPyros, 128);
-static WORKING_AREA(waThreadSBP, 1024);
+/*static WORKING_AREA(waThreadSBP, 1024);*/
 static WORKING_AREA(waAnalogue, 512);
 static WORKING_AREA(waHMC5883L, 512);
 static WORKING_AREA(waL3G4200D, 1024);
@@ -72,6 +72,8 @@ static msg_t ThreadHeartbeat(void *arg) {
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
     }
+
+    return RDY_OK;
 }
 
 /*

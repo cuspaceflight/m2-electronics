@@ -1,35 +1,47 @@
-Create M2Status shared by M2FC and M2R
-    Decides what to do with incoming and outgoing packets, stores state locally
-    Stores CPU usage too
-    Includes shell command to dump current states to shell.
-    Includes thread to hnadle generating outgoin gpackets
-    Includes function to handle incoming packet
-    Includes functions to set status on subcomponents
-    Includes functions to set latest readings
+x Create M2Status shared by M2FC and M2R
+x    Decides what to do with incoming and outgoing packets, stores state locally
+     Stores CPU usage too
+     Includes shell command to dump current states to shell.
+x    Includes thread to hnadle generating outgoin gpackets
+x    Includes function to handle incoming packet
+x    Includes functions to set status on subcomponents
+x    Includes functions to set latest readings
 
-Create M2Serial shared by M2FC and M2R
-    Transmits and receives packets over direct serial connection and opens
-    shells on the serial link, with 0x7D7D7D7D as the code perhaps
+x Create M2Serial shared by M2FC and M2R
+x    Transmits and receives packets over direct serial connection and opens
+x     shells on the serial link, with 0x7D7D7D7D as the code perhaps
+
 Create XBee in M2FC
-    Transmits and receives packets over xbee in API mode and opens shells to
-    the ground station xbee
+    Transmits and receives packets over xbee in API mode
+    Opens shells to the ground station xbee
+
 Update radio transmission from M2R
     Just send stringy packets that concisely summarise the state of M2Status,
     via RTTY for now, but maybe bump up to 300bd
     Wishlist: send in some priority order actual packets from M2Status via BPSK
     Wishlist: voice announcements
+
 Fix ADCs on M2FC: maybe double buffer DMA, or just start saving quicker
+
 Hard fault handlers, especially I2C/I2CDMA
+
 Watchdog reset management / survive reset as best as possible
     Maybe write state transitions to flash so we can resume in the last state,
     plus have "make flash" always reset it to PAD, and if the last state was
     LANDED then go to PAD, and maybe if state estimation is very still for a
     few seconds go to PAD too
+
 Test main altitude-based deployment
+
 M2R RockBLOCK
     Check code, update, add tweet after state changes
+
 M2R GPS code review and set to high data rate mode
+
 M2R battery voltage monitoring
+
 M2R version number in firmware and shell
+
 Battery life / long duration test of whole system
+
 Parser/interpreter for log files to check everything's being written OK
