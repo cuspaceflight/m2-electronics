@@ -19,7 +19,6 @@
 #include "m2fc_shell.h"
 #include "mission.h"
 #include "state_estimation.h"
-#include "sbp_io.h"
 #include "analogue.h"
 #include "l3g4200d.h"
 #include "hmc5883l.h"
@@ -69,8 +68,6 @@ static msg_t ThreadHeartbeat(void *arg) {
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
     }
-
-    return (msg_t)NULL;
 }
 
 /*

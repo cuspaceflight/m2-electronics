@@ -13,6 +13,7 @@ static void generate_packets(SystemStatus *status, void (*sender)(TelemPacket*))
 static void generate_common_packets(SystemStatus *status, void (*sender)(TelemPacket*));
 static void generate_m2fc_packets(SystemStatus *status, void (*sender)(TelemPacket*));
 static void generate_m2r_packets(SystemStatus *status, void (*sender)(TelemPacket*));
+static void update_system_status(void);
 
 void m2rl_send_packet(TelemPacket* packet);
 void m2serial_send_packet(TelemPacket* packet);
@@ -495,6 +496,195 @@ static void process_packet(SystemStatus *status, TelemPacket *packet)
             status->latest.gps_num_sv = packet->i8[2];
             status->latest_timestamps.gps_s = packet->timestamp;
             break;
+    }
+}
+
+void m2status_adc_status(Status status)
+{
+    LocalStatus->adc = status;
+    update_system_status();
+}
+
+void m2status_accel_status(Status status)
+{
+    LocalStatus->accel = status;
+    update_system_status();
+}
+
+void m2status_baro_status(Status status)
+{
+    LocalStatus->baro = status;
+    update_system_status();
+}
+
+void m2status_gyro_status(Status status)
+{
+    LocalStatus->gyro = status;
+    update_system_status();
+}
+
+void m2status_magno_status(Status status)
+{
+    LocalStatus->magno = status;
+    update_system_status();
+}
+
+void m2status_pyro_status(Status status)
+{
+    LocalStatus->pyro = status;
+    update_system_status();
+}
+
+void m2status_microsd_status(Status status)
+{
+    LocalStatus->microsd = status;
+    update_system_status();
+}
+
+void m2status_stateestimation_status(Status status)
+{
+    LocalStatus->stateestimation = status;
+    update_system_status();
+}
+
+void m2status_missioncontrol_status(Status status)
+{
+    LocalStatus->missioncontrol = status;
+    update_system_status();
+}
+
+void m2status_datalogging_status(Status status)
+{
+    LocalStatus->datalogging = status;
+    update_system_status();
+}
+
+void m2status_config_status(Status status)
+{
+    LocalStatus->config = status;
+    update_system_status();
+}
+
+void m2status_rockblock_status(Status status)
+{
+    LocalStatus->rockblock = status;
+    update_system_status();
+}
+
+void m2status_radio_status(Status status)
+{
+    LocalStatus->radio = status;
+    update_system_status();
+}
+
+void m2status_gps_status(Status status)
+{
+    LocalStatus->gps = status;
+    update_system_status();
+}
+
+/* Update LocalStatus->m2{fcbody,fcnose,r} based on the relevant subsystems'
+ * status.
+ */
+static void update_system_status()
+{
+    Status* mystatus;
+
+    if(LocalStatus->origin == M2T_ORIGIN_M2FCBODY ||
+       LocalStatus->origin == M2T_ORIGIN_M2FCNOSE)
+    {
+        if(LocalStatus->origin == M2T_ORIGIN_M2FCBODY) {
+            mystatus = &(LocalStatus->m2fcbody);
+        } else if(LocalStatus->origin == M2T_ORIGIN_M2FCNOSE) {
+            mystatus = &(LocalStatus->m2fcnose);
+        }
+
+        *mystatus = STATUS_OK;
+
+        if(
+           LocalStatus->adc == STATUS_UNKNOWN ||
+           LocalStatus->accel == STATUS_UNKNOWN ||
+           LocalStatus->baro == STATUS_UNKNOWN ||
+           LocalStatus->gyro == STATUS_UNKNOWN ||
+           LocalStatus->magno == STATUS_UNKNOWN ||
+           LocalStatus->pyro == STATUS_UNKNOWN ||
+           LocalStatus->microsd == STATUS_UNKNOWN ||
+           LocalStatus->stateestimation == STATUS_UNKNOWN ||
+           LocalStatus->missioncontrol == STATUS_UNKNOWN ||
+           LocalStatus->datalogging == STATUS_UNKNOWN ||
+           LocalStatus->config == STATUS_UNKNOWN
+          )
+        {
+            *mystatus = STATUS_UNKNOWN;
+        }
+
+        if(
+           LocalStatus->adc == STATUS_WAIT ||
+           LocalStatus->accel == STATUS_WAIT ||
+           LocalStatus->baro == STATUS_WAIT ||
+           LocalStatus->gyro == STATUS_WAIT ||
+           LocalStatus->magno == STATUS_WAIT ||
+           LocalStatus->pyro == STATUS_WAIT ||
+           LocalStatus->microsd == STATUS_WAIT ||
+           LocalStatus->stateestimation == STATUS_WAIT ||
+           LocalStatus->missioncontrol == STATUS_WAIT ||
+           LocalStatus->datalogging == STATUS_WAIT ||
+           LocalStatus->config == STATUS_WAIT
+          )
+        {
+            *mystatus = STATUS_WAIT;
+        }
+
+        if(
+           LocalStatus->adc >= STATUS_ERR ||
+           LocalStatus->accel >= STATUS_ERR ||
+           LocalStatus->baro >= STATUS_ERR ||
+           LocalStatus->gyro >= STATUS_ERR ||
+           LocalStatus->magno >= STATUS_ERR ||
+           LocalStatus->pyro >= STATUS_ERR ||
+           LocalStatus->microsd >= STATUS_ERR ||
+           LocalStatus->stateestimation >= STATUS_ERR ||
+           LocalStatus->missioncontrol >= STATUS_ERR ||
+           LocalStatus->datalogging >= STATUS_ERR ||
+           LocalStatus->config >= STATUS_ERR
+          )
+        {
+            *mystatus = STATUS_ERR;
+        }
+
+    } else if(LocalStatus->origin == M2T_ORIGIN_M2R) {
+        if(LocalStatus->origin == M2T_ORIGIN_M2R) {
+            mystatus = &(LocalStatus->m2r);
+        }
+
+        *mystatus = STATUS_OK;
+
+        if(
+           LocalStatus->rockblock == STATUS_UNKNOWN ||
+           LocalStatus->radio == STATUS_UNKNOWN ||
+           LocalStatus->gps == STATUS_UNKNOWN
+          )
+        {
+            *mystatus = STATUS_UNKNOWN;
+        }
+
+        if(
+           LocalStatus->rockblock == STATUS_WAIT ||
+           LocalStatus->radio == STATUS_WAIT ||
+           LocalStatus->gps == STATUS_WAIT
+          )
+        {
+            *mystatus = STATUS_WAIT;
+        }
+
+        if(
+           LocalStatus->rockblock >= STATUS_ERR ||
+           LocalStatus->radio >= STATUS_ERR ||
+           LocalStatus->gps >= STATUS_ERR
+          )
+        {
+            *mystatus = STATUS_ERR;
+        }
     }
 }
 

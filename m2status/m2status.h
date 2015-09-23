@@ -15,7 +15,7 @@
 
 typedef enum {
     STATUS_UNKNOWN = 0,
-    STATUS_WAIT, STATUS_ERR, STATUS_OK,
+    STATUS_OK, STATUS_WAIT, STATUS_ERR,
     STATUS_ERR_INITIALISING, STATUS_ERR_READING, STATUS_ERR_WRITING,
     STATUS_ERR_SENDING, STATUS_ERR_ALLOCATING,
     STATUS_ERR_CALLBACK_WHILE_ACTIVE, STATUS_ERR_SELFTEST_FAIL,
@@ -67,6 +67,22 @@ msg_t m2status_thread(void* arg);
 
 /* Update our knowledge of the world by processing a received packet. */
 void m2status_rx_packet(TelemPacket *packet);
+
+/* Update status of subsystems. */
+void m2status_adc_status(Status status);
+void m2status_accel_status(Status status);
+void m2status_baro_status(Status status);
+void m2status_gyro_status(Status status);
+void m2status_magno_status(Status status);
+void m2status_pyro_status(Status status);
+void m2status_microsd_status(Status status);
+void m2status_stateestimation_status(Status status);
+void m2status_missioncontrol_status(Status status);
+void m2status_datalogging_status(Status status);
+void m2status_config_status(Status status);
+void m2status_rockblock_status(Status status);
+void m2status_radio_status(Status status);
+void m2status_gps_status(Status status);
 
 /* Update our knowledge of our own latest readings. */
 void m2status_set_sg(int16_t sg1, int16_t sg2, int16_t sg3);
