@@ -57,7 +57,7 @@ the `Data` section.
        1     0      Firmware version, as Git commit hash
        2     8      Statistics: [CPU_usage uSD_duty 0 0 0 0 0 0 0]
        3     8      Status 1: [M2FCBODY M2FCNOSE M2R 0 0 0 0 0]
-       4     8      Status 2: [ADC Accel Baro Gyro Magno Pyro uSD 0]
+       4     8      Status 2: [ADC LG_Accel HG_Accel Baro Gyro Magno Pyro uSD]
        5     8      Status 3: [SE MC Datalogging Config 0 0 0 0]
        6     8      Status 4: [RockBLOCK Radio GPS 0 0 0 0 0]
 

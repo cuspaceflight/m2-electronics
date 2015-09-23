@@ -104,7 +104,10 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g)
 
     devid = adxl3x5_read_u8(SPID, 0x00);
     if(devid != 0xE5) {
-        m2status_accel_status(STATUS_ERR_INVALID_DEVICE_ID);
+        if(x == 4)
+            m2status_lg_accel_status(STATUS_ERR_INVALID_DEVICE_ID);
+        else if(x == 7)
+            m2status_hg_accel_status(STATUS_ERR_INVALID_DEVICE_ID);
         adxl3x5_sad();
     }
 
@@ -174,7 +177,7 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g)
         if(accels_delta[0] < 93  ||
            accels_delta[1] > -93 ||
            accels_delta[2] < 112) {
-            m2status_accel_status(STATUS_ERR_SELFTEST_FAIL);
+            m2status_lg_accel_status(STATUS_ERR_SELFTEST_FAIL);
             adxl3x5_sad();
         }
     } else if(x == 7) {
@@ -185,7 +188,7 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g)
          * Let's be OK with anything above 100LSB.
          */
         if(accels_delta[2] < 100) {
-            m2status_accel_status(STATUS_ERR_SELFTEST_FAIL);
+            m2status_hg_accel_status(STATUS_ERR_SELFTEST_FAIL);
             adxl3x5_sad();
         }
     }
@@ -226,7 +229,7 @@ void adxl345_wakeup(EXTDriver *extp, expchannel_t channel)
     if(tp345 != NULL && tp345->p_state != THD_STATE_READY) {
         chSchReadyI(tp345);
     } else {
-        m2status_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
+        m2status_lg_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
     }
     chSysUnlockFromIsr();
 }
@@ -240,7 +243,7 @@ void adxl375_wakeup(EXTDriver *extp, expchannel_t channel)
     if(tp375 != NULL && tp375->p_state != THD_STATE_READY) {
         chSchReadyI(tp375);
     } else {
-        m2status_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
+        m2status_hg_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
     }
     chSysUnlockFromIsr();
 }
@@ -270,11 +273,14 @@ msg_t adxl345_thread(void *arg)
     };
     int16_t accels[3], axis, g;
 
+    m2status_lg_accel_status(STATUS_WAIT);
     chRegSetThreadName("ADXL345");
 
     spiStart(&ADXL345_SPID, &spi_cfg);
     adxl3x5_init(&ADXL345_SPID, 4, &axis, &g);
     log_i16(M2T_CH_CAL_LG_ACCEL, axis, g, 0, 0);
+
+    m2status_lg_accel_status(STATUS_OK);
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
@@ -307,11 +313,14 @@ msg_t adxl375_thread(void *arg)
     };
     int16_t accels[3], axis, g;
 
+    m2status_hg_accel_status(STATUS_WAIT);
     chRegSetThreadName("ADXL375");
 
     spiStart(&ADXL375_SPID, &spi_cfg);
     adxl3x5_init(&ADXL375_SPID, 7, &axis, &g);
     log_i16(M2T_CH_CAL_HG_ACCEL, axis, g, 0, 0);
+
+    m2status_hg_accel_status(STATUS_OK);
 
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);

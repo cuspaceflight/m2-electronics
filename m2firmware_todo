@@ -1,11 +1,13 @@
 x Create M2Status shared by M2FC and M2R
 x    Decides what to do with incoming and outgoing packets, stores state locally
-     Stores CPU usage too
-     Includes shell command to dump current states to shell.
 x    Includes thread to hnadle generating outgoin gpackets
 x    Includes function to handle incoming packet
 x    Includes functions to set status on subcomponents
 x    Includes functions to set latest readings
+     Stores CPU usage too
+     Includes shell command to dump current states to shell.
+     Have all the M2FC and M2R code use M2Status for storing a copy of the 
+        latest reading and for setting error states
 
 x Create M2Serial shared by M2FC and M2R
 x    Transmits and receives packets over direct serial connection and opens

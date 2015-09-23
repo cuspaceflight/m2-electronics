@@ -105,12 +105,13 @@ static void generate_common_packets(SystemStatus *status, void (*sender)(TelemPa
 
     pkt.channel = M2T_CH_SYS_STATUS_2;
     pkt.u8[0] = status->adc;
-    pkt.u8[1] = status->accel;
-    pkt.u8[2] = status->baro;
-    pkt.u8[3] = status->gyro;
-    pkt.u8[4] = status->magno;
-    pkt.u8[5] = status->pyro;
-    pkt.u8[6] = status->microsd;
+    pkt.u8[1] = status->lg_accel;
+    pkt.u8[2] = status->hg_accel;
+    pkt.u8[3] = status->baro;
+    pkt.u8[4] = status->gyro;
+    pkt.u8[5] = status->magno;
+    pkt.u8[6] = status->pyro;
+    pkt.u8[7] = status->microsd;
     pkt.timestamp = status->latest_timestamps.status_2;
     pkt.metadata = status->origin;
     m2telem_write_checksum(&pkt);
@@ -346,12 +347,13 @@ static void process_packet(SystemStatus *status, TelemPacket *packet)
 
         case M2T_CH_SYS_STATUS_2:
             status->adc = packet->u8[0];
-            status->accel = packet->u8[1];
-            status->baro = packet->u8[2];
-            status->gyro = packet->u8[3];
-            status->magno = packet->u8[4];
-            status->pyro = packet->u8[5];
-            status->microsd = packet->u8[6];
+            status->lg_accel = packet->u8[1];
+            status->hg_accel = packet->u8[2];
+            status->baro = packet->u8[3];
+            status->gyro = packet->u8[4];
+            status->magno = packet->u8[5];
+            status->pyro = packet->u8[6];
+            status->microsd = packet->u8[7];
             status->latest_timestamps.status_2 = packet->timestamp;
             break;
 
@@ -505,9 +507,15 @@ void m2status_adc_status(Status status)
     update_system_status();
 }
 
-void m2status_accel_status(Status status)
+void m2status_lg_accel_status(Status status)
 {
-    LocalStatus->accel = status;
+    LocalStatus->lg_accel = status;
+    update_system_status();
+}
+
+void m2status_hg_accel_status(Status status)
+{
+    LocalStatus->hg_accel = status;
     update_system_status();
 }
 
@@ -603,7 +611,8 @@ static void update_system_status()
 
         if(
            LocalStatus->adc == STATUS_UNKNOWN ||
-           LocalStatus->accel == STATUS_UNKNOWN ||
+           LocalStatus->lg_accel == STATUS_UNKNOWN ||
+           LocalStatus->hg_accel == STATUS_UNKNOWN ||
            LocalStatus->baro == STATUS_UNKNOWN ||
            LocalStatus->gyro == STATUS_UNKNOWN ||
            LocalStatus->magno == STATUS_UNKNOWN ||
@@ -620,7 +629,8 @@ static void update_system_status()
 
         if(
            LocalStatus->adc == STATUS_WAIT ||
-           LocalStatus->accel == STATUS_WAIT ||
+           LocalStatus->lg_accel == STATUS_WAIT ||
+           LocalStatus->hg_accel == STATUS_WAIT ||
            LocalStatus->baro == STATUS_WAIT ||
            LocalStatus->gyro == STATUS_WAIT ||
            LocalStatus->magno == STATUS_WAIT ||
@@ -637,7 +647,8 @@ static void update_system_status()
 
         if(
            LocalStatus->adc >= STATUS_ERR ||
-           LocalStatus->accel >= STATUS_ERR ||
+           LocalStatus->lg_accel >= STATUS_ERR ||
+           LocalStatus->hg_accel >= STATUS_ERR ||
            LocalStatus->baro >= STATUS_ERR ||
            LocalStatus->gyro >= STATUS_ERR ||
            LocalStatus->magno >= STATUS_ERR ||

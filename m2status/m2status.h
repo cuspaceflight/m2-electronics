@@ -24,7 +24,7 @@ typedef enum {
 
 typedef struct {
     Status m2fcbody, m2fcnose, m2r,
-           adc, accel, baro, gyro, magno, pyro, microsd,
+           adc, lg_accel, hg_accel, baro, gyro, magno, pyro, microsd,
            stateestimation, missioncontrol, datalogging, config,
            rockblock, radio, gps;
     struct {
@@ -70,7 +70,8 @@ void m2status_rx_packet(TelemPacket *packet);
 
 /* Update status of subsystems. */
 void m2status_adc_status(Status status);
-void m2status_accel_status(Status status);
+void m2status_lg_accel_status(Status status);
+void m2status_hg_accel_status(Status status);
 void m2status_baro_status(Status status);
 void m2status_gyro_status(Status status);
 void m2status_magno_status(Status status);
