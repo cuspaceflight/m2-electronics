@@ -164,7 +164,7 @@ static void cmd_config(BaseSequentialStream *chp, int argc, char* argv[]) {
 
 }
 
-void m2fc_shell_run()
+void m2fc_shell_run(BaseSequentialStream* bss)
 {
     static const ShellCommand commands[] = {
         {"mem", cmd_mem},
@@ -178,11 +178,9 @@ void m2fc_shell_run()
         {"config", cmd_config},
         {NULL, NULL}
     };
-    static const ShellConfig shell_cfg = {
-      (BaseSequentialStream *)&SD2,
-      commands
-    };
+    static ShellConfig shell_cfg;
+    shell_cfg.sc_channel = bss;
+    shell_cfg.sc_commands = commands;
     shellInit();
-    sdStart(&SD2, NULL);
     shellCreate(&shell_cfg, 2048, NORMALPRIO);
 }

@@ -23,6 +23,8 @@
 #include "l3g4200d.h"
 #include "hmc5883l.h"
 #include "dma_mutexes.h"
+#include "m2serial.h"
+#include "m2status.h"
 
 /* Create working areas for all threads */
 /* TODO: Move some stacks to CCM where possible (no DMA use). */
@@ -38,6 +40,8 @@ static WORKING_AREA(waThreadSBP, 1024);
 static WORKING_AREA(waAnalogue, 512);
 static WORKING_AREA(waHMC5883L, 512);
 static WORKING_AREA(waL3G4200D, 1024);
+static WORKING_AREA(waM2Serial, 1024);
+static WORKING_AREA(waM2Status, 1024);
 
 /*
  * Heatbeat thread.
@@ -135,6 +139,17 @@ int main(void) {
     extStart(&EXTD1, &extcfg);
 
     /* Start module threads */
+    m2serial_shell = m2fc_shell_run;
+    chThdCreateStatic(waM2Serial, sizeof(waM2Serial), HIGHPRIO,
+                      m2serial_thread, NULL);
+
+    if(conf.location == CFG_M2FC_BODY)
+        LocalStatus = &M2FCBodyStatus;
+    else if(conf.location == CFG_M2FC_NOSE)
+        LocalStatus = &M2FCNoseStatus;
+    chThdCreateStatic(waM2Status, sizeof(waM2Status), HIGHPRIO,
+                      m2status_thread, NULL);
+
     chThdCreateStatic(waDatalogging, sizeof(waDatalogging), HIGHPRIO,
                       datalogging_thread, NULL);
 
@@ -167,9 +182,6 @@ int main(void) {
         chThdCreateStatic(waAnalogue, sizeof(waAnalogue), NORMALPRIO,
                           analogue_thread, NULL);
     }
-
-    /* Start the command shell on the slave serial port */
-    m2fc_shell_run();
 
     /* Let the main thread idle now. */
     chThdSetPriority(LOWPRIO);

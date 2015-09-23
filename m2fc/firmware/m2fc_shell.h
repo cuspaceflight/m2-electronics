@@ -10,6 +10,6 @@
 #include <ch.h>
 #include "shell.h"
 
-void m2fc_shell_run(void);
+void m2fc_shell_run(BaseSequentialStream* bss);
 
 #endif /* M2FC_SHELL_H */
