@@ -25,25 +25,20 @@ static uint8_t adxl3x5_read_u8(SPIDriver* SPID, uint8_t adr);
 static void adxl3x5_write_u8(SPIDriver* SPID, uint8_t adr, uint8_t val);
 static void adxl3x5_read_accel(SPIDriver* SPID, int16_t* accels);
 static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g);
-static void adxl3x5_sad(const uint8_t n);
 static float adxl3x5_accels_to_axis(int16_t *accels, int16_t axis, int16_t g);
+static void adxl3x5_sad(void);
 
 static Thread *tp345 = NULL;
 static Thread *tp375 = NULL;
 
-/* Helper for sad moments */
-static void adxl3x5_sad(const uint8_t n)
+/* Die obviously */
+static void adxl3x5_sad(void)
 {
-    /* TODO: report sadness up the chain */
-    uint8_t i;
-    while(1) {
-        for(i=0; i<n; i++) {
-            palSetPad(GPIOA, GPIOA_LED_SENSORS);
-            chThdSleepMilliseconds(100);
-            palClearPad(GPIOA, GPIOA_LED_SENSORS);
-            chThdSleepMilliseconds(200);
-        }
-        chThdSleepMilliseconds(800);
+    while(true) {
+        palSetPad(GPIOA, GPIOA_LED_SENSORS);
+        chThdSleepMilliseconds(400);
+        palClearPad(GPIOA, GPIOA_LED_SENSORS);
+        chThdSleepMilliseconds(400);
     }
 }
 
@@ -109,7 +104,8 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g)
 
     devid = adxl3x5_read_u8(SPID, 0x00);
     if(devid != 0xE5) {
-        adxl3x5_sad(2);
+        m2status_accel_status(STATUS_ERR_INVALID_DEVICE_ID);
+        adxl3x5_sad();
     }
 
     /* BW_RATE: Set high power mode and 800Hz ODR */
@@ -178,7 +174,8 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g)
         if(accels_delta[0] < 93  ||
            accels_delta[1] > -93 ||
            accels_delta[2] < 112) {
-            adxl3x5_sad(3);
+            m2status_accel_status(STATUS_ERR_SELFTEST_FAIL);
+            adxl3x5_sad();
         }
     } else if(x == 7) {
         /* ADXL375 self test parameters:
@@ -188,7 +185,8 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g)
          * Let's be OK with anything above 100LSB.
          */
         if(accels_delta[2] < 100) {
-            adxl3x5_sad(4);
+            m2status_accel_status(STATUS_ERR_SELFTEST_FAIL);
+            adxl3x5_sad();
         }
     }
 
@@ -227,6 +225,8 @@ void adxl345_wakeup(EXTDriver *extp, expchannel_t channel)
     chSysLockFromIsr();
     if(tp345 != NULL && tp345->p_state != THD_STATE_READY) {
         chSchReadyI(tp345);
+    } else {
+        m2status_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
     }
     chSysUnlockFromIsr();
 }
@@ -239,6 +239,8 @@ void adxl375_wakeup(EXTDriver *extp, expchannel_t channel)
     chSysLockFromIsr();
     if(tp375 != NULL && tp375->p_state != THD_STATE_READY) {
         chSchReadyI(tp375);
+    } else {
+        m2status_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
     }
     chSysUnlockFromIsr();
 }
@@ -314,6 +316,7 @@ msg_t adxl375_thread(void *arg)
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);
         log_i16(M2T_CH_IMU_HG_ACCEL, accels[0], accels[1], accels[2], 0);
+        m2status_set_hga(accels[0], accels[1], accels[2]);
         state_estimation_new_hg_accel(
             adxl3x5_accels_to_axis(accels, axis, g));
 
