@@ -4,7 +4,7 @@ x    Includes thread to hnadle generating outgoin gpackets
 x    Includes function to handle incoming packet
 x    Includes functions to set status on subcomponents
 x    Includes functions to set latest readings
-     Stores CPU usage too
+x    Stores CPU usage too
      Includes shell command to dump current states to shell.
      Have all the M2FC and M2R code use M2Status for storing a copy of the 
         latest reading and for setting error states
@@ -32,17 +32,23 @@ Watchdog reset management / survive reset as best as possible
     plus have "make flash" always reset it to PAD, and if the last state was
     LANDED then go to PAD, and maybe if state estimation is very still for a
     few seconds go to PAD too
+    Might need to write accel calibration to flash too in this case (or use
+    defaults or something)
 
-Test main altitude-based deployment
+Test main altitude-based deployment in simulation
 
 M2R RockBLOCK
-    Check code, update, add tweet after state changes
+    Check code over
+    generate messages from m2status
+    tweet messages on special occasions
 
-M2R GPS code review and set to high data rate mode
+M2R GPS
+    code review
+    set to high data rate mode
 
 M2R battery voltage monitoring
 
-M2R version number in firmware and shell
+M2R version number in firmware (and m2status)
 
 Battery life / long duration test of whole system
 

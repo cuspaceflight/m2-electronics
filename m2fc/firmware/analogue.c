@@ -11,6 +11,7 @@
 #include "config.h"
 #include "state_estimation.h"
 #include "chprintf.h"
+#include "m2status.h"
 #include "hal.h"
 
 #define ADC_NUM_CHANNELS   2
@@ -153,6 +154,8 @@ static void adc_call_back(ADCDriver *adc_driver_ptr, adcsample_t *buffer, size_t
         chSysLockFromIsr();
         if(tp != NULL && tp->p_state != THD_STATE_READY) {
             chSchReadyI(tp);
+        } else {
+            m2status_adc_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
         }
         chSysUnlockFromIsr();
     }
@@ -170,6 +173,9 @@ static void save_results()
     sum_TC_samples_3 = 0;
 
     const int16_t log_interval = 20;
+
+    m2status_set_sg(samples_1[0], samples_2[0], samples_3[0]);
+    m2status_set_tc(samples_1[1], samples_2[1], samples_3[1]);
 
     while(j < size)
     {
@@ -205,14 +211,16 @@ static void save_results()
  * restarts it or something similar in case there is an error.
  */
 static void adc_error_call_back(ADCDriver *adc_driver_ptr, adcerror_t err) {
-  (void)adc_driver_ptr;
-  (void)err;
+    (void)adc_driver_ptr;
+    (void)err;
+    m2status_adc_status(STATUS_ERR_PERIPHERAL);
 }
 
 msg_t analogue_thread(void *args)
 {
     (void)args;
 
+    m2status_adc_status(STATUS_WAIT);
     chRegSetThreadName("Analogue");
 
     adcInit();
@@ -239,6 +247,8 @@ msg_t analogue_thread(void *args)
     GPTD3.tim->CR2 |= STM32_TIM_CR2_MMS(2);
     gptStartContinuous(&GPTD3, 2);
     GPTD3.tim->DIER &= ~STM32_TIM_DIER_UIE;
+
+    m2status_adc_status(STATUS_OK);
 
     /* Sleep until woken up by the ADC buffer callback, then dump buffers
      * to the microSD card and go back to sleep.

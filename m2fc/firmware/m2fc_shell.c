@@ -96,7 +96,9 @@ static void cmd_magno(BaseSequentialStream *chp, int argc, char *argv[]) {
     (void)argv;
     (void)argc;
     chprintf(chp, "Magno readings:\n  x         y         z\n");
-    chprintf(chp,"%09d %09d %09d \n", global_magno[0], global_magno[1], global_magno[2]);
+    chprintf(chp,"%09d %09d %09d \n",
+             LocalStatus->latest.magno_x, LocalStatus->latest.magno_y,
+             LocalStatus->latest.magno_z);
 }
 
 static void cmd_accel(BaseSequentialStream *chp, int argc, char *argv[]) {

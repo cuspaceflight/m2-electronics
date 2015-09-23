@@ -280,8 +280,6 @@ msg_t adxl345_thread(void *arg)
     adxl3x5_init(&ADXL345_SPID, 4, &axis, &g);
     log_i16(M2T_CH_CAL_LG_ACCEL, axis, g, 0, 0);
 
-    m2status_lg_accel_status(STATUS_OK);
-
     while(TRUE) {
         adxl3x5_read_accel(&ADXL345_SPID, accels);
         log_i16(M2T_CH_IMU_LG_ACCEL, accels[0], accels[1], accels[2], 0);
@@ -293,6 +291,7 @@ msg_t adxl345_thread(void *arg)
         chSysLock();
         tp345 = chThdSelf();
         chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
+        m2status_lg_accel_status(STATUS_OK);
         tp345 = NULL;
         chSysUnlock();
     }
@@ -320,8 +319,6 @@ msg_t adxl375_thread(void *arg)
     adxl3x5_init(&ADXL375_SPID, 7, &axis, &g);
     log_i16(M2T_CH_CAL_HG_ACCEL, axis, g, 0, 0);
 
-    m2status_hg_accel_status(STATUS_OK);
-
     while(TRUE) {
         adxl3x5_read_accel(&ADXL375_SPID, accels);
         log_i16(M2T_CH_IMU_HG_ACCEL, accels[0], accels[1], accels[2], 0);
@@ -333,6 +330,7 @@ msg_t adxl375_thread(void *arg)
         chSysLock();
         tp375 = chThdSelf();
         chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
+        m2status_hg_accel_status(STATUS_OK);
         tp345 = NULL;
         chSysUnlock();
     }

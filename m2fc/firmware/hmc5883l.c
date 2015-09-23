@@ -10,6 +10,7 @@
 #include "datalogging.h"
 #include "hmc5883l.h"
 #include "dma_mutexes.h"
+#include "m2status.h"
 
 #define HMC5883L_I2C_ADDR       0x1E
 #define HMC5883L_I2CD           I2CD1
@@ -23,8 +24,6 @@
 #define HMC5883L_RA_ID_C        0x0C
 
 static Thread *tpHMC5883L = NULL;
-
-int16_t global_magno[3];
 
 static const I2CConfig i2cconfig = {
     OPMODE_I2C, 10000, STD_DUTY_CYCLE
@@ -141,7 +140,9 @@ static bool hmc5883l_ID_check(void) {
 
 
 /* Conversion to meaningful units. Output in miligauss. (1G = 1e-4T)*/
-static void hmc5883l_field_convert(uint8_t *buf_data, float *field) {
+static void hmc5883l_field_convert(uint16_t x, uint16_t y, uint16_t z,
+                                   float *field)
+{
     /* 0.73 mG/LSB for 1370 (reciprocal) gain
        0.92 mG/LSB for 1090 (reciprocal) gain
        1.22 mG/LSB for 820 (reciprocal) gain
@@ -149,22 +150,15 @@ static void hmc5883l_field_convert(uint8_t *buf_data, float *field) {
        2.27 mG/LSB for 440 (reciprocal) gain
        2.56 mG/LSB for 390 (reciprocal) gain
        3.03 mG/LSB for 330 (reciprocal) gain
-       4.35 mG/LSB for 230 (reciprocal) gain */
+       4.35 mG/LSB for 230 (reciprocal) gain
+       
+       Note that buf_data contains XX ZZ YY bytes.
+       */
     static float sensitivity = 0.92f;
-    int16_t concatenated_field;
 
-    int i;
-    for (i=0; i<3; i++)
-    {
-        concatenated_field = (buf_data[(i*2)] << 8) | (buf_data[(i*2+1)]);
-        global_magno[i] = concatenated_field;
-        field [i] = ((float)concatenated_field) * sensitivity;
-    }
-    /* Note the order of received is X,Z,Y, so re-arrangement is done here. */
-    float temp;
-    temp = global_magno[1];
-    global_magno[1] = global_magno[2];
-    global_magno[2] = temp;
+    field[0] = (float)x * sensitivity;
+    field[1] = (float)y * sensitivity;
+    field[2] = (float)z * sensitivity;
 }
 
 /*
@@ -190,15 +184,18 @@ msg_t hmc5883l_thread(void *arg)
     uint8_t buf_data[6];
     float field[3];
 
+    m2status_magno_status(STATUS_WAIT);
     chRegSetThreadName("HMC5883L");
 
     /* Check the magnetometer ID. */
     while (!hmc5883l_ID_check()) {
+        m2status_magno_status(STATUS_ERR_INVALID_DEVICE_ID);
         chThdSleepMilliseconds(500);
     }
 
     /* Initialise the settings. */
     while (!hmc5883l_init()) {
+        m2status_magno_status(STATUS_ERR_INITIALISING);
         chThdSleepMilliseconds(500);
     }
 
@@ -208,6 +205,7 @@ msg_t hmc5883l_thread(void *arg)
         chSysLock();
         tpHMC5883L = chThdSelf();
         chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
+        m2status_magno_status(STATUS_OK);
         tpHMC5883L = NULL;
         chSysUnlock();
 
@@ -219,8 +217,14 @@ msg_t hmc5883l_thread(void *arg)
             /*If date is succesfully recieved set SENSORS LED */
             palSetPad(GPIOA, GPIOA_LED_SENSORS);
 
-            hmc5883l_field_convert(buf_data, field);
-            log_i16(M2T_CH_IMU_MAGNO, field[0], field[1], field[2], 0);
+            uint16_t x = buf_data[0]<<8 | buf_data[1];
+            uint16_t z = buf_data[2]<<8 | buf_data[3];
+            uint16_t y = buf_data[4]<<8 | buf_data[5];
+            hmc5883l_field_convert(x, y, z, field);
+            log_i16(M2T_CH_IMU_MAGNO, x, y, z, 0);
+            m2status_set_magno(x, y, z);
+        } else {
+            m2status_magno_status(STATUS_ERR_READING);
         }
     }
 }

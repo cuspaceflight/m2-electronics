@@ -14,6 +14,7 @@ static void generate_common_packets(SystemStatus *status, void (*sender)(TelemPa
 static void generate_m2fc_packets(SystemStatus *status, void (*sender)(TelemPacket*));
 static void generate_m2r_packets(SystemStatus *status, void (*sender)(TelemPacket*));
 static void update_system_status(void);
+static uint8_t get_cpu_usage(void);
 
 void m2rl_send_packet(TelemPacket* packet);
 void m2serial_send_packet(TelemPacket* packet);
@@ -44,6 +45,8 @@ msg_t m2status_thread(void* arg)
          *  Send M2R status to M2FC Body via M2Serial for logging and relaying
          */
 
+        LocalStatus->latest.cpu_usage = get_cpu_usage();
+
         if(LocalStatus == &M2FCBodyStatus) {
             /* Send our status to M2FC Nose */
             generate_packets(&M2FCBodyStatus, m2rl_send_packet);
@@ -65,6 +68,21 @@ msg_t m2status_thread(void* arg)
         /* Sleep for a second and do it all again. */
         chThdSleepMilliseconds(1000);
     }
+}
+
+static uint8_t get_cpu_usage()
+{
+  uint64_t busy = 0, total = 0;
+  Thread *tp;
+  tp = chRegFirstThread();
+  do {
+    if(tp->p_prio != 1) {
+        busy += tp->p_time;
+    }
+    total += tp->p_time;
+    tp = chRegNextThread(tp);
+  } while (tp != NULL);
+  return (busy*100) / total;
 }
 
 static void generate_packets(SystemStatus *status,

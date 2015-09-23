@@ -13,6 +13,7 @@
 #include "datalogging.h"
 #include "config.h"
 #include "chprintf.h"
+#include "m2status.h"
 
 /* ------------------------------------------------------------------------- */
 
@@ -69,6 +70,7 @@ msg_t datalogging_thread(void* arg)
     (void)arg;
 
     /* initialise stuff */
+    m2status_datalogging_status(STATUS_WAIT);
     chRegSetThreadName("Datalogging");
     mem_init();
     while (microsd_open_file_inc(&file, "log", "bin", &file_system) != FR_OK);
@@ -79,7 +81,10 @@ msg_t datalogging_thread(void* arg)
         log_c(M2T_CH_SYS_INIT, "M2FCBODY");
     log_c(M2T_CH_SYS_VERSION, conf.version);
 
+    m2status_datalogging_status(STATUS_OK);
+
     while (true) {
+        m2status_datalogging_status(STATUS_OK);
 
         /* Block waiting for a message to be available */
         mailbox_res = chMBFetch(&log_mailbox, (msg_t*)&data_msg, TIME_INFINITE);
@@ -99,6 +104,7 @@ msg_t datalogging_thread(void* arg)
              * and write the data out when we succeed.
              */
             while (write_res != FR_OK) {
+                m2status_datalogging_status(STATUS_ERR_WRITING);
                 microsd_close_file(&file);
                 open_res = microsd_open_file_inc(&file, "log", "bin",
                                                  &file_system);
