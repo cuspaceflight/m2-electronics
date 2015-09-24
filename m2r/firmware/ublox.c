@@ -48,6 +48,7 @@
 /* Selection of UBX IDs */
 #define UBX_CFG_MSG  0x01
 #define UBX_CFG_NAV5 0x24
+#define UBX_CFG_RATE 0x08
 #define UBX_NAV_PVT  0x07
 #define NMEA_GGA 0x00
 #define NMEA_GLL 0x01
@@ -70,7 +71,7 @@ typedef enum {
  * Set navigation fix settings.
  * Notably includes changing dynamic mode to "Airborne 4G".
  */
-typedef struct {
+typedef struct __attribute__((packed)) {
     union {
         uint8_t data;
         uint8_t sync1;
@@ -105,7 +106,7 @@ typedef struct {
  * Change rate (or disable) automatic delivery of messages
  * to the current port.
  */
-typedef struct {
+typedef struct __attribute__((packed)) {
     union {
         uint8_t data;
         uint8_t sync1;
@@ -122,6 +123,24 @@ typedef struct {
     };
     uint8_t ck_a, ck_b;
 } ubx_cfg_msg_t;
+
+typedef struct __attribute__((packed)) {
+    union {
+        uint8_t data;
+        uint8_t sync1;
+    };
+    uint8_t sync2, class, id;
+    uint16_t length;
+    union {
+        uint8_t payload[6];
+        struct {
+            uint16_t meas_rate;
+            uint16_t nav_rate;
+            uint16_t time_ref;
+        } __attribute__((packed));
+    };
+    uint8_t ck_a, ck_b;
+} ubx_cfg_rate_t;
 
 /* UBX-ACK
  * ACK/NAK messages after trying to set a config.
@@ -451,6 +470,7 @@ static bool_t ublox_init(uint8_t *buf, size_t bufsize)
 {
     ubx_cfg_nav5_t nav5;
     ubx_cfg_msg_t msg;
+    ubx_cfg_rate_t rate;
     bool_t success = TRUE;
 
     /* Set to Airborne <4g dynamic mode */
@@ -515,6 +535,19 @@ static bool_t ublox_init(uint8_t *buf, size_t bufsize)
     msg.msg_id    = UBX_NAV_PVT;
     msg.rate      = 1;
     success &= ublox_transmit(&msg.data);
+    if(!success) return FALSE;
+
+    /* Set solution rate to 10Hz */
+    rate.sync1 = UBX_SYNC1;
+    rate.sync2 = UBX_SYNC2;
+    rate.class = UBX_CFG;
+    rate.id = UBX_CFG_RATE;
+    rate.length = 6;
+    
+    rate.meas_rate = 100;
+    rate.nav_rate = 1;
+    rate.time_ref = 0;
+    success &= ubx_transmit(&rate.data);
     if(!success) return FALSE;
 
     /* Clear the current I2C buffer */
