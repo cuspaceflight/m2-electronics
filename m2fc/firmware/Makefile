@@ -99,10 +99,11 @@ CSRC = $(PORTSRC) \
        ../../m2telem/m2telem.c \
 	   ../../m2status/m2status.c \
 	   ../../m2serial/m2serial.c \
+	   ../../m2rl/m2rl.c \
        main.c ms5611.c adxl3x5.c pyro.c microsd.c m2fc_shell.c \
 	   state_estimation.c mission.c time_utils.c fault_handlers.c \
 	   config.c sbp_io.c analogue.c l3g4200d.c hmc5883l.c \
-	   dma_mutexes.c datalogging.c m2rl.c
+	   dma_mutexes.c datalogging.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -214,7 +215,7 @@ UDEFS = -DM2FC_FIRMWARE_VERSION=\"$(GITVERSION)\"
 UADEFS =
 
 # List all user directories here
-UINCDIR = ../../sbp/ ../../m2telem/ ../../m2status/ ../../m2serial/
+UINCDIR = ../../sbp/ ../../m2telem/ ../../m2status/ ../../m2serial/ ../../m2rl/
 
 # List the user directory to look for the libraries here
 ULIBDIR =

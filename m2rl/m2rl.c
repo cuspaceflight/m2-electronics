@@ -16,3 +16,9 @@ void m2rl_send_packet(TelemPacket* pkt)
 {
     (void)pkt;
 }
+
+void m2rl_send_buffer(void* buf, size_t n)
+{
+    (void)buf;
+    (void)n;
+}
