@@ -2,7 +2,10 @@ Test M2Status in M2FC via shell
 Test M2Serial in M2FC via connecting to serial port
 Test M2Serial/M2Status in M2R via debug with both running and connected
 
-Generate new radio messages in M2R
+x Generate new radio messages in M2R
+
+M2R beeper based on M2Status
+x M2FC LED based on M2Status
 
 M2RL to send/rx packets
 

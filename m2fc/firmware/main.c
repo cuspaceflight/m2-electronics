@@ -49,17 +49,30 @@ static WORKING_AREA(waM2Status, 1024);
  * and keeps resetting the watchdog timer for us.
  */
 static msg_t ThreadHeartbeat(void *arg) {
+    uint8_t local_status;
     (void)arg;
     chRegSetThreadName("Heartbeat");
 
     while(TRUE) {
         /* Set the STATUS onboard LED */
         palSetPad(GPIOA, GPIOA_LED_STATUS);
-        /* Set the GREEN external LED */
-        palSetPad(GPIOC, GPIOC_LED_C);
-        palClearPad(GPIOC, GPIOC_LED_A);
+        /* Set external LED */
+        if(LocalStatus == &M2FCBodyStatus) {
+            local_status = M2FCBodyStatus.m2fcbody;
+        } else if(LocalStatus == &M2FCNoseStatus) {
+            local_status = M2FCNoseStatus.m2fcnose;
+        }
+        if(local_status == STATUS_OK) {
+            /* Set the GREEN external LED */
+            palSetPad(GPIOC, GPIOC_LED_C);
+            palClearPad(GPIOC, GPIOC_LED_A);
+        } else {
+            /* Set the RED external LED */
+            palClearPad(GPIOC, GPIOC_LED_C);
+            palSetPad(GPIOC, GPIOC_LED_A);
+        }
         /* Flash them briefly */
-        chThdSleepMilliseconds(10);
+        chThdSleepMilliseconds(20);
 
         /* Turn LEDs off */
         palClearPad(GPIOA, GPIOA_LED_STATUS);
@@ -68,7 +81,7 @@ static msg_t ThreadHeartbeat(void *arg) {
 
         /* Clear watchdog timer */
         IWDG->KR = 0xAAAA;
-        chThdSleepMilliseconds(490);
+        chThdSleepMilliseconds(480);
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
     }

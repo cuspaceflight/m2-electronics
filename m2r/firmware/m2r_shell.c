@@ -111,7 +111,7 @@ typedef struct {
 
 Semihosting SH = {&vmt};
 
-void m2r_shell_run()
+void m2r_shell_run(BaseSequentialStream *bss)
 {
     static const ShellCommand commands[] = {
         {"mem", cmd_mem},
@@ -122,11 +122,9 @@ void m2r_shell_run()
         {NULL, NULL}
     };
 
-    static const ShellConfig shell_cfg = {
-      (BaseSequentialStream *)&SH,
-      commands
-    };
-
+    static ShellConfig shell_cfg;
+    shell_cfg.sc_channel = bss;
+    shell_cfg.sc_commands = commands;
     shellInit();
     shellCreate(&shell_cfg, 2048, NORMALPRIO);
 }
