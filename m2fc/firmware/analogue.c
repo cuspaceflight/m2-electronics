@@ -31,6 +31,7 @@ static void gpt_adc_trigger(GPTDriver*);
 static void adc_call_back(ADCDriver*, adcsample_t*, size_t n);
 static void adc_error_call_back(ADCDriver*, adcerror_t);
 static void save_results(void);
+static void adc_null_callback(ADCDriver *, adcsample_t*, size_t n);
 
 /* Allocate arrays with the sample data from ADCs */
 static volatile adcsample_t samples_1[ADC_NUM_CHANNELS * ADC_BUF_DEPTH];
@@ -91,7 +92,7 @@ static const ADCConversionGroup adc_con_group_1 = {
 static const ADCConversionGroup adc_con_group_2 = {
     TRUE,
     ADC_NUM_CHANNELS,
-    adc_call_back,
+    adc_null_callback,
     adc_error_call_back,
     /* cr1 */
     0,
@@ -113,7 +114,7 @@ static const ADCConversionGroup adc_con_group_2 = {
 static const ADCConversionGroup adc_con_group_3 = {
     TRUE,
     ADC_NUM_CHANNELS,
-    adc_call_back,
+    adc_null_callback,
     adc_error_call_back,
     /* cr1 */
     0,
@@ -135,6 +136,11 @@ static const ADCConversionGroup adc_con_group_3 = {
 static void gpt_adc_trigger(GPTDriver *gpt_ptr) {
     (void)gpt_ptr;
 }
+static void adc_null_callback(ADCDriver *d, adcsample_t *b, size_t n) {
+    (void)d;
+    (void)b;
+    (void)n;
+}
 
 /* Called on ADC DMA buffer filling up. */
 static void adc_call_back(ADCDriver *adc_driver_ptr, adcsample_t *buffer, size_t n) {
@@ -142,23 +148,13 @@ static void adc_call_back(ADCDriver *adc_driver_ptr, adcsample_t *buffer, size_t
     (void)buffer;
     (void)n;
 
-    /*Checks if all the buffers are ready. i.e. the two others */
-    if (number_of_buffers_ready < 2)
-    {
-        number_of_buffers_ready++;
+    chSysLockFromIsr();
+    if(tp != NULL && tp->p_state != THD_STATE_READY) {
+        chSchReadyI(tp);
+    } else {
+        m2status_adc_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
     }
-
-    else
-    {
-        number_of_buffers_ready = 0;
-        chSysLockFromIsr();
-        if(tp != NULL && tp->p_state != THD_STATE_READY) {
-            chSchReadyI(tp);
-        } else {
-            m2status_adc_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
-        }
-        chSysUnlockFromIsr();
-    }
+    chSysUnlockFromIsr();
 }
 
 static void save_results()

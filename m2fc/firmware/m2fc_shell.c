@@ -75,43 +75,6 @@ static void cmd_rt(BaseSequentialStream *chp, int argc, char *argv[]) {
     chprintf(chp, "Real time clock frequency: %u\r\n", f);
 }
 
-static void cmd_gyro(BaseSequentialStream *chp, int argc, char *argv[]) {
-    (void)argc;	
-    (void)argv;
-
-    chprintf(chp, "Gyro readings:\n  x         y         z\n");
-    chprintf(chp,"%09d %09d %09d\n", global_gyro[0], global_gyro[1], global_gyro[2]);
-    return;
-}
-
-static void cmd_baro(BaseSequentialStream *chp, int argc, char *argv[]) {
-    (void)argv;
-    (void)argc;
-    
-    chprintf(chp, "Current Pressure: %d\r\n", pressure);
-    chprintf(chp, "Current Temperature: %d\r\n", temperature);
-}
-
-static void cmd_magno(BaseSequentialStream *chp, int argc, char *argv[]) {
-    (void)argv;
-    (void)argc;
-    chprintf(chp, "Magno readings:\n  x         y         z\n");
-    chprintf(chp,"%09d %09d %09d \n",
-             LocalStatus->latest.magno_x, LocalStatus->latest.magno_y,
-             LocalStatus->latest.magno_z);
-}
-
-static void cmd_accel(BaseSequentialStream *chp, int argc, char *argv[]) {
-    (void)argc;	
-    (void)argv;
-    
-    chprintf(chp, "Accel readings:\n x     y     z\n");
-    chprintf(chp," x: %d, y: %d, z: %d \n",
-             LocalStatus->latest.lga_x, LocalStatus->latest.lga_y,
-             LocalStatus->latest.lga_z);
-    return;
-}
-
 static void cmd_pyro(BaseSequentialStream *chp, int argc, char *argv[]) {
     bool p1, p2, p3;
     
@@ -175,12 +138,9 @@ void m2fc_shell_run(BaseSequentialStream* bss)
         {"mem", cmd_mem},
         {"threads", cmd_threads},
         {"rt", cmd_rt},
-        {"magno", cmd_magno},
-        {"gyro", cmd_gyro},
-        {"baro", cmd_baro},
-        {"accel", cmd_accel},
         {"pyro", cmd_pyro},
         {"config", cmd_config},
+        {"status", m2status_shell_cmd},
         {NULL, NULL}
     };
     static ShellConfig shell_cfg;

@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include "l3g4200d.h"
 #include "datalogging.h"
+#include "m2status.h"
 
 #define L3G4200D_I2C_ADDR   0x69
 #define L3G4200D_I2CD       I2CD2
@@ -86,8 +87,6 @@
  */
 
 
-
-int16_t global_gyro[3];
 
 static Thread *tpL3G4200D = NULL;
 
@@ -186,19 +185,16 @@ bool l3g4200d_ID_check(void) {
 }
 
 /* Conversion to meaningful units. */
-static void l3g4200d_rotation_convert(uint8_t *buf_data, float *rotation)
+static void l3g4200d_rotation_convert(uint16_t x, uint16_t y, uint16_t z,
+                                      float rotation[])
 {
     /* 8.75mdps/LSB for 250dps max.
        17.5mdps/LSB for 500dps max.
        70.0mdps/LSB for 2000pds max. */
     static float sensitivity = 17.5f;
-    int i;
-    int16_t total_rotation;
-    for (i =0; i<3; i++) {
-        total_rotation = (buf_data[(2*i+1)] << 8) | (buf_data[(2*i)]);
-        global_gyro[i] = total_rotation;
-        rotation[i] = ((float)total_rotation) * sensitivity;
-    }
+    rotation[0] = (float)x * sensitivity;
+    rotation[1] = (float)y * sensitivity;
+    rotation[2] = (float)z * sensitivity;
 }
 
 
@@ -226,16 +222,19 @@ msg_t l3g4200d_thread(void *arg)
     uint8_t buf_data[8];
     float rotation[3];
 
+    m2status_gyro_status(STATUS_WAIT);
     chRegSetThreadName("L3G4200D");
 
     i2cStart(&L3G4200D_I2CD, &i2cconfig);
 
     while (!l3g4200d_ID_check()) {
+        m2status_gyro_status(STATUS_ERR_INVALID_DEVICE_ID);
         chThdSleepMilliseconds(500);
     }
 
     /* Initialise the settings. */
     while (!l3g4200d_init()) {
+        m2status_gyro_status(STATUS_ERR_INITIALISING);
         chThdSleepMilliseconds(500);
     }
 
@@ -244,6 +243,7 @@ msg_t l3g4200d_thread(void *arg)
         chSysLock();
         tpL3G4200D = chThdSelf();
         chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
+        m2status_magno_status(STATUS_OK);
         tpL3G4200D = NULL;
         chSysUnlock();
 
@@ -252,12 +252,18 @@ msg_t l3g4200d_thread(void *arg)
 
         /* Pull data from the gyro into buf_data. */
         if (l3g4200d_receive(buf_data)) {
-            l3g4200d_rotation_convert(buf_data, rotation);
-            log_i16(M2T_CH_IMU_GYRO, rotation[0], rotation[1], rotation[2], 0);
+            uint16_t x = buf_data[0]<<8 | buf_data[1];
+            uint16_t y = buf_data[2]<<8 | buf_data[3];
+            uint16_t z = buf_data[4]<<8 | buf_data[5];
+            l3g4200d_rotation_convert(x, y, z, rotation);
+            log_i16(M2T_CH_IMU_GYRO, x, y, z, 0);
+            m2status_set_gyro(x, y, z);
 
             /*Set LED to show that everything is in order */
             palSetPad(GPIOA, GPIOA_LED_SENSORS);
 
+        } else {
+            m2status_gyro_status(STATUS_ERR_READING);
         }
     }
 }
