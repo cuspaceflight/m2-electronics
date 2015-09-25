@@ -346,7 +346,6 @@ void m2status_rx_systemstatus(SystemStatus *status)
     } else if(status->origin == M2T_ORIGIN_M2R) {
         memcpy(&M2RStatus, status, sizeof(SystemStatus));
     }
-
 }
 
 void m2status_rx_packet(TelemPacket *packet)

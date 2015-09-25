@@ -36,7 +36,9 @@ static msg_t ThreadHeartbeat(void *arg) {
         palSetPad(GPIOB, GPIOB_BUZZER);
         IWDG->KR = 0xAAAA;
 
-        if(M2RStatus.m2r == STATUS_OK) {
+        if(M2FCBodyStatus.m2fcbody == STATUS_OK &&
+           M2FCNoseStatus.m2fcnose == STATUS_OK)
+        {
             chThdSleepMilliseconds(50);
         } else {
             chThdSleepMilliseconds(500);
@@ -45,10 +47,7 @@ static msg_t ThreadHeartbeat(void *arg) {
         palClearPad(GPIOB, GPIOB_LED_STATUS);
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
-        IWDG->KR = 0xAAAA;
-        chThdSleepMilliseconds(400);
     }
-
     return (msg_t)NULL;
 }
 
