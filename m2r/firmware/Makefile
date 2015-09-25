@@ -96,6 +96,7 @@ CSRC = $(PORTSRC) \
 			 ../../m2telem/m2telem.c \
 			 ../../m2status/m2status.c \
 			 ../../m2serial/m2serial.c \
+			 ../../m2rl/m2rl.c \
        main.c radio.c dispatch.c ublox.c rockblock.c \
        audio_data.c sbp_io.c m2r_shell.c
 
@@ -209,7 +210,7 @@ UDEFS = -DM2R_FIRMWARE_VERSION=\"$(GITVERSION)\"
 UADEFS =
 
 # List all user directories here
-UINCDIR = ../../sbp/ ../../m2telem/ ../../m2status/ ../../m2serial/
+UINCDIR = ../../sbp/ ../../m2telem/ ../../m2status/ ../../m2serial/ ../../m2rl/
 
 # List the user directory to look for the libraries here
 ULIBDIR =

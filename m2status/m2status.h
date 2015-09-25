@@ -23,6 +23,8 @@ typedef enum {
 } Status;
 
 extern const char StatusStrings[14][40];
+extern const char StateNames[10][16];
+extern const char GPSFixTypes[6][10];
 
 typedef struct __attribute__((packed)) {
     /* Stores a value from the Status enum. */

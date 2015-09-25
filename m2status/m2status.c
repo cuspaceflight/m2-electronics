@@ -4,6 +4,7 @@
 #include "hal.h"
 #include "chprintf.h"
 #include "m2serial.h"
+#include "m2rl.h"
 
 SystemStatus M2FCBodyStatus = {0};
 SystemStatus M2FCNoseStatus = {0};
@@ -19,8 +20,6 @@ static void generate_m2r_packets(SystemStatus *status, void (*sender)(TelemPacke
 static void update_system_status(void);
 static uint8_t get_cpu_usage(void);
 static void print_status(BaseSequentialStream *chp, SystemStatus *status);
-
-void m2rl_send_buffer(void* buf, size_t n);
 
 msg_t m2status_thread(void* arg)
 {
@@ -887,12 +886,12 @@ const char StatusStrings[14][40] = {
     "Error due to bad input"
 };
 
-static const char state_names[10][16] = {
+const char StateNames[10][16] = {
     "Pad", "Ignition", "Powered Ascent", "Free Ascent", "Apogee",
     "Drogue Descent", "Main Release", "Main Descent", "Land", "Landed"
 };
 
-static const char gps_fix_types[6][10] = {
+const char GPSFixTypes[6][10] = {
     "None", "DR Only", "2D", "3D", "GPS+DR", "Time only"};
 
 static void print_status(BaseSequentialStream *chp, SystemStatus *status)
@@ -934,7 +933,7 @@ static void print_status(BaseSequentialStream *chp, SystemStatus *status)
              (int16_t)status->latest.se_v, (int16_t)status->latest.se_a,
              (int16_t)status->latest.se_p_s, (int16_t)status->latest.se_p_e,
              (int16_t)status->latest.se_a_s, (int16_t)status->latest.se_a_e);
-    chprintf(chp,"MC state=%s", state_names[status->latest.mc_state]);
+    chprintf(chp,"MC state=%s", StateNames[status->latest.mc_state]);
     chprintf(chp,"Pyro C: %d %d %d, F: %d %d %d\r\n",
              status->latest.pyro_c_1, status->latest.pyro_c_2,
              status->latest.pyro_c_3, status->latest.pyro_f_1,
@@ -950,7 +949,7 @@ static void print_status(BaseSequentialStream *chp, SystemStatus *status)
              status->latest.gps_lat, status->latest.gps_lng,
              status->latest.gps_alt, status->latest.gps_alt_msl);
     chprintf(chp,"GPS fix: %s, %d sats\r\n",
-             gps_fix_types[status->latest.gps_fix_type],
+             GPSFixTypes[status->latest.gps_fix_type],
              status->latest.gps_num_sv);
     chprintf(chp,"CPU usage: %u, MicroSD duty: %u\r\n",
              status->latest.cpu_usage, status->latest.microsd_duty);

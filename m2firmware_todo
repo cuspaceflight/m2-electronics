@@ -1,3 +1,19 @@
+Test M2Status in M2FC via shell
+Test M2Serial in M2FC via connecting to serial port
+Test M2Serial/M2Status in M2R via debug with both running and connected
+
+Generate new radio messages in M2R
+
+M2RL to send/rx packets
+
+RockBLOCK new packets
+
+Test
+
+=====
+
+x Serialise the SystemStatus struct directly instead of making a million packets
+
 x Create M2Status shared by M2FC and M2R
 x    Decides what to do with incoming and outgoing packets, stores state locally
 x    Includes thread to hnadle generating outgoin gpackets
@@ -5,23 +21,32 @@ x    Includes function to handle incoming packet
 x    Includes functions to set status on subcomponents
 x    Includes functions to set latest readings
 x    Stores CPU usage too
-     Includes shell command to dump current states to shell.
-     Have all the M2FC and M2R code use M2Status for storing a copy of the 
-        latest reading and for setting error states
+x    Includes shell command to dump current states to shell.
+x     Have all the M2FC and M2R code use M2Status for storing a copy of the 
+x        latest reading and for setting error states
 
 x Create M2Serial shared by M2FC and M2R
 x    Transmits and receives packets over direct serial connection and opens
 x     shells on the serial link, with 0x7D7D7D7D as the code perhaps
-
-Create XBee in M2FC
-    Transmits and receives packets over xbee in API mode
-    Opens shells to the ground station xbee
 
 Update radio transmission from M2R
     Just send stringy packets that concisely summarise the state of M2Status,
     via RTTY for now, but maybe bump up to 300bd
     Wishlist: send in some priority order actual packets from M2Status via BPSK
     Wishlist: voice announcements
+
+M2R RockBLOCK
+x   Check code over
+    generate messages from m2status
+    tweet messages on special occasions
+    run the weird required commands on init
+    check signal level before attempting transmit
+
+Update config settings for flight profile
+
+Create XBee in M2FC
+    Transmits and receives packets over xbee in API mode
+    Opens shells to the ground station xbee
 
 Fix ADCs on M2FC: maybe double buffer DMA, or just start saving quicker
 
@@ -33,18 +58,14 @@ Watchdog reset management / survive reset as best as possible
     LANDED then go to PAD, and maybe if state estimation is very still for a
     few seconds go to PAD too
     Might need to write accel calibration to flash too in this case (or use
-    defaults or something)
+    defaults or something (might want to do this anyway tbh) (maybe read from
+    the SD card?))
 
 Test main altitude-based deployment in simulation
 
-M2R RockBLOCK
-    Check code over
-    generate messages from m2status
-    tweet messages on special occasions
-
 M2R GPS
     code review
-    set to high data rate mode
+x   set to high data rate mode
 
 M2R battery voltage monitoring
 

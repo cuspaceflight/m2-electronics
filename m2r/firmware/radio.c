@@ -12,6 +12,7 @@
 #include <math.h>
 #include "dispatch.h"
 #include "audio_data.h"
+#include "m2status.h"
 
 #define PI 3.14159f
 #define BAUD (300.0f)
@@ -40,15 +41,30 @@ static void radio_generate_buffers()
 
 static void radio_make_telem_string(char* buf, size_t len)
 {
+    /*chsnprintf(buf, len,*/
+             /*" AD6AM AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%d, %d) "*/
+             /*"%dm (%dm) %dm/s (%dm/s) %u\n",*/
+             /*m2r_state.hour, m2r_state.minute, m2r_state.second,*/
+             /*(float)m2r_state.lat*1e-7f, (float)m2r_state.lng*1e-7f,*/
+             /*m2r_state.gps_valid,*/
+             /*m2r_state.gps_num_sats, (int)m2r_state.imu_height,*/
+             /*(int)m2r_state.imu_max_height, (int)m2r_state.imu_velocity,*/
+             /*(int)m2r_state.imu_max_velocity, m2r_state.fc_state);*/
     chsnprintf(buf, len,
-             " AD6AM AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%d, %d) "
-             "%dm (%dm) %dm/s (%dm/s) %u\n",
-             m2r_state.hour, m2r_state.minute, m2r_state.second,
-             (float)m2r_state.lat*1e-7f, (float)m2r_state.lng*1e-7f,
-             m2r_state.gps_valid,
-             m2r_state.gps_num_sats, (int)m2r_state.imu_height,
-             (int)m2r_state.imu_max_height, (int)m2r_state.imu_velocity,
-             (int)m2r_state.imu_max_velocity, m2r_state.fc_state);
+               "AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%s, %d)\r\n"
+               "Body: %s (%s), Nose: %s (%s), SE: %dm, %dm/s\r\n",
+               M2RStatus.latest.gps_t_hour, M2RStatus.latest.gps_t_min,
+               M2RStatus.latest.gps_t_sec, M2RStatus.latest.gps_lat*1e-7f,
+               M2RStatus.latest.gps_lng*1e-7f,
+               GPSFixTypes[M2RStatus.latest.gps_fix_type],
+               M2RStatus.latest.gps_num_sv,
+               StateNames[M2FCBodyStatus.latest.mc_state],
+               StatusStrings[M2FCBodyStatus.m2fcbody],
+               StateNames[M2FCNoseStatus.latest.mc_state],
+               StatusStrings[M2FCNoseStatus.m2fcnose],
+               (int)M2FCNoseStatus.latest.se_h,
+               (int)M2FCNoseStatus.latest.se_v);
+
 }
 
 uint8_t *radio_fm_sampbuf;
@@ -215,6 +231,7 @@ static const GPTConfig gptcfg1 = {
     0
 };
 
+#if 0
 static const GPTConfig gptcfg_psk = {
     1000000,
     psk_cb
@@ -234,6 +251,7 @@ static const PWMConfig pwmcfg = {
     },
     0
 };
+#endif
 
 msg_t radio_thread(void* arg)
 {
