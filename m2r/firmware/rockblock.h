@@ -14,9 +14,11 @@
 #define ROCKBLOCK_PORT SD1
 
 void rockblock_init(void);
-void send_sbd_posn(const ublox_pvt_t *pvt);
+void send_sbd_posn(void);
 
+#if 0
 bool_t rb_enqueue(char* msg);
 msg_t rb_thread(void* arg);
+#endif
 
 #endif /* ROCKBLOCK_H */

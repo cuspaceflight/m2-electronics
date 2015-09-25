@@ -117,4 +117,6 @@ void m2status_set_gps_status(int8_t fix_type, int8_t flags, int8_t num_sv);
 
 void m2status_shell_cmd(BaseSequentialStream *chp, int argc, char* argv[]);
 
+int m2status_write_status_summary(SystemStatus* status, char* buf, int n);
+
 #endif /* M2STATUS_H */

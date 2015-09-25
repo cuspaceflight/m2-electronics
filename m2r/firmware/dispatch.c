@@ -10,11 +10,13 @@
 #include "chprintf.h"
 #include "dispatch.h"
 #include "audio_data.h"
-volatile m2r_state_t m2r_state;
 #include "rockblock.h"
 #include "sbp_io.h"
+#include "radio.h"
 
 #include "../../m2fc/firmware/state_estimation.h"
+
+volatile m2r_state_t m2r_state;
 
 void dispatch_pvt(const ublox_pvt_t pvt)
 {
@@ -31,13 +33,13 @@ void dispatch_pvt(const ublox_pvt_t pvt)
 
   if (chTimeNow() - last_sbd > 60000) {
     /* Only send an Iridium SBD message every 60s */
-    send_sbd_posn(&pvt);
+    send_sbd_posn();
     last_sbd = chTimeNow();
   }
 }
 
 #define LEN(x) (sizeof(x)/sizeof(x[0]))
-uint8_t * const number[10] = {
+uint8_t const * number[10] = {
   zero, one, two, three, four, five, six, seven, eight, nine
 };
 uint16_t const number_lens[10] = {
@@ -61,11 +63,11 @@ void say_altitude(float alt, uint8_t **samples, uint16_t *lens)
 
     uint8_t i = 0;
     while (buff[i] && buff[i] != ' ') {
-        samples[i] = number[buff[i] - '0'];
+        samples[i] = (uint8_t*)number[buff[i] - '0'];
         lens[i] = number_lens[buff[i] - '0'];
         i++;
     }
-    samples[i] = kft;
+    samples[i] = (uint8_t*)kft;
     lens[i++] = LEN(kft);
     samples[i] = 0;
     lens[i] = 0;
@@ -93,12 +95,13 @@ void est_state_callback(u16 sender_id, u8 len, u8 msg[], void *context)
 
 void m2fc_mission_callback(u16 sender_id, u8 len, u8 msg[], void *ctx)
 {
+    (void)len;
     (void)sender_id; (void)ctx;
     m2r_state.fc_state = msg[0];
     if(msg[0] == 4) {
-        radio_say(drogue, sizeof(drogue));
+        radio_say((uint8_t*)drogue, sizeof(drogue));
     } else if(msg[0] == 6) {
-        radio_say(main_chute, sizeof(main_chute));
+        radio_say((uint8_t*)main_chute, sizeof(main_chute));
     }
 }
 

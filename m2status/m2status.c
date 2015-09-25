@@ -20,6 +20,8 @@ static void generate_m2r_packets(SystemStatus *status, void (*sender)(TelemPacke
 static void update_system_status(void);
 static uint8_t get_cpu_usage(void);
 static void print_status(BaseSequentialStream *chp, SystemStatus *status);
+static int write_m2r_summary(SystemStatus* status, char* buf, int n);
+static int write_m2fc_summary(SystemStatus* status, char* buf, int n);
 
 msg_t m2status_thread(void* arg)
 {
@@ -970,4 +972,112 @@ void m2status_shell_cmd(BaseSequentialStream *chp, int argc, char* argv[])
     chprintf(chp,"M2R Status:\r\n==================\r\n");
     print_status(chp, &M2RStatus);
     chprintf(chp,"\r\n\r\n");
+}
+
+int m2status_write_status_summary(SystemStatus* status, char* buf, int n)
+{
+    if(status == &M2RStatus) {
+        return write_m2r_summary(status, buf, n);
+    } else if(status == &M2FCBodyStatus || status == &M2FCNoseStatus) {
+        return write_m2fc_summary(status, buf, n);
+    } else {
+        return 0;
+    };
+}
+
+static int write_m2r_summary(SystemStatus* status, char* buf, int len)
+{
+    int n = len;
+    if(
+        status->rockblock == STATUS_OK &&
+        status->radio     == STATUS_OK &&
+        status->gps       == STATUS_OK
+    ) {
+        return chsnprintf(buf, len, "OK");
+    } else {
+        if(status->rockblock != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "RB: %s ",
+                            StatusStrings[status->rockblock]);
+        }
+        if(status->radio != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "Radio: %s ",
+                            StatusStrings[status->radio]);
+        }
+        if(status->gps != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "GPS: %s ",
+                            StatusStrings[status->gps]);
+        }
+        return n;
+    }
+}
+
+static int write_m2fc_summary(SystemStatus* status, char* buf, int len)
+{
+    int n = len;
+    if(
+        status->adc == STATUS_OK &&
+        status->lg_accel == STATUS_OK &&
+        status->hg_accel == STATUS_OK &&
+        status->baro == STATUS_OK &&
+        status->gyro == STATUS_OK &&
+        status->magno == STATUS_OK &&
+        status->pyro == STATUS_OK &&
+        status->microsd == STATUS_OK &&
+        status->stateestimation == STATUS_OK &&
+        status->missioncontrol == STATUS_OK &&
+        status->datalogging == STATUS_OK &&
+        status->config == STATUS_OK
+    ) {
+        return chsnprintf(buf, len, "OK");
+    } else {
+        if(status->adc != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "ADC: %s ",
+                            StatusStrings[status->adc]);
+        }
+        if(status->lg_accel != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "LGA: %s ",
+                            StatusStrings[status->lg_accel]);
+        }
+        if(status->hg_accel != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "HGA: %s ",
+                            StatusStrings[status->hg_accel]);
+        }
+        if(status->baro != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "Baro: %s ",
+                            StatusStrings[status->baro]);
+        }
+        if(status->gyro != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "Gyro: %s ",
+                            StatusStrings[status->gyro]);
+        }
+        if(status->magno != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "Magno: %s ",
+                            StatusStrings[status->magno]);
+        }
+        if(status->pyro != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "Pyro: %s ",
+                            StatusStrings[status->pyro]);
+        }
+        if(status->microsd != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "uSD: %s ",
+                            StatusStrings[status->microsd]);
+        }
+        if(status->stateestimation != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "SE: %s ",
+                            StatusStrings[status->stateestimation]);
+        }
+        if(status->missioncontrol != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "MC: %s ",
+                            StatusStrings[status->missioncontrol]);
+        }
+        if(status->datalogging != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "DL: %s ",
+                            StatusStrings[status->datalogging]);
+        }
+        if(status->config != STATUS_OK) {
+            n += chsnprintf(buf+n, len-n, "Cfg: %s ",
+                            StatusStrings[status->config]);
+        }
+        return n;
+    }
 }

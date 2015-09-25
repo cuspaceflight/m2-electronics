@@ -20,19 +20,24 @@ void rockblock_init()
   m2status_rockblock_status(STATUS_OK);
 }
 
-void send_sbd_posn(const ublox_pvt_t *pvt)
+void send_sbd_posn()
 {
   if(!m2r_state.armed)
       return;
 
+  chprintf((BaseSequentialStream *)&ROCKBLOCK_PORT, "AT-MSSTM\r\n");
+  chThdSleepMilliseconds(500);
   chprintf((BaseSequentialStream *)&ROCKBLOCK_PORT, "AT+SBDD0\r\n");
   chThdSleepMilliseconds(500);
   chprintf((BaseSequentialStream *)&ROCKBLOCK_PORT,
     "AT+SBDWT=%02d%02d%02d %02X %.3f,%.3f,%d\r\n",
-    pvt->hour, pvt->minute, pvt->second,
-    pvt->fix_type,
-    pvt->lat*1e-7, pvt->lon*1e-7, (int)(pvt->height*1e-3)
-  );
+    M2RStatus.latest.gps_t_hour,
+    M2RStatus.latest.gps_t_min,
+    M2RStatus.latest.gps_t_sec,
+    M2RStatus.latest.gps_fix_type,
+    (double)M2RStatus.latest.gps_lat * (double)1e-7,
+    (double)M2RStatus.latest.gps_lng * (double)1e-7,
+    M2RStatus.latest.gps_alt);
   chThdSleepMilliseconds(500);
   chprintf((BaseSequentialStream *)&ROCKBLOCK_PORT, "AT+SBDI\r\n");
 }

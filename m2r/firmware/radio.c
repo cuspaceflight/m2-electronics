@@ -21,10 +21,13 @@
 #define SAMPLES_PER_BIT 40 //T_BIT * FS
 #define F_MARK  (1000.0f)
 #define F_SPACE (1350.0f)
-#define MSGLEN 128
+#define MSGLEN 256
 static uint8_t mark_buf[SAMPLES_PER_BIT];
 static uint8_t space_buf[SAMPLES_PER_BIT];
 static uint8_t zero_buf[SAMPLES_PER_BIT];
+
+static void radio_generate_buffers(void);
+static void radio_make_telem_string(char* buf, size_t len);
 
 static void radio_generate_buffers()
 {
@@ -41,30 +44,26 @@ static void radio_generate_buffers()
 
 static void radio_make_telem_string(char* buf, size_t len)
 {
-    /*chsnprintf(buf, len,*/
-             /*" AD6AM AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%d, %d) "*/
-             /*"%dm (%dm) %dm/s (%dm/s) %u\n",*/
-             /*m2r_state.hour, m2r_state.minute, m2r_state.second,*/
-             /*(float)m2r_state.lat*1e-7f, (float)m2r_state.lng*1e-7f,*/
-             /*m2r_state.gps_valid,*/
-             /*m2r_state.gps_num_sats, (int)m2r_state.imu_height,*/
-             /*(int)m2r_state.imu_max_height, (int)m2r_state.imu_velocity,*/
-             /*(int)m2r_state.imu_max_velocity, m2r_state.fc_state);*/
-    chsnprintf(buf, len,
-               "AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%s, %d)\r\n"
-               "Body: %s (%s), Nose: %s (%s), SE: %dm, %dm/s\r\n",
-               M2RStatus.latest.gps_t_hour, M2RStatus.latest.gps_t_min,
-               M2RStatus.latest.gps_t_sec, M2RStatus.latest.gps_lat*1e-7f,
-               M2RStatus.latest.gps_lng*1e-7f,
-               GPSFixTypes[M2RStatus.latest.gps_fix_type],
-               M2RStatus.latest.gps_num_sv,
-               StateNames[M2FCBodyStatus.latest.mc_state],
-               StatusStrings[M2FCBodyStatus.m2fcbody],
-               StateNames[M2FCNoseStatus.latest.mc_state],
-               StatusStrings[M2FCNoseStatus.m2fcnose],
-               (int)M2FCNoseStatus.latest.se_h,
-               (int)M2FCNoseStatus.latest.se_v);
-
+    int n;
+    n = chsnprintf(buf, len,
+                   "AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%s, %d)"
+                   " %dm %dm/s\r\n",
+                   M2RStatus.latest.gps_t_hour, M2RStatus.latest.gps_t_min,
+                   M2RStatus.latest.gps_t_sec,
+                   (double)M2RStatus.latest.gps_lat*(double)1e-7f,
+                   (double)M2RStatus.latest.gps_lng*(double)1e-7f,
+                   GPSFixTypes[M2RStatus.latest.gps_fix_type],
+                   M2RStatus.latest.gps_num_sv,
+                   (int)M2FCNoseStatus.latest.se_h,
+                   (int)M2FCNoseStatus.latest.se_v);
+    n += chsnprintf(buf+n, len-n, "M2R: ");
+    n += m2status_write_status_summary(&M2RStatus, buf+n, len-n);
+    n += chsnprintf(buf+n, len-n, "\r\nM2FCBody (%s): ",
+                    StateNames[M2FCBodyStatus.latest.mc_state]);
+    n += m2status_write_status_summary(&M2FCBodyStatus, buf+n, len-n);
+    n += chsnprintf(buf+n, len-n, "\r\nM2FCNose (%s): ",
+                    StateNames[M2FCNoseStatus.latest.mc_state]);
+    n += m2status_write_status_summary(&M2FCNoseStatus, buf+n, len-n);
 }
 
 uint8_t *radio_fm_sampbuf;
@@ -100,7 +99,7 @@ static void radio_fm_timer(GPTDriver *gptd)
                 if(radio_fm_bytebuf[radio_fm_byteidx] == 0x00) {
                     /* End of message */
                     radio_fm_byteidx = 0;
-                    radio_make_telem_string(radio_fm_bytebuf, 128);
+                    radio_make_telem_string((char*)radio_fm_bytebuf, 128);
                     radio_fm_rtty = 0;
                     radio_fm_audioidx = 0;
 
@@ -135,15 +134,13 @@ static void radio_fm_timer(GPTDriver *gptd)
                 radio_fm_sampidx = 65534;
                 radio_fm_audioidx = 0;
                 say_altitude(m2r_state.imu_height,
-                             &radio_fm_audioqueue,
-                             &radio_fm_audioqueuelens);
+                             radio_fm_audioqueue,
+                             radio_fm_audioqueuelens);
                 radio_fm_rtty = 1;
             }
 
-            radio_fm_sampbuf = radio_fm_audioqueue[
-                radio_fm_audioidx];
-            radio_fm_samplen = radio_fm_audioqueuelens[
-                radio_fm_audioidx];
+            radio_fm_sampbuf = radio_fm_audioqueue[radio_fm_audioidx];
+            radio_fm_samplen = radio_fm_audioqueuelens[radio_fm_audioidx];
             radio_fm_audioidx++;
         }
     }
@@ -255,8 +252,9 @@ static const PWMConfig pwmcfg = {
 
 msg_t radio_thread(void* arg)
 {
-    char mymsg[] = "\x2D\x55" "AD6AM AD6AM TESTING TESTING, HELLO PSK";
-    int i, this_bit, last_bit = 0;
+    /*char mymsg[] = "\x2D\x55" "AD6AM AD6AM TESTING TESTING, HELLO PSK";*/
+    /*int i, this_bit, last_bit = 0;*/
+    (void)arg;
 
     m2status_radio_status(STATUS_WAIT);
     chRegSetThreadName("Radio");
@@ -311,7 +309,8 @@ msg_t radio_thread(void* arg)
     /* Compute the sine waves for AFSK */
     radio_generate_buffers();
 
-    chsnprintf(radio_fm_bytebuf, MSGLEN, "AD6AM AD6AM MARTLET 2 FM INITIALISE ");
+    chsnprintf((char*)radio_fm_bytebuf, MSGLEN,
+               "AD6AM AD6AM MARTLET 2 FM INIT\r\n");
 
     /* Enable DAC */
     RCC->APB1ENR |= (1<<29);
@@ -321,9 +320,8 @@ msg_t radio_thread(void* arg)
         /*chThdSleepMilliseconds(100);*/
 
     say_altitude(m2r_state.imu_height,
-                 &radio_fm_audioqueue,
-                 &radio_fm_audioqueuelens);
-
+                 radio_fm_audioqueue,
+                 radio_fm_audioqueuelens);
 
     /* Enable 12kHz FM Radio timer */
     gptStart(&GPTD2, &gptcfg1);

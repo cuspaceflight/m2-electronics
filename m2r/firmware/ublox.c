@@ -213,6 +213,7 @@ static const I2CConfig i2cconfig = {
     0, 0
 };
 
+#if 0
 static void ublox_warn(const uint8_t n)
 {
     uint8_t i;
@@ -223,13 +224,16 @@ static void ublox_warn(const uint8_t n)
         chThdSleepMilliseconds(200);
     }
 }
+#endif
 
+#if 0
 static void ublox_error(const uint8_t n)
 {
     while(1) {
         ublox_warn(n);
     }
 }
+#endif
 
 /* Computes the Fletcher-8 checksum over buf, using its length fields
  * to determine how much to read and where to insert the new checksum.
@@ -291,6 +295,7 @@ static size_t ublox_receive(uint8_t *buf, size_t bufsize)
     /*uint16_t bytes_available;*/
     /*uint8_t bytes_available_addr = UBLOX_I2C_BYTES_AVAIL;*/
     /*systime_t timeout;*/
+    (void)bufsize;
     msg_t rv;
 
     rv = i2cMasterReceiveTimeout(&I2CD1, UBLOX_I2C_ADDR, buf, 64, 1000);
@@ -520,6 +525,8 @@ static bool_t ublox_init(uint8_t *buf, size_t bufsize)
     /*
     while(ublox_receive(buf, bufsize));
     */
+    (void)buf;
+    (void)bufsize;
 
     return success;
 }
