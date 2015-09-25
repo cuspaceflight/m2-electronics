@@ -1,6 +1,6 @@
 #include "m2telem.h"
 
-extern uint16_t compute_crc(uint8_t *buf, size_t len)
+static uint16_t compute_crc(uint8_t *buf, size_t len)
 {
     size_t i, j;
     uint16_t crc = 0x0000;

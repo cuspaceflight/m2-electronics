@@ -1,6 +1,9 @@
 #include "m2status.h"
 #include <stdbool.h>
+#include <string.h>
 #include "hal.h"
+#include "chprintf.h"
+#include "m2serial.h"
 
 SystemStatus M2FCBodyStatus = {0};
 SystemStatus M2FCNoseStatus = {0};
@@ -15,9 +18,9 @@ static void generate_m2fc_packets(SystemStatus *status, void (*sender)(TelemPack
 static void generate_m2r_packets(SystemStatus *status, void (*sender)(TelemPacket*));
 static void update_system_status(void);
 static uint8_t get_cpu_usage(void);
+static void print_status(BaseSequentialStream *chp, SystemStatus *status);
 
-void m2rl_send_packet(TelemPacket* packet);
-void m2serial_send_packet(TelemPacket* packet);
+void m2rl_send_buffer(void* buf, size_t n);
 
 msg_t m2status_thread(void* arg)
 {
@@ -49,21 +52,24 @@ msg_t m2status_thread(void* arg)
 
         if(LocalStatus == &M2FCBodyStatus) {
             /* Send our status to M2FC Nose */
-            generate_packets(&M2FCBodyStatus, m2rl_send_packet);
+            m2rl_send_buffer(&M2FCBodyStatus, sizeof(SystemStatus));
 
         } else if(LocalStatus == &M2FCNoseStatus) {
             /* Send our status and M2R status to M2FC Body */
-            generate_packets(&M2FCNoseStatus, m2rl_send_packet);
-            generate_packets(&M2RStatus, m2rl_send_packet);
+            m2rl_send_buffer(&M2FCNoseStatus, sizeof(SystemStatus));
+            m2rl_send_buffer(&M2RStatus, sizeof(SystemStatus));
 
             /* Send our status and M2FC Body status to M2R */
-            generate_packets(&M2FCBodyStatus, m2serial_send_packet);
-            generate_packets(&M2FCNoseStatus, m2serial_send_packet);
+            m2serial_send_buffer(&M2FCBodyStatus, sizeof(SystemStatus));
+            m2serial_send_buffer(&M2FCNoseStatus, sizeof(SystemStatus));
 
         } else if(LocalStatus == &M2RStatus) {
             /* Send our status to M2FC Body */
-            generate_packets(&M2RStatus, m2serial_send_packet);
+            m2serial_send_buffer(&M2RStatus, sizeof(SystemStatus));
         }
+
+        /* We used to do this... */
+        (void)generate_packets;
         
         /* Sleep for a second and do it all again. */
         chThdSleepMilliseconds(1000);
@@ -330,6 +336,18 @@ static void generate_m2r_packets(SystemStatus *status, void (*sender)(TelemPacke
     pkt.metadata = status->origin;
     m2telem_write_checksum(&pkt);
     sender(&pkt);
+}
+
+void m2status_rx_systemstatus(SystemStatus *status)
+{
+    if(status->origin == M2T_ORIGIN_M2FCBODY) {
+        memcpy(&M2FCBodyStatus, status, sizeof(SystemStatus));
+    } else if(status->origin == M2T_ORIGIN_M2FCNOSE) {
+        memcpy(&M2FCNoseStatus, status, sizeof(SystemStatus));
+    } else if(status->origin == M2T_ORIGIN_M2R) {
+        memcpy(&M2RStatus, status, sizeof(SystemStatus));
+    }
+
 }
 
 void m2status_rx_packet(TelemPacket *packet)
@@ -861,3 +879,97 @@ void m2status_set_gps_status(int8_t fix_type, int8_t flags, int8_t num_sv)
     LocalStatus->latest.gps_num_sv = num_sv;
 }
 
+const char StatusStrings[14][40] = {
+    "Unknown", "OK", "Wait", "Error", "Error Initialising", "Error Reading",
+    "Error Writing", "Error Sending", "Error Allocating",
+    "Error due to callback while active", "Error due to self test fail",
+    "Error due to invalid device ID", "Error in peripheral",
+    "Error due to bad input"
+};
+
+static const char state_names[10][16] = {
+    "Pad", "Ignition", "Powered Ascent", "Free Ascent", "Apogee",
+    "Drogue Descent", "Main Release", "Main Descent", "Land", "Landed"
+};
+
+static const char gps_fix_types[6][10] = {
+    "None", "DR Only", "2D", "3D", "GPS+DR", "Time only"};
+
+static void print_status(BaseSequentialStream *chp, SystemStatus *status)
+{
+    chprintf(chp,"Status:\r\n");
+    chprintf(chp,"    M2FCBody=%s M2FCNose=%s M2R=%s\r\n",
+             StatusStrings[status->m2fcbody], StatusStrings[status->m2fcnose],
+             StatusStrings[status->m2r]);
+    chprintf(chp,"    ADC=%s LGA=%s HGA=%s Baro=%s Gyro=%s Magno=%s "
+             "Pyro=%s MicroSD=%s\r\n",
+             StatusStrings[status->adc], StatusStrings[status->lg_accel],
+             StatusStrings[status->hg_accel], StatusStrings[status->baro],
+             StatusStrings[status->magno], StatusStrings[status->pyro],
+             StatusStrings[status->microsd]);
+    chprintf(chp,"    SE=%s MC=%s DL=%s Cfg=%s\r\n",
+             StatusStrings[status->stateestimation],
+             StatusStrings[status->missioncontrol],
+             StatusStrings[status->datalogging],
+             StatusStrings[status->config]);
+    chprintf(chp,"    RockBLOCK=%s Radio=%s GPS=%s\r\n",
+             StatusStrings[status->rockblock], StatusStrings[status->radio],
+             StatusStrings[status->gps]);
+
+    chprintf(chp,"Latest Values:\r\n");
+    chprintf(chp,"SG: %d %d %d, TC: %d %d %d\r\n",
+             status->latest.sg1, status->latest.sg2, status->latest.sg3,
+             status->latest.tc1, status->latest.tc2, status->latest.tc3);
+    chprintf(chp,"LGA: %d %d %d, HGA: %d %d %d\r\n",
+             status->latest.lga_x, status->latest.lga_y, status->latest.lga_z,
+             status->latest.hga_x, status->latest.hga_y, status->latest.hga_z);
+    chprintf(chp,"Baro: %d %d\r\n",
+             status->latest.baro_p, status->latest.baro_t);
+    chprintf(chp,"Gyro: %d %d %d, Magno: %d %d %d\r\n",
+             status->latest.gyro_x, status->latest.gyro_y,
+             status->latest.gyro_z, status->latest.magno_x,
+             status->latest.magno_y, status->latest.magno_z);
+    chprintf(chp,"SE dt=%d h=%d v=%d a=%d p_s=%d p_e=%d a_s=%d a_e=%d\r\n",
+             (int16_t)status->latest.se_dt, (int16_t)status->latest.se_h,
+             (int16_t)status->latest.se_v, (int16_t)status->latest.se_a,
+             (int16_t)status->latest.se_p_s, (int16_t)status->latest.se_p_e,
+             (int16_t)status->latest.se_a_s, (int16_t)status->latest.se_a_e);
+    chprintf(chp,"MC state=%s", state_names[status->latest.mc_state]);
+    chprintf(chp,"Pyro C: %d %d %d, F: %d %d %d\r\n",
+             status->latest.pyro_c_1, status->latest.pyro_c_2,
+             status->latest.pyro_c_3, status->latest.pyro_f_1,
+             status->latest.pyro_f_2, status->latest.pyro_f_3);
+    chprintf(chp,"Battery: %d\r\n", status->latest.battery);
+    chprintf(chp,"GPS time: %d-%d-%d %d:%d:%d (%d)\r\n",
+             ((uint16_t)status->latest.gps_t_year_h << 8) |
+             (uint16_t)status->latest.gps_t_year_l,
+             status->latest.gps_t_month, status->latest.gps_t_day,
+             status->latest.gps_t_hour, status->latest.gps_t_min,
+             status->latest.gps_t_sec, status->latest.gps_t_valid);
+    chprintf(chp,"GPS pos: %d %d, alt: %d (%d aMSL)\r\n",
+             status->latest.gps_lat, status->latest.gps_lng,
+             status->latest.gps_alt, status->latest.gps_alt_msl);
+    chprintf(chp,"GPS fix: %s, %d sats\r\n",
+             gps_fix_types[status->latest.gps_fix_type],
+             status->latest.gps_num_sv);
+    chprintf(chp,"CPU usage: %u, MicroSD duty: %u\r\n",
+             status->latest.cpu_usage, status->latest.microsd_duty);
+}
+
+void m2status_shell_cmd(BaseSequentialStream *chp, int argc, char* argv[])
+{
+    (void)argc;
+    (void)argv;
+
+    chprintf(chp,"M2FC Body Status:\r\n==================\r\n");
+    print_status(chp, &M2FCBodyStatus);
+    chprintf(chp,"\r\n\r\n");
+
+    chprintf(chp,"M2FC Nose Status:\r\n==================\r\n");
+    print_status(chp, &M2FCNoseStatus);
+    chprintf(chp,"\r\n\r\n");
+
+    chprintf(chp,"M2R Status:\r\n==================\r\n");
+    print_status(chp, &M2RStatus);
+    chprintf(chp,"\r\n\r\n");
+}

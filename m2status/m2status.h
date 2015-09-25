@@ -22,11 +22,14 @@ typedef enum {
     STATUS_ERR_INVALID_DEVICE_ID, STATUS_ERR_PERIPHERAL, STATUS_ERR_BAD_INPUT,
 } Status;
 
-typedef struct {
-    Status m2fcbody, m2fcnose, m2r,
-           adc, lg_accel, hg_accel, baro, gyro, magno, pyro, microsd,
-           stateestimation, missioncontrol, datalogging, config,
-           rockblock, radio, gps;
+extern const char StatusStrings[14][40];
+
+typedef struct __attribute__((packed)) {
+    /* Stores a value from the Status enum. */
+    uint8_t m2fcbody, m2fcnose, m2r,
+            adc, lg_accel, hg_accel, baro, gyro, magno, pyro, microsd,
+            stateestimation, missioncontrol, datalogging, config,
+            rockblock, radio, gps;
     struct {
         int16_t sg1, sg2, sg3, tc1, tc2, tc3;
         int16_t lga_x, lga_y, lga_z, hga_x, hga_y, hga_z;
@@ -68,6 +71,9 @@ msg_t m2status_thread(void* arg);
 /* Update our knowledge of the world by processing a received packet. */
 void m2status_rx_packet(TelemPacket *packet);
 
+/* Update our knowledge of the world by processing a received SystemStatus. */
+void m2status_rx_systemstatus(SystemStatus *status);
+
 /* Update status of subsystems. */
 void m2status_adc_status(Status status);
 void m2status_lg_accel_status(Status status);
@@ -106,5 +112,7 @@ void m2status_set_gps_time(uint8_t year_l, uint8_t year_h, uint8_t month,
 void m2status_set_gps_pos(int32_t lat, int32_t lng);
 void m2status_set_gps_alt(int32_t alt, int32_t alt_msl);
 void m2status_set_gps_status(int8_t fix_type, int8_t flags, int8_t num_sv);
+
+void m2status_shell_cmd(BaseSequentialStream *chp, int argc, char* argv[]);
 
 #endif /* M2STATUS_H */

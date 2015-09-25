@@ -51,12 +51,6 @@ static const GPTConfig gpt_adc_config =
 };
 
 /*
- * This number keeps track on how many times the full buffer
- *  callback has been called since last save.
- */
-static volatile int number_of_buffers_ready = 0;
-
-/*
 * ADC conversion group.
 * Mode:        Continuous, 1024 samples of 2 channels,
 *

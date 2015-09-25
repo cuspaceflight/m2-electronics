@@ -17,7 +17,9 @@ extern void(*m2serial_shell)(BaseSequentialStream*);
 /* Process incoming serial data. */
 msg_t m2serial_thread(void* arg);
 
-/* Blocking transmit a packet over the serial port. */
-void m2serial_send_packet(TelemPacket* packet);
+/* Blocking transmit an arbitrary buffer over the serial port.
+ * Performs relevant flagging, escaping and checksumming.
+ */
+void m2serial_send_buffer(void* buf, size_t n);
 
 #endif /* M2SERIAL_H */
