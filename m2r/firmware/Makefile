@@ -5,7 +5,8 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 -std=gnu99
+  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 \
+			-fsingle-precision-constant -std=gnu99
 endif
 
 # C specific options here (added to USE_OPT).
@@ -92,7 +93,10 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/memstreams.c \
 			 ../../sbp/sbp.c ../../sbp/edc.c \
-       main.c radio.c dispatch.c ublox.c rockblock.c serial_link.c \
+			 ../../m2telem/m2telem.c \
+			 ../../m2status/m2status.c \
+			 ../../m2serial/m2serial.c \
+       main.c radio.c dispatch.c ublox.c rockblock.c \
        audio_data.c sbp_io.c m2r_shell.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
@@ -198,13 +202,14 @@ DLIBS =
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
+GITVERSION := $(shell git describe --abbrev=8 --always)
+UDEFS = -DM2R_FIRMWARE_VERSION=\"$(GITVERSION)\"
 
 # Define ASM defines here
 UADEFS =
 
 # List all user directories here
-UINCDIR = ../../sbp
+UINCDIR = ../../sbp/ ../../m2telem/ ../../m2status/ ../../m2serial/
 
 # List the user directory to look for the libraries here
 ULIBDIR =

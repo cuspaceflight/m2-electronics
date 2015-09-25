@@ -21,6 +21,7 @@
 #include "ublox.h"
 #include "hal.h"
 #include "dispatch.h"
+#include "m2status.h"
 
 /* uBlox I2C addresses */
 #define UBLOX_I2C_ADDR        0x42
@@ -97,7 +98,7 @@ typedef struct __attribute__((packed)) {
             uint8_t utc_standard;
             uint8_t reserved3;
             uint32_t reserved4;
-        } __attribute__((packed));
+        };
     };
     uint8_t ck_a, ck_b;
 } ubx_cfg_nav5_t;
@@ -119,7 +120,7 @@ typedef struct __attribute__((packed)) {
             uint8_t msg_class;
             uint8_t msg_id;
             uint8_t rate;
-        } __attribute__((packed));
+        };
     };
     uint8_t ck_a, ck_b;
 } ubx_cfg_msg_t;
@@ -137,7 +138,7 @@ typedef struct __attribute__((packed)) {
             uint16_t meas_rate;
             uint16_t nav_rate;
             uint16_t time_ref;
-        } __attribute__((packed));
+        };
     };
     uint8_t ck_a, ck_b;
 } ubx_cfg_rate_t;
@@ -276,6 +277,8 @@ static bool_t ublox_transmit(uint8_t *buf)
     /* Transmit message */
     rv = i2cMasterTransmitTimeout(&I2CD1, UBLOX_I2C_ADDR, buf, n,
                                   NULL, 0, timeout);
+    if(rv != RDY_OK)
+        m2status_gps_status(STATUS_ERR_WRITING);
     return rv == RDY_OK;
 }
 
@@ -285,62 +288,19 @@ static bool_t ublox_transmit(uint8_t *buf)
  */
 static size_t ublox_receive(uint8_t *buf, size_t bufsize)
 {
-    uint16_t bytes_available;
-    uint8_t bytes_available_addr = UBLOX_I2C_BYTES_AVAIL;
-    systime_t timeout;
+    /*uint16_t bytes_available;*/
+    /*uint8_t bytes_available_addr = UBLOX_I2C_BYTES_AVAIL;*/
+    /*systime_t timeout;*/
     msg_t rv;
 
+    rv = i2cMasterReceiveTimeout(&I2CD1, UBLOX_I2C_ADDR, buf, 64, 1000);
 
-    
-    rv = i2cMasterReceiveTimeout(&I2CD1, UBLOX_I2C_ADDR,
-                                 buf, 64, 1000);
-
-    if(rv == RDY_OK)
+    if(rv == RDY_OK) {
         return 64;
-    else if(rv == RDY_RESET)
+    } else {
+        m2status_gps_status(STATUS_ERR_READING);
         return 0;
-    else if(rv == RDY_TIMEOUT)
-        return 0;
-
-    return 0;
-
-
-
-    /* Set the read address to 0xFD, the start of "bytes available",
-     * then read those two bytes. Timeout of 2ms should be plenty.
-     */
-    /*
-    rv = i2cMasterTransmitTimeout(&I2CD1, UBLOX_I2C_ADDR,
-                                  &bytes_available_addr, 1, buf, 2,
-                                  TIME_INFINITE);
-    if(rv != RDY_OK)
-        return 0;
-    bytes_available = ((uint16_t*)buf)[0];
-    */
-    bytes_available = bufsize;
-    
-    /* If there's data to read, try and read it.
-     * After the last two reads, the read register will already be 0xFF.
-     */
-    if(bytes_available > 0) {
-        /* Don't overflow the read buffer. We'll just read some more later. */
-        if(bytes_available > bufsize)
-            bytes_available = bufsize;
-        bytes_available = 128;
-        timeout = bytes_available / 100 + 10;
-        timeout = 100;
-        rv = i2cMasterReceiveTimeout(&I2CD1, UBLOX_I2C_ADDR,
-                                     buf, bytes_available, timeout);
-        if(rv == RDY_OK) {
-            return bytes_available;
-        } else {
-            i2cStop(&I2CD1);
-            i2cStart(&I2CD1, &i2cconfig);
-        }
     }
-
-    /* No data to read. */
-    return 0;
 }
 
 /* Run the first `num_new_bytes` bytes in `buf` through the UBX decoding state
@@ -417,17 +377,20 @@ static void ublox_state_machine(uint8_t *buf, size_t num_new_bytes)
             case STATE_CK_A:
                 ck_b = b;
                 /* TODO check checksum */
+                (void)ck_a;
+                (void)ck_b;
+
                 state = STATE_IDLE;
                 switch(class) {
                     case UBX_ACK:
                         if(id == 0x00) {
                             /* NAK */
-                            /* TODO be very sad */
+                            m2status_gps_status(STATUS_ERR);
                         } else if(id == 0x01) {
                             /* ACK */
                             /* No need to do anything */
                         } else {
-                            /* TODO SAD */
+                            m2status_gps_status(STATUS_ERR);
                         }
                         break;
                     case UBX_NAV:
@@ -437,22 +400,25 @@ static void ublox_state_machine(uint8_t *buf, size_t num_new_bytes)
                             memcpy(&pvt, payload, length);
                             /* Send the PVT to dispatch */
                             dispatch_pvt(pvt);
+                            m2status_gps_status(STATUS_OK);
                         } else {
-                            /* TODO SAD */
+                            m2status_gps_status(STATUS_ERR);
                         }
                         break;
                     case UBX_CFG:
                         if(id == 0x24) {
                             /* NAV5 */
                             memcpy(cfg_nav5.payload, payload, length);
-                            /* Just check that Airborne is set, if not log a
+                            /* TODO check that Airborne is set, if not log a
                              * warning and try to set it again */
+                            if(cfg_nav5.dyn_model != 8) {
+                                m2status_gps_status(STATUS_ERR_SELFTEST_FAIL);
+                            }
                         } else {
-                            /* TODO SAD */
+                            m2status_gps_status(STATUS_ERR);
                         }
                         break;
                     default:
-                        /* TODO sad */
                         break;
                 }
                 break;
@@ -547,7 +513,7 @@ static bool_t ublox_init(uint8_t *buf, size_t bufsize)
     rate.meas_rate = 100;
     rate.nav_rate = 1;
     rate.time_ref = 0;
-    success &= ubx_transmit(&rate.data);
+    success &= ublox_transmit(&rate.data);
     if(!success) return FALSE;
 
     /* Clear the current I2C buffer */
@@ -565,6 +531,7 @@ msg_t ublox_thread(void* arg)
     uint8_t buf[bufsize];
     uint8_t n_rx;
 
+    m2status_gps_status(STATUS_WAIT);
     chRegSetThreadName("uBlox");
 
     /* We'll reset the uBlox so it's in a known state */
@@ -576,13 +543,14 @@ msg_t ublox_thread(void* arg)
     i2cStart(&I2CD1, &i2cconfig);
 
     if(!ublox_init(buf, bufsize)) {
-        while(1) chThdSleepMilliseconds(5);
+        m2status_gps_status(STATUS_ERR_INITIALISING);
+        while(1) chThdSleepMilliseconds(100);
     }
 
     i2cStart(&I2CD1, &i2cconfig);
     while(TRUE) {
         n_rx = ublox_receive(buf, bufsize);
         ublox_state_machine(buf, n_rx);
-        chThdSleepMilliseconds(50);
+        chThdSleepMilliseconds(10);
     }
 }

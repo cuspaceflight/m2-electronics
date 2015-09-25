@@ -7,6 +7,7 @@
 #include <hal.h>
 #include "chprintf.h"
 #include <stdio.h>
+#include "m2status.h"
 
 static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
   size_t n, size;
@@ -67,6 +68,12 @@ static void cmd_rt(BaseSequentialStream *chp, int argc, char *argv[]) {
     chprintf(chp, "Real time clock frequency: %u\r\n", f);
 }
 
+static void cmd_version(BaseSequentialStream *chp, int argc, char* argv[]) {
+    (void)argc;
+    (void)argv;
+    chprintf(chp, "Version: " M2R_FIRMWARE_VERSION "\r\n");
+}
+
 struct SemihostingVMT {
     _base_sequential_stream_methods
 };
@@ -110,6 +117,8 @@ void m2r_shell_run()
         {"mem", cmd_mem},
         {"threads", cmd_threads},
         {"rt", cmd_rt},
+        {"status", m2status_shell_cmd},
+        {"version", cmd_version},
         {NULL, NULL}
     };
 

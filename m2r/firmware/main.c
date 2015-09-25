@@ -21,7 +21,7 @@ void initialise_monitor_handles(void);
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waThreadUblox, 4096);
 static WORKING_AREA(waThreadRadio, 2048);
-static WORKING_AREA(waThreadSBP, 2048);
+/*static WORKING_AREA(waThreadSBP, 2048);*/
 
 static msg_t ThreadHeartbeat(void *arg) {
     (void)arg;
@@ -49,14 +49,14 @@ int main(void) {
     chRegSetThreadName("main");
 
     /*sbp_state_init(&sbp_state);*/
-    /*rockblock_init();*/
-    /*dispatch_init();*/
+    rockblock_init();
+    dispatch_init();
 
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,
                       ThreadHeartbeat, NULL);
 
-    /*chThdCreateStatic(waThreadUblox, sizeof(waThreadUblox), NORMALPRIO,*/
-                      /*ublox_thread, NULL);*/
+    chThdCreateStatic(waThreadUblox, sizeof(waThreadUblox), NORMALPRIO,
+                      ublox_thread, NULL);
 
     chThdCreateStatic(waThreadRadio, sizeof(waThreadRadio), NORMALPRIO,
                       radio_thread, NULL);
@@ -72,10 +72,6 @@ int main(void) {
 
     chThdSetPriority(LOWPRIO);
     chThdSleep(TIME_INFINITE);
-
-    /* Stop the compiler from removing this function by calling it after going
-     * to sleep. Take that, optimiser! */
-    m2r_shell_run();
 
     return 0;
 }

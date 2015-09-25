@@ -7,6 +7,7 @@
 #include "rockblock.h"
 #include "chprintf.h"
 #include "dispatch.h"
+#include "m2status.h"
 
 void rockblock_init()
 {
@@ -15,6 +16,8 @@ void rockblock_init()
   };
 
   sdStart(&ROCKBLOCK_PORT, &iridium_port_config);
+
+  m2status_rockblock_status(STATUS_OK);
 }
 
 void send_sbd_posn(const ublox_pvt_t *pvt)
