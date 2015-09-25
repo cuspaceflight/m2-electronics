@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "microsd.h"
+#include "m2status.h"
 #include "hal.h"
 #include "ff.h"
 #include "chprintf.h"
@@ -22,11 +23,18 @@ static bool microsd_card_init(FATFS* fs)
     /* Attempt to connect to the SD card */
     int i = sdcConnect(&SDCD1);
     if (i) {
+        m2status_microsd_status(STATUS_ERR_PERIPHERAL);
         return false;
     }
 
     /* Attempt to mount the filesystem */
     err = f_mount(0, fs);
+
+    if(err != FR_OK)
+        m2status_microsd_status(STATUS_ERR_INITIALISING);
+    else
+        m2status_microsd_status(STATUS_OK);
+
     return err == FR_OK;
 }
 
@@ -64,6 +72,8 @@ SDRESULT microsd_open_file(SDFILE* fp, const char* path, SDMODE mode,
     SDRESULT err;
     microsd_card_try_init(sd);
     err = f_open(fp, path, mode);
+    if(err != FR_OK)
+        m2status_microsd_status(STATUS_ERR_INITIALISING);
     return err;
 }
 
@@ -87,8 +97,13 @@ SDRESULT microsd_open_file_inc(FIL* fp, const char* path, const char* ext,
         file_idx++;
         chsnprintf(fname, 25, "%s_%05d.%s", path, file_idx, ext);
         err = f_open(fp, fname, mode);
-        if (err == FR_EXIST) continue;
-        else return err;
+        if (err == FR_EXIST) {
+            continue;
+        } else {
+            if(err != FR_OK)
+                m2status_microsd_status(STATUS_ERR_INITIALISING);
+            return err;
+        }
     }
 }
 
@@ -117,6 +132,9 @@ SDRESULT microsd_write(SDFILE* fp, const char* buf, unsigned int btw)
     f_sync(fp);
     palClearPad(GPIOA, GPIOA_LED_SDCARD);
 
+    if(err != FR_OK)
+        m2status_microsd_status(STATUS_ERR_WRITING);
+
     return err;
 }
 
@@ -132,6 +150,10 @@ SDRESULT microsd_read(SDFILE* fp, char* buf, unsigned int btr)
     if (err == FR_OK) {
         err = f_read(fp, (void*)buf, btr, &bytes_read);
     }
+
+    if(err != FR_OK)
+        m2status_microsd_status(STATUS_ERR_READING);
+
     return err;
 }
 
@@ -140,7 +162,14 @@ SDRESULT microsd_read(SDFILE* fp, char* buf, unsigned int btr)
 SDRESULT microsd_gets(SDFILE* fp, char* buf, int size)
 {
     TCHAR* res = f_gets(buf, size, fp);
+
     // if res is null then either an error occurred (check with f_error(fp))
     // or it reached end of file (check with f_eof(fp))
-    return res == NULL ? FR_INT_ERR : FR_OK;
+    if(res == NULL) {
+        if(f_error(fp))
+            m2status_microsd_status(STATUS_ERR_READING);
+        return FR_INT_ERR;
+    } else {
+        return FR_OK;
+    }
 }

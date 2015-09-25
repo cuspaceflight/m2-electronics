@@ -7,6 +7,7 @@
 #include "pyro.h"
 #include "config.h"
 #include "datalogging.h"
+#include "m2status.h"
 #include <hal.h>
 
 void pyro_off_1(void* arg);
@@ -51,6 +52,7 @@ bool_t pyro_continuities()
     if(conf.pyro_3) ok &= p3;
 
     log_i16(M2T_CH_PYRO_CONT, p1, p2, p3, 0);
+    m2status_set_pyro_c(p1, p2, p3);
 
     return ok;
 }
@@ -62,6 +64,7 @@ bool_t pyro_continuities()
 void pyro_fire(bool ch1, bool ch2, bool ch3)
 {
     unsigned int i;
+    m2status_set_pyro_f(ch1, ch2, ch3);
     for(i=0; i<conf.pyro_firetime / 20; i++) {
         if(ch1)
             palSetPad(GPIOE, GPIOE_PYRO_1_F);
@@ -103,16 +106,19 @@ void pyro_fire_main()
 
 msg_t pyro_continuity_thread(void *arg) {
     (void)arg;
+    m2status_pyro_status(STATUS_WAIT);
     chRegSetThreadName("Pyros");
 
     while(TRUE) {
         if(pyro_continuities()) {
+            m2status_pyro_status(STATUS_WAIT);
             palSetPad(GPIOA, GPIOA_LED_PYROS);
             chThdSleepMilliseconds(10);
             palClearPad(GPIOA, GPIOA_LED_PYROS);
             chThdSleepMilliseconds(990);
         } else {
             /* TODO: report sadness up the chain */
+            m2status_pyro_status(STATUS_ERR);
             palSetPad(GPIOA, GPIOA_LED_PYROS);
             chThdSleepMilliseconds(100);
             palClearPad(GPIOA, GPIOA_LED_PYROS);

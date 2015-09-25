@@ -12,6 +12,7 @@
 #include "hal.h"
 #include "chprintf.h"
 #include "dma_mutexes.h"
+#include "m2status.h"
 
 
 #define MS5611_SPID        SPID3
@@ -30,8 +31,6 @@ static void ms5611_init(MS5611CalData* cal_data);
 static void ms5611_read_cal(MS5611CalData* cal_data);
 static void ms5611_read(MS5611CalData* cal_data,
                         int32_t* temperature, int32_t* pressure);
-
-int32_t temperature, pressure;
 
 static const SPIConfig spi_cfg = {
     NULL,
@@ -207,6 +206,10 @@ static void ms5611_read(MS5611CalData* cal_data,
     /* Compute and store new pressure and temperature */
     *pressure = (((d1 * sens) >> 21) - off) >> 15;
     log_i32(M2T_CH_IMU_BARO, *pressure, *temperature);
+    m2status_set_baro(*pressure, *temperature);
+
+    if(*pressure < 1000 || *pressure > 120000)
+        m2status_baro_status(STATUS_ERR_SELFTEST_FAIL);
 }
 
 /*
@@ -219,9 +222,12 @@ msg_t ms5611_thread(void *arg)
     (void)arg;
 
     static MS5611CalData cal_data;
+    int32_t temperature, pressure;
 
+    m2status_baro_status(STATUS_WAIT);
     chRegSetThreadName("MS5611");
     ms5611_init(&cal_data);
+    m2status_baro_status(STATUS_OK);
 
     while (TRUE) {
         ms5611_read(&cal_data, &temperature, &pressure);

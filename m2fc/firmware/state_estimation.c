@@ -8,7 +8,7 @@
 #include "state_estimation.h"
 #include "datalogging.h"
 #include "time_utils.h"
-#include "sbp_io.h"
+#include "m2status.h"
 
 /* Kalman filter state and covariance storage */
 static float x[3]    = {1180.0f, 0.0f, 0.0f};
@@ -130,7 +130,7 @@ void state_estimation_update_accel(float accel, float r);
 state_estimate_t state_estimation_get_state()
 {
     float q, dt, dt2, dt3, dt4, dt5, dt6, dt2_2;
-    static uint8_t sbp_counter = 0;
+    /*static uint8_t sbp_counter = 0;*/
     state_estimate_t x_out;
 
     /* TODO Determine this q-value */
@@ -204,12 +204,15 @@ state_estimate_t state_estimation_get_state()
     /* Log the newly predicted state */
     log_f(M2T_CH_SE_T_H, dt, x_out.h);
     log_f(M2T_CH_SE_V_A, x_out.v, x_out.a);
+    m2status_set_se_pred(dt, x_out.h, x_out.v, x_out.a);
 
+    /*
     sbp_counter++;
     if(sbp_counter == 100) {
         SBP_SEND(0x22, x_out);
         sbp_counter = 0;
     }
+    */
 
     return x_out;
 }
@@ -221,6 +224,7 @@ void state_estimation_init()
 {
     state_estimation_trust_barometer = 0;
     chBSemInit(&kalman_lock, FALSE);
+    m2status_stateestimation_status(STATUS_OK);
 }
 
 /* We run a Kalman update step with a new pressure reading.
@@ -311,6 +315,7 @@ void state_estimation_new_pressure(float pressure)
 
     /* Log new pressure reading and the consequent new state altitude */
     log_f(M2T_CH_SE_PRESSURE, pressure, x[0]);
+    m2status_set_se_pressure(pressure, x[0]);
 
     /* Release lock */
     chBSemSignal(&kalman_lock);
@@ -469,6 +474,7 @@ void state_estimation_update_accel(float a, float r)
 
     /* Log new acceleration value the consequent new state acceleration */
     log_f(M2T_CH_SE_ACCEL, a, x[2]);
+    m2status_set_se_accel(a, x[2]);
 
     /* Release lock */
     chBSemSignal(&kalman_lock);

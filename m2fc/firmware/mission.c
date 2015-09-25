@@ -10,6 +10,7 @@
 #include "pyro.h"
 #include "datalogging.h"
 #include "config.h"
+#include "m2status.h"
 
 typedef enum {
     STATE_PAD = 0, STATE_IGNITION, STATE_POWERED_ASCENT, STATE_FREE_ASCENT,
@@ -147,14 +148,16 @@ static state_t do_state_landed(instance_data_t *data)
 msg_t mission_thread(void* arg)
 {
     (void)arg;
+    m2status_missioncontrol_status(STATUS_WAIT);
+    chRegSetThreadName("Mission");
+
     state_t cur_state = STATE_PAD;
     state_t new_state;
+    m2status_set_mc(cur_state);
     instance_data_t data;
     data.t_launch = 0;
     data.t_apogee = 0;
     data.h_ground = 0.0f;
-
-    chRegSetThreadName("Mission");
 
     while(1) {
         /* Run Kalman prediction step */
@@ -163,11 +166,14 @@ msg_t mission_thread(void* arg)
         /* Run state machine current state function */
         new_state = run_state(cur_state, &data);
 
+        m2status_missioncontrol_status(STATUS_OK);
+
         /* Log changes in state */
         if(new_state != cur_state) {
             log_i32(M2T_CH_STATE_MISSION,
                             (int32_t)cur_state, (int32_t)new_state);
             cur_state = new_state;
+            m2status_set_mc(cur_state);
         }
 
         /* Tick the state machine about every millisecond */
