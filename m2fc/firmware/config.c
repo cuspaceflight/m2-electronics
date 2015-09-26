@@ -166,12 +166,7 @@ bool config_init()
 msg_t config_thread(void* arg)
 {
     (void)arg;
-    m2status_config_status(STATUS_WAIT);
     chRegSetThreadName("Config");
     config_init();
-    if(conf.config_loaded)
-        m2status_config_status(STATUS_OK);
-    else
-        m2status_config_status(STATUS_ERR);
     return RDY_OK;
 }

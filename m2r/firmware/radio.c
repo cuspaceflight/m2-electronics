@@ -15,13 +15,13 @@
 #include "m2status.h"
 
 #define PI 3.14159f
-#define BAUD (300.0f)
+#define BAUD (150.0f)
 #define T_BIT (1.0f / BAUD)
 #define FS (12000.0f)
-#define SAMPLES_PER_BIT 40 //T_BIT * FS
+#define SAMPLES_PER_BIT 80 //T_BIT * FS
 #define F_MARK  (1000.0f)
 #define F_SPACE (1350.0f)
-#define MSGLEN 256
+#define MSGLEN 1024
 static uint8_t mark_buf[SAMPLES_PER_BIT];
 static uint8_t space_buf[SAMPLES_PER_BIT];
 static uint8_t zero_buf[SAMPLES_PER_BIT];
@@ -36,17 +36,17 @@ static void radio_generate_buffers()
         float t = ((float)i / (float)SAMPLES_PER_BIT) * T_BIT;
         float mark  = sinf(2.0f * PI * F_MARK * t);
         float space = sinf(2.0f * PI * F_SPACE * t);
-        mark_buf[i]  = (uint8_t)((mark  * 127.0f) + 127.0f);
-        space_buf[i] = (uint8_t)((space * 127.0f) + 127.0f);
+        mark_buf[i]  = (uint8_t)((mark  * 64.0f) + 127.0f);
+        space_buf[i] = (uint8_t)((space * 64.0f) + 127.0f);
         zero_buf[i] = 0;
     }
 }
 
 static void radio_make_telem_string(char* buf, size_t len)
 {
-    int n;
-    n = chsnprintf(buf, len,
-                   "AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%s, %d)"
+    int n = 0;
+    n += chsnprintf(buf, len,
+                   "UUU\r\n\r\n AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%s, %d)"
                    " %dm %dm/s\r\n",
                    M2RStatus.latest.gps_t_hour, M2RStatus.latest.gps_t_min,
                    M2RStatus.latest.gps_t_sec,
@@ -58,9 +58,11 @@ static void radio_make_telem_string(char* buf, size_t len)
                    (int)M2FCNoseStatus.latest.se_v);
     n += chsnprintf(buf+n, len-n, "M2R: ");
     n += m2status_write_status_summary(&M2RStatus, buf+n, len-n);
+    /*
     n += chsnprintf(buf+n, len-n, "\r\nM2FCBody (%s): ",
                     StateNames[M2FCBodyStatus.latest.mc_state]);
     n += m2status_write_status_summary(&M2FCBodyStatus, buf+n, len-n);
+    */
     n += chsnprintf(buf+n, len-n, "\r\nM2FCNose (%s): ",
                     StateNames[M2FCNoseStatus.latest.mc_state]);
     n += m2status_write_status_summary(&M2FCNoseStatus, buf+n, len-n);
@@ -92,17 +94,16 @@ static void radio_fm_timer(GPTDriver *gptd)
         if(radio_fm_rtty) {
 
             radio_fm_bitidx++;
-            /* If we're now also transmitted all bits... */
+            /* If we've now also transmitted all bits... */
             if(radio_fm_bitidx == 11) {
                 radio_fm_bitidx = 0;
                 radio_fm_byteidx++;
                 if(radio_fm_bytebuf[radio_fm_byteidx] == 0x00) {
                     /* End of message */
                     radio_fm_byteidx = 0;
-                    radio_make_telem_string((char*)radio_fm_bytebuf, 128);
-                    radio_fm_rtty = 0;
+                    radio_make_telem_string((char*)radio_fm_bytebuf, MSGLEN);
+                    radio_fm_rtty = 1;
                     radio_fm_audioidx = 0;
-
                 } else {
                     /* START */
                     radio_fm_bitbuf[0] = 0;
@@ -133,9 +134,9 @@ static void radio_fm_timer(GPTDriver *gptd)
                 /* End of message */
                 radio_fm_sampidx = 65534;
                 radio_fm_audioidx = 0;
-                say_altitude(m2r_state.imu_height,
-                             radio_fm_audioqueue,
-                             radio_fm_audioqueuelens);
+                /*say_altitude(M2RStatus.latest.se_h,*/
+                             /*radio_fm_audioqueue,*/
+                             /*radio_fm_audioqueuelens);*/
                 radio_fm_rtty = 1;
             }
 
@@ -146,7 +147,7 @@ static void radio_fm_timer(GPTDriver *gptd)
     }
 
     /* Write next sample to the DAC */
-    DAC->DHR8R2 = radio_fm_sampbuf[radio_fm_sampidx];
+    DAC->DHR8R1 = radio_fm_sampbuf[radio_fm_sampidx];
     radio_fm_sampidx++;
 
 }
@@ -175,7 +176,7 @@ static void radio_ssb_timer(GPTDriver *gptd)
         if(radio_ssb_bytebuf[radio_ssb_byteidx] == 0x00) {
             /* End of message */
             radio_ssb_byteidx = 0;
-            radio_make_telem_string(radio_ssb_bytebuf, 128);
+            radio_make_telem_string(radio_ssb_bytebuf, MSGLEN);
         } else {
             /* START bit */
             radio_ssb_bitbuf[0] = 1;
@@ -193,10 +194,10 @@ static void radio_ssb_timer(GPTDriver *gptd)
 
 void radio_say(u8* buf, u16 len)
 {
-    radio_fm_audioqueue[0] = buf;
-    radio_fm_audioqueue[1] = 0;
-    radio_fm_audioqueuelens[0] = len;
-    radio_fm_rtty = 0;
+    /*radio_fm_audioqueue[0] = buf;*/
+    /*radio_fm_audioqueue[1] = 0;*/
+    /*radio_fm_audioqueuelens[0] = len;*/
+    /*radio_fm_rtty = 0;*/
 }
 
 #if 0
@@ -314,14 +315,14 @@ msg_t radio_thread(void* arg)
 
     /* Enable DAC */
     RCC->APB1ENR |= (1<<29);
-    DAC->CR = DAC_CR_EN2 | DAC_CR_BOFF2;
+    DAC->CR = DAC_CR_EN1 | DAC_CR_BOFF1;
 
     /*while(!m2r_state.armed)*/
         /*chThdSleepMilliseconds(100);*/
 
-    say_altitude(m2r_state.imu_height,
-                 radio_fm_audioqueue,
-                 radio_fm_audioqueuelens);
+    /*say_altitude(M2RStatus.latest.se_h,*/
+                 /*radio_fm_audioqueue,*/
+                 /*radio_fm_audioqueuelens);*/
 
     /* Enable 12kHz FM Radio timer */
     gptStart(&GPTD2, &gptcfg1);

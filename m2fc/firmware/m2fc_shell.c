@@ -100,7 +100,7 @@ static void cmd_pyro(BaseSequentialStream *chp, int argc, char *argv[]) {
 static void cmd_config(BaseSequentialStream *chp, int argc, char* argv[]) {
     (void)argc;
     (void)argv;
-    chprintf(chp, " Configuration:\n===============");
+    chprintf(chp, " Configuration:\n===============\n");
     chprintf(chp, "Firmware version: %c%c%c%c%c%c%c%c\n",
              conf.version[0], conf.version[1], conf.version[2],
              conf.version[3], conf.version[4], conf.version[5],
@@ -147,5 +147,5 @@ void m2fc_shell_run(BaseSequentialStream* bss)
     shell_cfg.sc_channel = bss;
     shell_cfg.sc_commands = commands;
     shellInit();
-    shellCreate(&shell_cfg, 2048, NORMALPRIO);
+    chThdWait(shellCreate(&shell_cfg, 2048, NORMALPRIO));
 }

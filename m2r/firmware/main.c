@@ -18,8 +18,6 @@
 #include "m2serial.h"
 #include "m2status.h"
 
-void initialise_monitor_handles(void);
-
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waThreadUblox, 4096);
 static WORKING_AREA(waThreadRadio, 2048);
@@ -33,7 +31,7 @@ static msg_t ThreadHeartbeat(void *arg) {
 
     while (TRUE) {
         palSetPad(GPIOB, GPIOB_LED_STATUS);
-        palSetPad(GPIOB, GPIOB_BUZZER);
+        /*palSetPad(GPIOB, GPIOB_BUZZER);*/
         IWDG->KR = 0xAAAA;
 
         if(M2FCBodyStatus.m2fcbody == STATUS_OK &&
@@ -45,6 +43,7 @@ static msg_t ThreadHeartbeat(void *arg) {
         }
 
         palClearPad(GPIOB, GPIOB_LED_STATUS);
+        palClearPad(GPIOB, GPIOB_BUZZER);
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
     }
@@ -52,10 +51,11 @@ static msg_t ThreadHeartbeat(void *arg) {
 }
 
 int main(void) {
-    initialise_monitor_handles();
     halInit();
     chSysInit();
     chRegSetThreadName("main");
+
+    LocalStatus = &M2RStatus;
 
     /*sbp_state_init(&sbp_state);*/
     rockblock_init();
@@ -71,10 +71,10 @@ int main(void) {
     IWDG->KR = 0xCCCC;
 
     m2serial_shell = m2r_shell_run;
+    M2SerialSD = &SD2;
     chThdCreateStatic(waM2Serial, sizeof(waM2Serial), HIGHPRIO,
                       m2serial_thread, NULL);
 
-    LocalStatus = &M2RStatus;
     chThdCreateStatic(waM2Status, sizeof(waM2Status), HIGHPRIO,
                       m2status_thread, NULL);
 

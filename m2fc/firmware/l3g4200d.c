@@ -88,7 +88,7 @@
 
 
 
-static Thread *tpL3G4200D = NULL;
+static BinarySemaphore bsGyro;
 
 static const I2CConfig i2cconfig = {
     OPMODE_I2C, 100000, STD_DUTY_CYCLE
@@ -207,11 +207,13 @@ void l3g4200d_wakeup(EXTDriver *extp, expchannel_t channel)
     (void)extp;
     (void)channel;
     chSysLockFromIsr();
-    if(tpL3G4200D != NULL && tpL3G4200D->p_state != THD_STATE_READY)
-    {
-        chSchReadyI(tpL3G4200D);
-    }
-    tpL3G4200D = NULL;
+    /*if(tpL3G4200D != NULL && tpL3G4200D->p_state != THD_STATE_READY) {*/
+        /*chSchReadyI(tpL3G4200D);*/
+    /*} else {*/
+        /*m2status_gyro_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);*/
+    /*}*/
+    /*tpL3G4200D = NULL;*/
+    chBSemSignalI(&bsGyro);
     chSysUnlockFromIsr();
 }
 
@@ -224,6 +226,7 @@ msg_t l3g4200d_thread(void *arg)
 
     m2status_gyro_status(STATUS_WAIT);
     chRegSetThreadName("L3G4200D");
+    chBSemInit(&bsGyro, true);
 
     i2cStart(&L3G4200D_I2CD, &i2cconfig);
 
@@ -241,11 +244,12 @@ msg_t l3g4200d_thread(void *arg)
     while (true) {
         /* Sleep until DRDY */
         chSysLock();
-        tpL3G4200D = chThdSelf();
-        chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
-        m2status_magno_status(STATUS_OK);
-        tpL3G4200D = NULL;
+        /*tpL3G4200D = chThdSelf();*/
+        /*chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);*/
+        /*tpL3G4200D = NULL;*/
+        chBSemWaitTimeoutS(&bsGyro, 100);
         chSysUnlock();
+        m2status_gyro_status(STATUS_OK);
 
         /* Clears SENSOR LED */
         palClearPad(GPIOA, GPIOA_LED_SENSORS);

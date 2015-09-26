@@ -880,7 +880,7 @@ void m2status_set_gps_status(int8_t fix_type, int8_t flags, int8_t num_sv)
 }
 
 const char StatusStrings[14][40] = {
-    "Unknown", "OK", "Wait", "Error", "Error Initialising", "Error Reading",
+    "?", "OK", "Wait", "Error", "Error Initialising", "Error Reading",
     "Error Writing", "Error Sending", "Error Allocating",
     "Error due to callback while active", "Error due to self test fail",
     "Error due to invalid device ID", "Error in peripheral",
@@ -905,8 +905,8 @@ static void print_status(BaseSequentialStream *chp, SystemStatus *status)
              "Pyro=%s MicroSD=%s\r\n",
              StatusStrings[status->adc], StatusStrings[status->lg_accel],
              StatusStrings[status->hg_accel], StatusStrings[status->baro],
-             StatusStrings[status->magno], StatusStrings[status->pyro],
-             StatusStrings[status->microsd]);
+             StatusStrings[status->gyro], StatusStrings[status->magno],
+             StatusStrings[status->pyro], StatusStrings[status->microsd]);
     chprintf(chp,"    SE=%s MC=%s DL=%s Cfg=%s\r\n",
              StatusStrings[status->stateestimation],
              StatusStrings[status->missioncontrol],
@@ -934,7 +934,7 @@ static void print_status(BaseSequentialStream *chp, SystemStatus *status)
              (int16_t)status->latest.se_v, (int16_t)status->latest.se_a,
              (int16_t)status->latest.se_p_s, (int16_t)status->latest.se_p_e,
              (int16_t)status->latest.se_a_s, (int16_t)status->latest.se_a_e);
-    chprintf(chp,"MC state=%s", StateNames[status->latest.mc_state]);
+    chprintf(chp,"MC state=%s\r\n", StateNames[status->latest.mc_state]);
     chprintf(chp,"Pyro C: %d %d %d, F: %d %d %d\r\n",
              status->latest.pyro_c_1, status->latest.pyro_c_2,
              status->latest.pyro_c_3, status->latest.pyro_f_1,
@@ -952,7 +952,7 @@ static void print_status(BaseSequentialStream *chp, SystemStatus *status)
     chprintf(chp,"GPS fix: %s, %d sats\r\n",
              GPSFixTypes[status->latest.gps_fix_type],
              status->latest.gps_num_sv);
-    chprintf(chp,"CPU usage: %u, MicroSD duty: %u\r\n",
+    chprintf(chp,"CPU usage: %u%%, MicroSD duty: %u\r\n",
              status->latest.cpu_usage, status->latest.microsd_duty);
 }
 
@@ -974,12 +974,12 @@ void m2status_shell_cmd(BaseSequentialStream *chp, int argc, char* argv[])
     chprintf(chp,"\r\n\r\n");
 }
 
-int m2status_write_status_summary(SystemStatus* status, char* buf, int n)
+int m2status_write_status_summary(SystemStatus* status, char* buf, int len)
 {
     if(status == &M2RStatus) {
-        return write_m2r_summary(status, buf, n);
+        return write_m2r_summary(status, buf, len);
     } else if(status == &M2FCBodyStatus || status == &M2FCNoseStatus) {
-        return write_m2fc_summary(status, buf, n);
+        return write_m2fc_summary(status, buf, len);
     } else {
         return 0;
     };
@@ -987,7 +987,7 @@ int m2status_write_status_summary(SystemStatus* status, char* buf, int n)
 
 static int write_m2r_summary(SystemStatus* status, char* buf, int len)
 {
-    int n = len;
+    int n = 0;
     if(
         status->rockblock == STATUS_OK &&
         status->radio     == STATUS_OK &&
@@ -1013,7 +1013,7 @@ static int write_m2r_summary(SystemStatus* status, char* buf, int len)
 
 static int write_m2fc_summary(SystemStatus* status, char* buf, int len)
 {
-    int n = len;
+    int n = 0;
     if(
         status->adc == STATUS_OK &&
         status->lg_accel == STATUS_OK &&

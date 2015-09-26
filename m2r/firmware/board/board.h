@@ -168,7 +168,7 @@
                                      PIN_MODE_OUTPUT(GPIOA_5VOUT)           |\
                                      PIN_MODE_ALTERNATE(GPIOA_SER_OUT)      |\
                                      PIN_MODE_ALTERNATE(GPIOA_SER_IN)       |\
-                                     PIN_MODE_ALTERNATE(GPIOA_MTX2_TXD)     |\
+                                     PIN_MODE_ANALOG(GPIOA_MTX2_TXD)        |\
                                      PIN_MODE_ANALOG(GPIOA_BAT_MON)         |\
                                      PIN_MODE_OUTPUT(GPIOA_LED_A)           |\
                                      PIN_MODE_OUTPUT(GPIOA_LED_C)           |\

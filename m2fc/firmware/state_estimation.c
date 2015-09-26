@@ -205,6 +205,7 @@ state_estimate_t state_estimation_get_state()
     log_f(M2T_CH_SE_T_H, dt, x_out.h);
     log_f(M2T_CH_SE_V_A, x_out.v, x_out.a);
     m2status_set_se_pred(dt, x_out.h, x_out.v, x_out.a);
+    m2status_stateestimation_status(STATUS_OK);
 
     /*
     sbp_counter++;

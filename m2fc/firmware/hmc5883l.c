@@ -170,9 +170,10 @@ void hmc5883l_wakeup(EXTDriver *extp, expchannel_t channel)
     (void)extp;
     (void)channel;
     chSysLockFromIsr();
-    if(tpHMC5883L != NULL && tpHMC5883L->p_state != THD_STATE_READY)
-    {
+    if(tpHMC5883L != NULL && tpHMC5883L->p_state != THD_STATE_READY) {
         chSchReadyI(tpHMC5883L);
+    } else {
+        m2status_magno_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
     }
     tpHMC5883L = NULL;
     chSysUnlockFromIsr();

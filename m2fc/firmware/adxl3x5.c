@@ -28,8 +28,8 @@ static void adxl3x5_init(SPIDriver* SPID, uint8_t x, int16_t *axis, int16_t *g);
 static float adxl3x5_accels_to_axis(int16_t *accels, int16_t axis, int16_t g);
 static void adxl3x5_sad(void);
 
-static Thread *tp345 = NULL;
-static Thread *tp375 = NULL;
+static BinarySemaphore bs345;
+static BinarySemaphore bs375;
 
 /* Die obviously */
 static void adxl3x5_sad(void)
@@ -226,11 +226,12 @@ void adxl345_wakeup(EXTDriver *extp, expchannel_t channel)
     (void)channel;
 
     chSysLockFromIsr();
-    if(tp345 != NULL && tp345->p_state != THD_STATE_READY) {
-        chSchReadyI(tp345);
-    } else {
-        m2status_lg_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
-    }
+    /*if(tp345 != NULL && tp345->p_state != THD_STATE_READY) {*/
+        /*chSchReadyI(tp345);*/
+    /*} else {*/
+        /*m2status_lg_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);*/
+    /*}*/
+    chBSemSignalI(&bs345);
     chSysUnlockFromIsr();
 }
 
@@ -240,11 +241,12 @@ void adxl375_wakeup(EXTDriver *extp, expchannel_t channel)
     (void)channel;
 
     chSysLockFromIsr();
-    if(tp375 != NULL && tp375->p_state != THD_STATE_READY) {
-        chSchReadyI(tp375);
-    } else {
-        m2status_hg_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
-    }
+    /*if(tp375 != NULL && tp375->p_state != THD_STATE_READY) {*/
+        /*chSchReadyI(tp375);*/
+    /*} else {*/
+        /*m2status_hg_accel_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);*/
+    /*}*/
+    chBSemSignalI(&bs375);
     chSysUnlockFromIsr();
 }
 
@@ -275,6 +277,7 @@ msg_t adxl345_thread(void *arg)
 
     m2status_lg_accel_status(STATUS_WAIT);
     chRegSetThreadName("ADXL345");
+    chBSemInit(&bs345, true);
 
     spiStart(&ADXL345_SPID, &spi_cfg);
     adxl3x5_init(&ADXL345_SPID, 4, &axis, &g);
@@ -289,11 +292,12 @@ msg_t adxl345_thread(void *arg)
 
         /* Sleep until DRDY */
         chSysLock();
-        tp345 = chThdSelf();
-        chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
-        m2status_lg_accel_status(STATUS_OK);
-        tp345 = NULL;
+        chBSemWaitS(&bs345);
+        /*tp345 = chThdSelf();*/
+        /*chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);*/
+        /*tp345 = NULL;*/
         chSysUnlock();
+        m2status_lg_accel_status(STATUS_OK);
     }
 }
 
@@ -314,6 +318,7 @@ msg_t adxl375_thread(void *arg)
 
     m2status_hg_accel_status(STATUS_WAIT);
     chRegSetThreadName("ADXL375");
+    chBSemInit(&bs375, true);
 
     spiStart(&ADXL375_SPID, &spi_cfg);
     adxl3x5_init(&ADXL375_SPID, 7, &axis, &g);
@@ -328,10 +333,11 @@ msg_t adxl375_thread(void *arg)
 
         /* Sleep until DRDY */
         chSysLock();
-        tp375 = chThdSelf();
-        chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);
-        m2status_hg_accel_status(STATUS_OK);
-        tp345 = NULL;
+        chBSemWaitTimeoutS(&bs375, 100);
+        /*tp375 = chThdSelf();*/
+        /*chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, 100);*/
+        /*tp345 = NULL;*/
         chSysUnlock();
+        m2status_hg_accel_status(STATUS_OK);
     }
 }

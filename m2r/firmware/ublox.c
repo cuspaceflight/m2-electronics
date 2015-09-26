@@ -403,8 +403,15 @@ static void ublox_state_machine(uint8_t *buf, size_t num_new_bytes)
                             /* PVT */
                             memcpy(nav_pvt.payload, payload, length);
                             memcpy(&pvt, payload, length);
-                            /* Send the PVT to dispatch */
-                            dispatch_pvt(pvt);
+                            m2status_set_gps_time(
+                                pvt.year&0xFF, (pvt.year>>8)&0xFF,
+                                pvt.month, pvt.day, pvt.hour, pvt.minute,
+                                pvt.second, pvt.valid);
+                            m2status_set_gps_pos(pvt.lat, pvt.lon);
+                            m2status_set_gps_alt(pvt.height, pvt.h_msl);
+                            m2status_set_gps_status(pvt.fix_type,
+                                                    pvt.flags, pvt.num_sv);
+
                             m2status_gps_status(STATUS_OK);
                         } else {
                             m2status_gps_status(STATUS_ERR);

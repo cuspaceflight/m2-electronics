@@ -147,19 +147,25 @@ int main(void) {
     Thread* cfg_tp = chThdCreateStatic(waConfig, sizeof(waConfig),
                                        NORMALPRIO, config_thread, NULL);
     while(cfg_tp->p_state != THD_STATE_FINAL) chThdSleepMilliseconds(10);
+    if(conf.location == CFG_M2FC_BODY)
+        LocalStatus = &M2FCBodyStatus;
+    else if(conf.location == CFG_M2FC_NOSE)
+        LocalStatus = &M2FCNoseStatus;
+    if(conf.config_loaded)
+        m2status_config_status(STATUS_OK);
+    else
+        m2status_config_status(STATUS_ERR);
 
     /* Activate the EXTI pin change interrupts */
     extStart(&EXTD1, &extcfg);
 
     /* Start module threads */
     m2serial_shell = m2fc_shell_run;
+    M2SerialSD = &SD1;
+    sdStart(M2SerialSD, NULL);
     chThdCreateStatic(waM2Serial, sizeof(waM2Serial), HIGHPRIO,
                       m2serial_thread, NULL);
 
-    if(conf.location == CFG_M2FC_BODY)
-        LocalStatus = &M2FCBodyStatus;
-    else if(conf.location == CFG_M2FC_NOSE)
-        LocalStatus = &M2FCNoseStatus;
     chThdCreateStatic(waM2Status, sizeof(waM2Status), HIGHPRIO,
                       m2status_thread, NULL);
 
@@ -184,16 +190,22 @@ int main(void) {
     if(conf.use_gyro) {
         chThdCreateStatic(waL3G4200D, sizeof(waL3G4200D), NORMALPRIO,
                           l3g4200d_thread, NULL);
+    } else {
+        m2status_gyro_status(STATUS_OK);
     }
 
     if(conf.use_magno) {
         chThdCreateStatic(waHMC5883L, sizeof(waHMC5883L), NORMALPRIO,
                           hmc5883l_thread, NULL);
+    } else {
+        m2status_magno_status(STATUS_OK);
     }
 
     if(conf.use_adc) {
         chThdCreateStatic(waAnalogue, sizeof(waAnalogue), NORMALPRIO,
                           analogue_thread, NULL);
+    } else {
+        m2status_adc_status(STATUS_OK);
     }
 
     /* Let the main thread idle now. */

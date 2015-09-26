@@ -111,7 +111,7 @@ msg_t pyro_continuity_thread(void *arg) {
 
     while(TRUE) {
         if(pyro_continuities()) {
-            m2status_pyro_status(STATUS_WAIT);
+            m2status_pyro_status(STATUS_OK);
             palSetPad(GPIOA, GPIOA_LED_PYROS);
             chThdSleepMilliseconds(10);
             palClearPad(GPIOA, GPIOA_LED_PYROS);

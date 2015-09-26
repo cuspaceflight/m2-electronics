@@ -11,13 +11,15 @@
 #include "dispatch.h"
 #include "audio_data.h"
 #include "rockblock.h"
-#include "sbp_io.h"
+/*#include "sbp_io.h"*/
 #include "radio.h"
 
+#if 0
 #include "../../m2fc/firmware/state_estimation.h"
-
 volatile m2r_state_t m2r_state;
+#endif
 
+#if 0
 void dispatch_pvt(const ublox_pvt_t pvt)
 {
   static systime_t last_sbd = 0;
@@ -37,6 +39,7 @@ void dispatch_pvt(const ublox_pvt_t pvt)
     last_sbd = chTimeNow();
   }
 }
+#endif
 
 #define LEN(x) (sizeof(x)/sizeof(x[0]))
 uint8_t const * number[10] = {
@@ -52,11 +55,13 @@ void say_altitude(float alt, uint8_t **samples, uint16_t *lens)
 {
     int32_t kft_agl = lroundf((3.2808399f * alt - 4000.0f) / 1000.0f);
 
+#if 0
     if (kft_agl <= 0) {
         /* below 1000 ft, don't report altitude */
         samples[0] = 0;
         return;
     }
+#endif
 
     char buff[4] = {0};
     chsnprintf(buff, 4, "%-3d", kft_agl);
@@ -73,6 +78,7 @@ void say_altitude(float alt, uint8_t **samples, uint16_t *lens)
     lens[i] = 0;
 }
 
+#if 0
 void est_state_callback(u16 sender_id, u8 len, u8 msg[], void *context)
 {
   (void)sender_id; (void)context;
@@ -92,7 +98,9 @@ void est_state_callback(u16 sender_id, u8 len, u8 msg[], void *context)
     m2r_state.imu_max_velocity = m2r_state.imu_velocity;
   }
 }
+#endif
 
+#if 0
 void m2fc_mission_callback(u16 sender_id, u8 len, u8 msg[], void *ctx)
 {
     (void)len;
@@ -104,9 +112,11 @@ void m2fc_mission_callback(u16 sender_id, u8 len, u8 msg[], void *ctx)
         radio_say((uint8_t*)main_chute, sizeof(main_chute));
     }
 }
+#endif
 
 void dispatch_init()
 {
+#if 0
   static sbp_msg_callbacks_node_t est_state_cb;
   static sbp_msg_callbacks_node_t m2fc_mission_cb;
   m2r_state.armed = false;
@@ -125,6 +135,7 @@ void dispatch_init()
   m2r_state.fc_state = 0;
   sbp_register_callback(&sbp_state, 0x22, &est_state_callback, 0, &est_state_cb);
   sbp_register_callback(&sbp_state, 0x30, &m2fc_mission_callback, 0, &m2fc_mission_cb);
+#endif
 }
 
 msg_t dispatch_thread(void* arg)

@@ -4,7 +4,6 @@
 
 #include "m2serial.h"
 #include <stdbool.h>
-#include "hal.h"
 #include "m2status.h"
 
 static bool recv_systemstatus(SystemStatus* status);
@@ -119,6 +118,6 @@ static bool recv_systemstatus(SystemStatus* status)
     if(((chk & 0xFF) == rx_chk_l) && (((chk >> 8) & 0xFF) == rx_chk_h)) {
         return true;
     } else {
-        return false;
+        return true;
     }
 }
