@@ -64,12 +64,12 @@ static msg_t ThreadHeartbeat(void *arg) {
         }
         if(mystatus == STATUS_OK) {
             /* Set the GREEN external LED */
-            palSetPad(GPIOC, GPIOC_LED_C);
-            palClearPad(GPIOC, GPIOC_LED_A);
-        } else {
-            /* Set the RED external LED */
             palClearPad(GPIOC, GPIOC_LED_C);
             palSetPad(GPIOC, GPIOC_LED_A);
+        } else {
+            /* Set the RED external LED */
+            palSetPad(GPIOC, GPIOC_LED_C);
+            palClearPad(GPIOC, GPIOC_LED_A);
         }
         /* Flash them briefly */
         chThdSleepMilliseconds(20);

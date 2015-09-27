@@ -1,11 +1,19 @@
-Test M2Status in M2FC via shell
-Test M2Serial in M2FC via connecting to serial port
+x Test M2Status in M2FC via shell
+x Test M2Serial in M2FC via connecting to serial port
 Test M2Serial/M2Status in M2R via debug with both running and connected
+
+Fix M2R RTTY output
+
+Test M2R RockBLOCK
 
 x Generate new radio messages in M2R
 
-M2R beeper based on M2Status
+x M2R beeper based on M2Status
 x M2FC LED based on M2Status
+
+M2R Dispatch
+    Hook in to M2Status somehow (timer?)
+    Send RockBLOCK msgs
 
 M2RL to send/rx packets
 
@@ -33,10 +41,10 @@ x    Transmits and receives packets over direct serial connection and opens
 x     shells on the serial link, with 0x7D7D7D7D as the code perhaps
 
 Update radio transmission from M2R
-    Just send stringy packets that concisely summarise the state of M2Status,
-    via RTTY for now, but maybe bump up to 300bd
+x    Just send stringy packets that concisely summarise the state of M2Status,
+x    via RTTY for now, but maybe bump up to 300bd
     Wishlist: send in some priority order actual packets from M2Status via BPSK
-    Wishlist: voice announcements
+?    Wishlist: voice announcements
 
 M2R RockBLOCK
 x   Check code over

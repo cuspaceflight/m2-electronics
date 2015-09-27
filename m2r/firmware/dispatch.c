@@ -141,8 +141,10 @@ void dispatch_init()
 msg_t dispatch_thread(void* arg)
 {
     (void)arg;
-    while(TRUE)
-        chThdSleepMilliseconds(1000);
+    while(true) {
+        chThdSleepMilliseconds(60000);
+        send_sbd_posn();
+    }
 }
 
 

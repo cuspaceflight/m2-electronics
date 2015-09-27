@@ -24,6 +24,7 @@ static WORKING_AREA(waThreadRadio, 2048);
 static WORKING_AREA(waM2Serial, 1024);
 static WORKING_AREA(waM2Status, 1024);
 /*static WORKING_AREA(waThreadSBP, 2048);*/
+static WORKING_AREA(waDispatch, 1024);
 
 static msg_t ThreadHeartbeat(void *arg) {
     (void)arg;
@@ -31,10 +32,10 @@ static msg_t ThreadHeartbeat(void *arg) {
 
     while (TRUE) {
         palSetPad(GPIOB, GPIOB_LED_STATUS);
-        /*palSetPad(GPIOB, GPIOB_BUZZER);*/
+        palSetPad(GPIOB, GPIOB_BUZZER);
         IWDG->KR = 0xAAAA;
 
-        if(M2FCBodyStatus.m2fcbody == STATUS_OK &&
+        if(/*M2FCBodyStatus.m2fcbody == STATUS_OK &&*/
            M2FCNoseStatus.m2fcnose == STATUS_OK)
         {
             chThdSleepMilliseconds(50);
@@ -83,6 +84,9 @@ int main(void) {
 
     chThdCreateStatic(waThreadRadio, sizeof(waThreadRadio), NORMALPRIO,
                       radio_thread, NULL);
+
+    chThdCreateStatic(waDispatch, sizeof(waDispatch), NORMALPRIO,
+                      dispatch_thread, NULL);
 
     chThdSetPriority(LOWPRIO);
     chThdSleep(TIME_INFINITE);

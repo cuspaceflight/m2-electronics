@@ -194,6 +194,8 @@ static void radio_ssb_timer(GPTDriver *gptd)
 
 void radio_say(u8* buf, u16 len)
 {
+    (void)buf;
+    (void)len;
     /*radio_fm_audioqueue[0] = buf;*/
     /*radio_fm_audioqueue[1] = 0;*/
     /*radio_fm_audioqueuelens[0] = len;*/

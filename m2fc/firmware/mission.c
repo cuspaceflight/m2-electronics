@@ -56,7 +56,7 @@ static state_t do_state_pad(instance_data_t *data)
 {
     state_estimation_trust_barometer = true;
     data->h_ground = data->state.h;
-    if(chTimeNow() < 500)
+    if(chTimeNow() < 30000)
         return STATE_PAD;
     else if(data->state.a > conf.ignition_accel)
         return STATE_IGNITION;

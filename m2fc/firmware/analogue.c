@@ -38,7 +38,7 @@ static volatile adcsample_t samples_1[ADC_NUM_CHANNELS * ADC_BUF_DEPTH];
 static volatile adcsample_t samples_2[ADC_NUM_CHANNELS * ADC_BUF_DEPTH];
 static volatile adcsample_t samples_3[ADC_NUM_CHANNELS * ADC_BUF_DEPTH];
 
-static Thread *tp = NULL;
+static BinarySemaphore bsAnalogue;
 
 /*
  * Configure a GPT object
@@ -143,11 +143,12 @@ static void adc_call_back(ADCDriver *adc_driver_ptr, adcsample_t *buffer, size_t
     (void)n;
 
     chSysLockFromIsr();
-    if(tp != NULL && tp->p_state != THD_STATE_READY) {
-        chSchReadyI(tp);
-    } else {
-        m2status_adc_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);
-    }
+    /*if(tp != NULL && tp->p_state != THD_STATE_READY) {*/
+        /*chSchReadyI(tp);*/
+    /*} else {*/
+        /*m2status_adc_status(STATUS_ERR_CALLBACK_WHILE_ACTIVE);*/
+    /*}*/
+    chBSemSignalI(&bsAnalogue);
     chSysUnlockFromIsr();
 }
 
@@ -212,6 +213,7 @@ msg_t analogue_thread(void *args)
 
     m2status_adc_status(STATUS_WAIT);
     chRegSetThreadName("Analogue");
+    chBSemInit(&bsAnalogue, true);
 
     adcInit();
     adcStart(&ADCD1, NULL);
@@ -245,8 +247,9 @@ msg_t analogue_thread(void *args)
      */
     while(true) {
         chSysLock();
-        tp = chThdSelf();
-        chSchGoSleepS(THD_STATE_SUSPENDED);
+        /*tp = chThdSelf();*/
+        /*chSchGoSleepS(THD_STATE_SUSPENDED);*/
+        chBSemWaitS(&bsAnalogue);
         chSysUnlock();
         save_results();
     }
