@@ -78,49 +78,49 @@ with open(sys.argv[1], "rb") as f:
         if len(packet) != 16:
             break
         
-        timestamp = struct.unpack("I", packet[:4])[0]
-        mode, channel, _, _ = struct.unpack("BBBB", packet[4:8])
+        timestamp = struct.unpack("I", packet[8:12])[0]
+        mode, channel, _, _ = struct.unpack("BBBB", packet[12:])
         if timestamp < last_timestamp:
             t_correction += 0xFFFFFFFF
         last_timestamp = timestamp
         timestamp += t_correction
 
         if channel == 0x11:
-            data = struct.unpack("hhhh", packet[8:])
+            data = struct.unpack("hhhh", packet[:8])
             axis, grav, _, _ = data
             print("LGA cal axis={} grav={}".format(axis, grav))
         if channel == 0x12:
-            data = struct.unpack("hhhh", packet[8:])
+            data = struct.unpack("hhhh", packet[:8])
             axis, grav, _, _ = data
             print("HGA cal axis={} grav={}".format(axis, grav))
         if channel == 0x50:
-            data = struct.unpack("ff", packet[8:])
+            data = struct.unpack("ff", packet[:8])
             se_t.append(timestamp / 168E6)
             se_h.append(data[1])
         if channel == 0x51:
-            data = struct.unpack("ff", packet[8:])
+            data = struct.unpack("ff", packet[:8])
             se_v.append(data[0])
             se_a.append(data[1])
         if channel == 0x52:
-            data = struct.unpack("ff", packet[8:])
+            data = struct.unpack("ff", packet[:8])
             baro_t.append(timestamp / 168E6)
             baro_h.append(p2a(data[0]))
         if channel == 0x53:
-            data = struct.unpack("ff", packet[8:])
+            data = struct.unpack("ff", packet[:8])
             accel_t.append(timestamp / 168E6)
             accel_a.append(data[0])
         if channel == 0x40:
-            data = struct.unpack("ii", packet[8:])
+            data = struct.unpack("ii", packet[:8])
             mission_t.append(timestamp / 168E6)
             mission_s.append(data[1])
         if channel == 0x20:
-            x, y, z, _ = struct.unpack("hhhh", packet[8:])
+            x, y, z, _ = struct.unpack("hhhh", packet[:8])
             lga_y.append(y)
         if channel == 0x21:
-            x, y, z, _ = struct.unpack("hhhh", packet[8:])
+            x, y, z, _ = struct.unpack("hhhh", packet[:8])
             hga_y.append(y)
         if channel == 0x61:
-            ch1, ch2, ch3, _ = struct.unpack("hhhh", packet[8:])
+            ch1, ch2, ch3, _ = struct.unpack("hhhh", packet[:8])
             pyro_fire_t.append(timestamp / 168E6)
             if ch1:
                 pyro_fire_c.append(1)
@@ -138,13 +138,18 @@ with open(sys.argv[1], "rb") as f:
 #plt.show()
 
 # if we got a p1 and no p2, fix
-se_t = se_t[:len(se_v)]
-se_h = se_h[:len(se_v)]
+se_len = min(len(se_t), len(se_h), len(se_v), len(se_a))
+print("Got {} time, {} h, {} v, {} a, cutting to {}".format(
+      len(se_t), len(se_h), len(se_v), len(se_a), se_len))
+se_t = np.array(se_t[:se_len])
+se_h = np.array(se_h[:se_len])
+se_v = np.array(se_v[:se_len])
+se_a = np.array(se_v[:se_len])
 
 plt.subplot(3, 1, 1)
 plt.plot(baro_t, baro_h, 'x', color='k', label="Sensor Readings")
 plt.plot(se_t, se_h, color='b', lw=3, label="State Estimate")
-plt.ylim((-100, 1000))
+# plt.ylim((-100, 1000))
 for t, s in zip(mission_t, mission_s):
     plt.axvline(t)
     ydisp = plt.gca().transAxes.transform((0, 1 - s/10.0))[1]
@@ -157,11 +162,14 @@ for t, c in zip(pyro_fire_t, pyro_fire_c):
     plt.axvline(t, color='r')
     plt.text(t, 0, str(c), color='r')
 plt.ylabel("Altitude (m)")
-plt.xlim((390, 470))
+plt.xlim((8960, 9000))
 plt.legend()
 plt.grid()
 
 plt.subplot(3, 1, 2)
+print(se_t.shape)
+print(se_h.shape)
+print(se_v.shape)
 plt.plot(se_t, se_v, color='g', label="State Estimate")
 for t, s in zip(mission_t, mission_s):
     plt.axvline(t)
@@ -172,7 +180,7 @@ for t, s in zip(mission_t, mission_s):
     except KeyError:
         print("Unknown mission state t={} s={}".format(t, s))
 plt.ylabel("Velocity (m/s)")
-plt.xlim((390, 470))
+plt.xlim((8960, 9000))
 plt.legend()
 plt.legend()
 plt.grid()
@@ -180,8 +188,8 @@ plt.grid()
 plt.subplot(3, 1, 3)
 plt.plot(accel_t, accel_a, 'x', color='k', label="Sensor Readings")
 plt.plot(se_t, se_a, color='r', lw=3, label="State Estimate")
-plt.xlim((390, 470))
-plt.ylim((-30, 200))
+plt.xlim((8960, 9000))
+# plt.ylim((-30, 200))
 plt.ylabel("Acceleration (m/s/s)")
 for t, s in zip(mission_t, mission_s):
     plt.axvline(t)

@@ -84,6 +84,8 @@ bool m2telem_deframe(uint8_t* buf, size_t buf_len,
 #define M2T_ORIGIN_M2R              (3)
 #define M2T_ORIGIN_GROUND           (15)
 
+extern const char m2telem_origin_names[16][9];
+
 
 /*
  * Channel constants ==========================================================
@@ -140,5 +142,13 @@ bool m2telem_deframe(uint8_t* buf, size_t buf_len,
 #define M2T_CH_GPS_POS              (0x72)
 #define M2T_CH_GPS_ALT              (0x73)
 #define M2T_CH_GPS_STATUS           (0x74)
+
+typedef enum {
+    M2TELEM_C, M2TELEM_I64, M2TELEM_U64, M2TELEM_I32, M2TELEM_U32,
+    M2TELEM_I16, M2TELEM_U16, M2TELEM_I8, M2TELEM_U8, M2TELEM_F, M2TELEM_D
+} m2telem_format;
+
+extern const char m2telem_channel_names[256][32];
+extern const m2telem_format m2telem_channel_formats[256];
 
 #endif /* M2_TELEM_H */

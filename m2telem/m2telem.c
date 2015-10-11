@@ -108,3 +108,77 @@ bool m2telem_deframe(uint8_t* buf, size_t buf_len,
 
     return ret;
 }
+
+const char m2telem_origin_names[16][9] = {
+    "", "M2FCBODY", "M2FCNOSE", "M2R",
+    "", "", "", "",
+    "", "", "", "",
+    "", "", "", "GROUND"
+};
+
+const char m2telem_channel_names[256][32] = {
+    "SYS_INIT", "SYS_VERSION", "SYS_STATS", "SYS_STATUS_1", "SYS_STATUS_2",
+    "SYS_STATUS_3", "SYS_STATUS_4", "", "", "", "", "", "", "", "", "",
+
+    "CAL_TFREQ", "CAL_LG_ACCEL", "CAL_HG_ACCEL", "CAL_BARO_1", "CAL_BARO_2",
+    "", "", "", "", "", "", "", "", "", "", "",
+
+    "IMU_LG_ACCEL", "IMU_HG_ACCEL", "IMU_BARO", "IMU_GYRO", "IMU_MAGNO",
+    "", "", "", "", "", "", "", "", "", "", "",
+
+    "ADC_BATT", "ADC_STRAIN", "ADC_THERMO", "", "", "", "", "", "", "",
+    "", "", "", "", "", "",
+
+    "STATE_MISSION", "", "", "", "", "", "", "", "", "", "", "", "", "",
+    "", "",
+
+    "SE_T_H", "SE_V_A", "SE_PRESSURE", "SE_ACCEL", "", "", "", "",
+    "", "", "", "", "", "", "", "",
+
+    "PYRO_CONT", "PYRO_FIRE", "", "", "", "", "", "",
+    "", "", "", "", "", "", "", "",
+
+    "GPS_TIME", "GPS_POS", "GPS_ALT", "GPS_STATUS", "", "", "", "",
+    "", "", "", "", "", "", "", ""
+};
+
+const m2telem_format m2telem_channel_formats[256] = {
+    [M2T_CH_SYS_INIT] = M2TELEM_C,
+    [M2T_CH_SYS_VERSION] = M2TELEM_C,
+    [M2T_CH_SYS_STATS] = M2TELEM_U8,
+    [M2T_CH_SYS_STATUS_1] = M2TELEM_U8,
+    [M2T_CH_SYS_STATUS_2] = M2TELEM_U8,
+    [M2T_CH_SYS_STATUS_3] = M2TELEM_U8,
+    [M2T_CH_SYS_STATUS_4] = M2TELEM_U8,
+
+    [M2T_CH_CAL_TFREQ] = M2TELEM_U32,
+    [M2T_CH_CAL_LG_ACCEL] = M2TELEM_I16,
+    [M2T_CH_CAL_HG_ACCEL] = M2TELEM_I16,
+    [M2T_CH_CAL_BARO_1] = M2TELEM_U8,
+    [M2T_CH_CAL_BARO_2] = M2TELEM_U8,
+
+    [M2T_CH_IMU_LG_ACCEL] = M2TELEM_I16,
+    [M2T_CH_IMU_HG_ACCEL] = M2TELEM_I16,
+    [M2T_CH_IMU_BARO] = M2TELEM_I32,
+    [M2T_CH_IMU_GYRO] = M2TELEM_I16,
+    [M2T_CH_IMU_MAGNO] = M2TELEM_I16,
+
+    [M2T_CH_ADC_BATT] = M2TELEM_I16,
+    [M2T_CH_ADC_STRAIN] = M2TELEM_I16,
+    [M2T_CH_ADC_THERMO] = M2TELEM_I16,
+
+    [M2T_CH_STATE_MISSION] = M2TELEM_I32,
+    
+    [M2T_CH_SE_T_H] = M2TELEM_F,
+    [M2T_CH_SE_V_A] = M2TELEM_F,
+    [M2T_CH_SE_PRESSURE] = M2TELEM_F,
+    [M2T_CH_SE_ACCEL] = M2TELEM_F,
+
+    [M2T_CH_PYRO_CONT] = M2TELEM_I16,
+    [M2T_CH_PYRO_FIRE] = M2TELEM_I16,
+
+    [M2T_CH_GPS_TIME] = M2TELEM_U8,
+    [M2T_CH_GPS_POS] = M2TELEM_I32,
+    [M2T_CH_GPS_ALT] = M2TELEM_I32,
+    [M2T_CH_GPS_STATUS] = M2TELEM_I8
+};
