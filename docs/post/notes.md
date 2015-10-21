@@ -21,9 +21,3 @@ GitHub repo: https://github.com/cuspaceflight/m2-electronics
 Photos: https://www.flickr.com/photos/randomskk/albums/72157645881007740
 
 ## Thoughts drop
-Mention Metrons not having enough DC so needing pulses, which worked but was 
-not ideal.
-Magno was unreliable at best. Gyro wasn't great either. I2C sensors...
-SD card came off. Use eMMC?
-M2RL was a bit weird. Could have been integrated onto the boards. Or don't 
-design like that. Maybe good for multiple stages though.
