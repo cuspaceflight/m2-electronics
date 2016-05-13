@@ -42,8 +42,37 @@ static void radio_generate_buffers()
     }
 }
 
+
+uint16_t crc_update(uint16_t crc, uint8_t data);
+uint16_t sentence_calc_checksum(char* buf);
+
+uint16_t crc_update(uint16_t crc, uint8_t data) {
+    int i;
+
+    crc = crc ^ ((uint16_t)data << 8);
+    for (i=0; i<8; i++)
+    {
+        if (crc & 0x8000)
+            crc = (crc << 1) ^ 0x1021;
+        else
+            crc <<= 1;
+    }
+
+    return crc;
+}
+
+uint16_t sentence_calc_checksum(char* buf) {
+    uint16_t crc = 0xFFFF;
+    uint8_t i;
+    for(i=0; i<strlen(buf); i++)
+        crc = crc_update(crc, buf[i]);
+    return crc;
+}
+
+uint16_t packet_counter = 0;
 static void radio_make_telem_string(char* buf, size_t len)
 {
+#if 0
     int n = 0;
     n += chsnprintf(buf, len,
                    "UUU\r\n\r\n AD6AM AD6AM %02d:%02d:%02d %.5f,%.5f (%s, %d)"
@@ -66,6 +95,20 @@ static void radio_make_telem_string(char* buf, size_t len)
     n += chsnprintf(buf+n, len-n, "\r\nM2FCNose (%s): ",
                     StateNames[M2FCNoseStatus.latest.mc_state]);
     n += m2status_write_status_summary(&M2FCNoseStatus, buf+n, len-n);
+#endif
+
+    packet_counter += 1;
+    int n = 0;
+    n += chsnprintf(buf, len,
+                    "$$$M2R,%d,%02d:%02d:%02d,%.5f,%.5f,%d,%d",
+                    packet_counter, M2RStatus.latest.gps_t_hour,
+                    M2RStatus.latest.gps_t_min, M2RStatus.latest.gps_t_sec,
+                    (double)M2RStatus.latest.gps_lat*(double)1e-7f,
+                    (double)M2RStatus.latest.gps_lng*(double)1e-7f,
+                    M2RStatus.latest.gps_alt / 1000,
+                    M2RStatus.latest.gps_num_sv);
+    uint16_t checksum = sentence_calc_checksum(buf+3);
+    n += chsnprintf(buf+n, len-n, "*%04X\n", checksum);
 }
 
 uint8_t *radio_fm_sampbuf;
@@ -84,6 +127,8 @@ static void radio_fm_timer(GPTDriver *gptd)
 {
     uint8_t i, byte;
     (void)gptd;
+
+#if 0
     /* If we just wrote the last sample... */
     if(radio_fm_sampidx >= radio_fm_samplen) {
         radio_fm_sampidx = 0;
@@ -150,11 +195,12 @@ static void radio_fm_timer(GPTDriver *gptd)
     DAC->DHR8R1 = radio_fm_sampbuf[radio_fm_sampidx];
     radio_fm_sampidx++;
 
+#endif
+
 }
 
-#if 0
 uint8_t radio_ssb_bitidx = 0;
-uint8_t radio_ssb_bitbuf[10];
+uint8_t radio_ssb_bitbuf[11];
 uint8_t radio_ssb_byteidx = 0;
 uint8_t radio_ssb_bytebuf[MSGLEN];
 static void radio_ssb_timer(GPTDriver *gptd)
@@ -163,34 +209,34 @@ static void radio_ssb_timer(GPTDriver *gptd)
     (void)gptd;
 
     if(radio_ssb_bitbuf[radio_ssb_bitidx]) {
-        DAC->DHR8R2 = 100;
+        DAC->DHR8R1 = 100;
     } else {
-        DAC->DHR8R2 = 183;
+        DAC->DHR8R1 = 110;
     }
 
     radio_ssb_bitidx++;
 
-    if(radio_ssb_bitidx == 10) {
+    if(radio_ssb_bitidx == 11) {
         radio_ssb_bitidx = 0;
         radio_ssb_byteidx++;
         if(radio_ssb_bytebuf[radio_ssb_byteidx] == 0x00) {
             /* End of message */
             radio_ssb_byteidx = 0;
-            radio_make_telem_string(radio_ssb_bytebuf, MSGLEN);
+            radio_make_telem_string((char*)radio_ssb_bytebuf, MSGLEN);
         } else {
             /* START bit */
-            radio_ssb_bitbuf[0] = 1;
+            radio_ssb_bitbuf[0] = 0;
             /* Data bits, 7bit ASCII */
             byte = radio_ssb_bytebuf[radio_ssb_byteidx];
             for(i=0; i<7; i++)
-                radio_ssb_bitbuf[i + 1] = byte & (1<<i);
+                radio_ssb_bitbuf[i + 1] = (byte & (1<<i)) >> i;
             /* Stop bits */
             radio_ssb_bitbuf[8] = 1;
             radio_ssb_bitbuf[9] = 1;
+            radio_ssb_bitbuf[10] = 1;
         }
     }
 }
-#endif
 
 void radio_say(u8* buf, u16 len)
 {
@@ -226,8 +272,8 @@ static psk_cb(GPTDriver* gptd)
 #endif
 
 static const GPTConfig gptcfg1 = {
-    48000,
-    radio_fm_timer,
+    32000,
+    radio_ssb_timer,
     0
 };
 
@@ -310,10 +356,11 @@ msg_t radio_thread(void* arg)
 #endif
 
     /* Compute the sine waves for AFSK */
-    radio_generate_buffers();
+    /*radio_generate_buffers();*/
 
-    chsnprintf((char*)radio_fm_bytebuf, MSGLEN,
-               "AD6AM AD6AM MARTLET 2 FM INIT\r\n");
+    /*chsnprintf((char*)radio_fm_bytebuf, MSGLEN,*/
+               /*"AD6AM AD6AM MARTLET 2 FM INIT\r\n");*/
+    chsnprintf((char*)radio_ssb_bytebuf, MSGLEN, "M2R M2R SSB INIT\r\n");
 
     /* Enable DAC */
     RCC->APB1ENR |= (1<<29);
@@ -327,8 +374,9 @@ msg_t radio_thread(void* arg)
                  /*radio_fm_audioqueuelens);*/
 
     /* Enable 12kHz FM Radio timer */
+    /* Enable 50Hz SSB timer */
     gptStart(&GPTD2, &gptcfg1);
-    gptStartContinuous(&GPTD2, 4);
+    gptStartContinuous(&GPTD2, 640);
 
     m2status_radio_status(STATUS_OK);
 

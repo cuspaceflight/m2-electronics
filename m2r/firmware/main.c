@@ -32,7 +32,7 @@ static msg_t ThreadHeartbeat(void *arg) {
 
     while (TRUE) {
         palSetPad(GPIOB, GPIOB_LED_STATUS);
-        palSetPad(GPIOB, GPIOB_BUZZER);
+        /*palSetPad(GPIOB, GPIOB_BUZZER);*/
         IWDG->KR = 0xAAAA;
 
         if(/*M2FCBodyStatus.m2fcbody == STATUS_OK &&*/
@@ -44,7 +44,7 @@ static msg_t ThreadHeartbeat(void *arg) {
         }
 
         palClearPad(GPIOB, GPIOB_LED_STATUS);
-        palClearPad(GPIOB, GPIOB_BUZZER);
+        /*palClearPad(GPIOB, GPIOB_BUZZER);*/
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
     }
