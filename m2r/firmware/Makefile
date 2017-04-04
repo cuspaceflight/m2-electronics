@@ -92,13 +92,11 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/evtimer.c \
        $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/memstreams.c \
-			 ../../sbp/sbp.c ../../sbp/edc.c \
 			 ../../m2telem/m2telem.c \
 			 ../../m2status/m2status.c \
 			 ../../m2serial/m2serial.c \
 			 ../../m2rl/m2rl.c \
-       main.c radio.c dispatch.c ublox.c rockblock.c \
-       audio_data.c sbp_io.c m2r_shell.c
+       main.c radio.c ublox.c m2r_shell.c pyro.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

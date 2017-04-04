@@ -94,7 +94,6 @@ static msg_t sh_put(void *ip, uint8_t b)
 {
     (void)ip;
     return putchar(b);
-    return b;
 }
 
 static msg_t sh_get(void *ip)

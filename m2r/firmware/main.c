@@ -9,11 +9,9 @@
 #include "ch.h"
 #include "hal.h"
 
-#include "sbp_io.h"
 #include "ublox.h"
 #include "radio.h"
-#include "dispatch.h"
-#include "rockblock.h"
+#include "pyro.h"
 #include "m2r_shell.h"
 #include "m2serial.h"
 #include "m2status.h"
@@ -21,10 +19,9 @@
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waThreadUblox, 4096);
 static WORKING_AREA(waThreadRadio, 2048);
+static WORKING_AREA(waThreadPyro, 512);
 static WORKING_AREA(waM2Serial, 1024);
 static WORKING_AREA(waM2Status, 1024);
-/*static WORKING_AREA(waThreadSBP, 2048);*/
-static WORKING_AREA(waDispatch, 1024);
 
 static msg_t ThreadHeartbeat(void *arg) {
     (void)arg;
@@ -32,11 +29,9 @@ static msg_t ThreadHeartbeat(void *arg) {
 
     while (TRUE) {
         palSetPad(GPIOB, GPIOB_LED_STATUS);
-        /*palSetPad(GPIOB, GPIOB_BUZZER);*/
         IWDG->KR = 0xAAAA;
 
-        if(/*M2FCBodyStatus.m2fcbody == STATUS_OK &&*/
-           M2FCNoseStatus.m2fcnose == STATUS_OK)
+        if(M2FCNoseStatus.m2fcnose == STATUS_OK)
         {
             chThdSleepMilliseconds(50);
         } else {
@@ -44,7 +39,6 @@ static msg_t ThreadHeartbeat(void *arg) {
         }
 
         palClearPad(GPIOB, GPIOB_LED_STATUS);
-        /*palClearPad(GPIOB, GPIOB_BUZZER);*/
         IWDG->KR = 0xAAAA;
         chThdSleepMilliseconds(500);
     }
@@ -57,10 +51,6 @@ int main(void) {
     chRegSetThreadName("main");
 
     LocalStatus = &M2RStatus;
-
-    /*sbp_state_init(&sbp_state);*/
-    rockblock_init();
-    dispatch_init();
 
     chThdCreateStatic(waThreadHB, sizeof(waThreadHB), LOWPRIO,
                       ThreadHeartbeat, NULL);
@@ -85,8 +75,8 @@ int main(void) {
     chThdCreateStatic(waThreadRadio, sizeof(waThreadRadio), NORMALPRIO,
                       radio_thread, NULL);
 
-    chThdCreateStatic(waDispatch, sizeof(waDispatch), NORMALPRIO,
-                      dispatch_thread, NULL);
+    chThdCreateStatic(waThreadPyro, sizeof(waThreadPyro), NORMALPRIO,
+                      pyro_thread, NULL);
 
     chThdSetPriority(LOWPRIO);
     chThdSleep(TIME_INFINITE);

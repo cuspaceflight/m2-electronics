@@ -20,7 +20,6 @@
 #include <string.h>
 #include "ublox.h"
 #include "hal.h"
-#include "dispatch.h"
 #include "m2status.h"
 
 /* uBlox I2C addresses */

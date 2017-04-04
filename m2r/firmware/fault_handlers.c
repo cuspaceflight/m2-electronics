@@ -29,7 +29,7 @@ void panic()
     {
         palSetPad(GPIOC, GPIOC_LED_EXT);
 
-        palSetPad(GPIOB, GPIOB_LED_RB);
+        palSetPad(GPIOB, GPIOB_LED_PYRO);
         palSetPad(GPIOB, GPIOB_LED_RADIO);
         palSetPad(GPIOB, GPIOB_LED_GPS);
         palSetPad(GPIOB, GPIOB_LED_STATUS);
@@ -38,7 +38,7 @@ void panic()
 
         palClearPad(GPIOC, GPIOC_LED_EXT);
 
-        palClearPad(GPIOB, GPIOB_LED_RB);
+        palClearPad(GPIOB, GPIOB_LED_PYRO);
         palClearPad(GPIOB, GPIOB_LED_RADIO);
         palClearPad(GPIOB, GPIOB_LED_GPS);
         palClearPad(GPIOB, GPIOB_LED_STATUS);
