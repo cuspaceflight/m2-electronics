@@ -94,7 +94,6 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/memstreams.c \
 			 ../../m2telem/m2telem.c \
 			 ../../m2status/m2status.c \
-			 ../../m2serial/m2serial.c \
 			 ../../m2rl/m2rl.c \
        main.c radio.c ublox.c m2r_shell.c pyro.c
 

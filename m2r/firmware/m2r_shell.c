@@ -8,6 +8,7 @@
 #include "chprintf.h"
 #include <stdio.h>
 #include "m2status.h"
+#include "pyro.h"
 
 static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
   size_t n, size;
@@ -74,6 +75,20 @@ static void cmd_version(BaseSequentialStream *chp, int argc, char* argv[]) {
     chprintf(chp, "Version: " M2R_FIRMWARE_VERSION "\r\n");
 }
 
+static void cmd_pyro_cont(BaseSequentialStream *chp, int argc, char* argv[]) {
+    (void)argc;
+    (void)argv;
+    chprintf(chp, "Pyro continuity: %d, fired: %d\r\n", pyro_cont, pyro_fired);
+}
+
+static void cmd_pyro_fire(BaseSequentialStream *chp, int argc, char* argv[]) {
+    (void)argc;
+    (void)argv;
+    chprintf(chp, "Firing...\r\n");
+    pyro_fire();
+    chprintf(chp, "Fired.\r\n");
+}
+
 struct SemihostingVMT {
     _base_sequential_stream_methods
 };
@@ -118,6 +133,8 @@ void m2r_shell_run(BaseSequentialStream *bss)
         {"rt", cmd_rt},
         {"status", m2status_shell_cmd},
         {"version", cmd_version},
+        {"pyro_cont", cmd_pyro_cont},
+        {"pyro_fire", cmd_pyro_fire},
         {NULL, NULL}
     };
 

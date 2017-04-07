@@ -411,6 +411,11 @@ static void ublox_state_machine(uint8_t *buf, size_t num_new_bytes)
                             m2status_set_gps_status(pvt.fix_type,
                                                     pvt.flags, pvt.num_sv);
 
+                            if(pvt.fix_type == 3) {
+                                palSetPad(GPIOB, GPIOB_LED_GPS);
+                            } else {
+                                palClearPad(GPIOB, GPIOB_LED_GPS);
+                            }
                             m2status_gps_status(STATUS_OK);
                         } else {
                             m2status_gps_status(STATUS_ERR);

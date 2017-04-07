@@ -9,13 +9,14 @@ bool pyro_cont = false;
 bool pyro_fired = false;
 
 bool pyro_got_continuity(void) {
-    return !palReadPad(GPIOA, GPIOA_PYRO_CONT);
+    return palReadPad(GPIOA, GPIOA_PYRO_CONT);
 }
 
 void pyro_fire(void) {
     palSetPad(GPIOA, GPIOA_PYRO_FIRE);
-    chThdSleepMilliseconds(3000);
+    chThdSleepMilliseconds(4000);
     palClearPad(GPIOA, GPIOA_PYRO_FIRE);
+    pyro_fired = true;
 }
 
 msg_t pyro_thread(void* arg)
@@ -25,21 +26,18 @@ msg_t pyro_thread(void* arg)
     chRegSetThreadName("Pyro");
 
     while(true) {
-        palSetPad(GPIOB, GPIOB_LED_PYRO);
         if(pyro_got_continuity()) {
+            palSetPad(GPIOB, GPIOB_LED_PYRO);
             pyro_cont = true;
-            chThdSleepMilliseconds(100);
         } else {
+            palClearPad(GPIOB, GPIOB_LED_PYRO);
             pyro_cont = false;
-            chThdSleepMilliseconds(1000);
         }
-        palClearPad(GPIOB, GPIOB_LED_PYRO);
 
         int altitude_m = M2RStatus.latest.gps_alt / 1000;
         bool gps_locked = M2RStatus.latest.gps_fix_type == 3;
         if(!pyro_fired && gps_locked && altitude_m > PYRO_FIRE_ALTITUDE_M) {
             pyro_fire();
-            pyro_fired = true;
         }
 
         chThdSleepMilliseconds(500);

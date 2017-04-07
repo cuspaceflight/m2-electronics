@@ -61,12 +61,12 @@ msg_t m2status_thread(void* arg)
             m2rl_send_buffer(&M2RStatus, sizeof(SystemStatus));
 
             /* Send our status and M2FC Body status to M2R */
-            m2serial_send_buffer(&M2FCBodyStatus, sizeof(SystemStatus));
-            m2serial_send_buffer(&M2FCNoseStatus, sizeof(SystemStatus));
+            /*m2serial_send_buffer(&M2FCBodyStatus, sizeof(SystemStatus));*/
+            /*m2serial_send_buffer(&M2FCNoseStatus, sizeof(SystemStatus));*/
 
         } else if(LocalStatus == &M2RStatus) {
             /* Send our status to M2FC Body */
-            m2serial_send_buffer(&M2RStatus, sizeof(SystemStatus));
+            /*m2serial_send_buffer(&M2RStatus, sizeof(SystemStatus));*/
         }
 
         /* We used to do this... */

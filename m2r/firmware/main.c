@@ -13,14 +13,12 @@
 #include "radio.h"
 #include "pyro.h"
 #include "m2r_shell.h"
-#include "m2serial.h"
 #include "m2status.h"
 
 static WORKING_AREA(waThreadHB, 128);
 static WORKING_AREA(waThreadUblox, 4096);
 static WORKING_AREA(waThreadRadio, 2048);
 static WORKING_AREA(waThreadPyro, 512);
-static WORKING_AREA(waM2Serial, 1024);
 static WORKING_AREA(waM2Status, 1024);
 
 static msg_t ThreadHeartbeat(void *arg) {
@@ -61,10 +59,8 @@ int main(void) {
     IWDG->PR = 3;
     IWDG->KR = 0xCCCC;
 
-    m2serial_shell = m2r_shell_run;
-    M2SerialSD = &SD2;
-    chThdCreateStatic(waM2Serial, sizeof(waM2Serial), HIGHPRIO,
-                      m2serial_thread, NULL);
+    sdStart(&SD1, NULL);
+    m2r_shell_run((BaseSequentialStream*)&SD1);
 
     chThdCreateStatic(waM2Status, sizeof(waM2Status), HIGHPRIO,
                       m2status_thread, NULL);

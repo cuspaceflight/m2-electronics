@@ -39,15 +39,15 @@
  */
 #define GPIOA_PIN0                  0
 #define GPIOA_5VOUT                 1
-#define GPIOA_SER_OUT               2
-#define GPIOA_SER_IN                3
+#define GPIOA_PYRO_FIRE             2
+#define GPIOA_PYRO_CONT             3
 #define GPIOA_MTX2_TXD              4
 #define GPIOA_BAT_MON               5
 #define GPIOA_LED_A                 6
 #define GPIOA_LED_C                 7
 #define GPIOA_NRST                  8
-#define GPIOA_PYRO_FIRE             9
-#define GPIOA_PYRO_CONT             10
+#define GPIOA_SER_OUT               9
+#define GPIOA_SER_IN                10
 #define GPIOA_PIN11                 11
 #define GPIOA_PIN12                 12
 #define GPIOA_SWDIO                 13
@@ -222,7 +222,7 @@
                                      PIN_PUPDR_FLOATING(GPIOA_LED_C)        |\
                                      PIN_PUPDR_PULLUP(GPIOA_NRST)           |\
                                      PIN_PUPDR_PULLDOWN(GPIOA_PYRO_FIRE)    |\
-                                     PIN_PUPDR_PULLUP(GPIOA_PYRO_CONT)      |\
+                                     PIN_PUPDR_PULLDOWN(GPIOA_PYRO_CONT)    |\
                                      PIN_PUPDR_PULLUP(GPIOA_PIN11)          |\
                                      PIN_PUPDR_PULLUP(GPIOA_PIN12)          |\
                                      PIN_PUPDR_FLOATING(GPIOA_SWDIO)        |\
@@ -246,15 +246,15 @@
                                      PIN_ODR_HIGH(GPIOA_PIN15))
 #define VAL_GPIOA_AFRL              (PIN_AFIO_AF(GPIOA_PIN0, 0)             |\
                                      PIN_AFIO_AF(GPIOA_5VOUT, 0)            |\
-                                     PIN_AFIO_AF(GPIOA_SER_OUT, 7)          |\
-                                     PIN_AFIO_AF(GPIOA_SER_IN, 7)           |\
+                                     PIN_AFIO_AF(GPIOA_PYRO_FIRE, 0)        |\
+                                     PIN_AFIO_AF(GPIOA_PYRO_CONT, 0)        |\
                                      PIN_AFIO_AF(GPIOA_MTX2_TXD, 2)         |\
                                      PIN_AFIO_AF(GPIOA_BAT_MON, 0)          |\
                                      PIN_AFIO_AF(GPIOA_LED_A, 0)            |\
                                      PIN_AFIO_AF(GPIOA_LED_C, 0))
 #define VAL_GPIOA_AFRH              (PIN_AFIO_AF(GPIOA_NRST, 0)             |\
-                                     PIN_AFIO_AF(GPIOA_PYRO_FIRE, 0)        |\
-                                     PIN_AFIO_AF(GPIOA_PYRO_CONT, 0)        |\
+                                     PIN_AFIO_AF(GPIOA_SER_OUT, 7)          |\
+                                     PIN_AFIO_AF(GPIOA_SER_IN, 7)           |\
                                      PIN_AFIO_AF(GPIOA_PIN11, 0)            |\
                                      PIN_AFIO_AF(GPIOA_PIN12, 0)            |\
                                      PIN_AFIO_AF(GPIOA_SWDIO, 0)            |\
